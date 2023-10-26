@@ -1,0 +1,10 @@
+
+spring:
+  application:
+    name: RoleService
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.21.23.42:8848
+server:
+  port: 9001
