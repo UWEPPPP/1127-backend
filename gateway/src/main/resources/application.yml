@@ -1,0 +1,14 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: 1127-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.21.23.163
+        namespace: 1127
+    gateway:
+      discovery:
+        locator:
+          enabled: true
