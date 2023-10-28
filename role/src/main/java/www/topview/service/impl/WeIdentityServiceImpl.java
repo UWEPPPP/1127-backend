@@ -30,7 +30,7 @@ import java.util.Map;
 @Service
 @Slf4j
 public class WeIdentityServiceImpl implements www.topview.service.WeIdentityService {
-    @Value("${weidentity.admin_private_key}")
+    @Value("${weIdentity.admin_private_key}")
     private String adminPrivateKeyPath;
 
     private final AuthorityIssuerService authorityIssuerService = new AuthorityIssuerServiceImpl();

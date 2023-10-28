@@ -1,4 +1,4 @@
-package www.topview.dao.dto;
+package www.topview.entity.model;
 
 /**
  * @author 刘家辉
