@@ -27,6 +27,11 @@
             <artifactId>weid-java-sdk</artifactId>
             <version>${weidentity.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>5.8.20</version>
+        </dependency>
     </dependencies>
 
 

@@ -8,3 +8,6 @@ spring:
         server-addr: 10.21.23.163:8848
 server:
   port: 9001
+WeIdentity:
+  cpt_templatg_path: cpt_template/cpt001.json
+  admin_private_key: private_key
