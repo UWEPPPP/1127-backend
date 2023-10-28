@@ -15,6 +15,7 @@
         <spring.cloud.alibaba.version>2021.0.5.0</spring.cloud.alibaba.version>
         <spring.cloud.version>2021.0.5</spring.cloud.version>
         <spring.boot.version>2.6.13</spring.boot.version>
+        <weidentity.version>3.1.1-rc.1</weidentity.version>
         <lombock>1.18.28</lombock>
         <jackson>2.15.2</jackson>
     </properties>

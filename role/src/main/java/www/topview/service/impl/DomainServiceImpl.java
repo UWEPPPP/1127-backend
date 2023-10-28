@@ -4,6 +4,7 @@ import cn.hutool.core.io.file.FileReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import www.topview.mapper.WeIdToCptMapper;
 import www.topview.service.DomainService;
 import www.topview.service.WeIdentityService;
 
@@ -15,7 +16,8 @@ import java.util.Map;
  */
 @Service
 public class DomainServiceImpl implements DomainService {
-    @Value("${weidentity.cpt_template_path}")
+
+    @Value("${weIdentity.cpt_template_path}")
     private String cptTemplatePath;
     @Autowired
     WeIdentityService weIdentityService;
