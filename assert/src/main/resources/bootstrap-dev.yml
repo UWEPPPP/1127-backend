@@ -1,0 +1,4 @@
+cloud:
+  nacos:
+    discovery:
+      server-addr:
