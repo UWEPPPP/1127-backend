@@ -1,5 +1,6 @@
 package www.topview.service;
 
+import www.topview.entity.bo.CompanyRegisterBO;
 import www.topview.entity.bo.UserRegisterBO;
 import www.topview.exception.WeIdentityException;
 
@@ -9,13 +10,16 @@ import www.topview.exception.WeIdentityException;
  */
 public interface AccountService {
 
-    /**
-     * 注册
-     * @param userRegisterBO 包含注册信息
-     * @return 返回注册结果
-     */
-     boolean companyRegister(UserRegisterBO userRegisterBO) throws WeIdentityException;
 
-    boolean userRegister(UserRegisterBO userRegisterBO) throws WeIdentityException;
+     boolean userRegister(UserRegisterBO userRegisterBO) throws WeIdentityException;
+
+
+    /**
+     *公司注册
+     * @param companyRegisterBO 公司注册信息
+     * @return  bool
+     * @throws WeIdentityException WeIdentity
+     */
+    boolean companyRegister(CompanyRegisterBO companyRegisterBO) throws WeIdentityException;
 
 }
