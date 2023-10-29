@@ -52,7 +52,7 @@ public class WeIdentityServiceImpl implements WeIdentityService {
 
     /**
      * 生成WeId及其公私钥
-     *
+     *生成的私钥为大整数 十进制形式
      * @return {@link CreateWeIdDataResult}
      */
     @Override
@@ -62,7 +62,6 @@ public class WeIdentityServiceImpl implements WeIdentityService {
         if (weId.getErrorCode() == ErrorCode.SUCCESS.getCode()) {
             String address = ecdsaKeyPair.getAddress(DataToolUtils.addressFromPublic(new BigInteger( weId.getResult().getUserWeIdPublicKey().getPublicKey())));
             AccountModel accountModel = new AccountModel();
-
             accountModel.setAccountAddress(address)
                     .setWeId(weId.getResult().getWeId())
                     .setPublicKey(weId.getResult().getUserWeIdPublicKey().getPublicKey())

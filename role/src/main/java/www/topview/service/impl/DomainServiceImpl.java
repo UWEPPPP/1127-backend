@@ -28,6 +28,8 @@ public class DomainServiceImpl implements DomainService {
 
     @Override
     public Boolean registerCpt(RegisterCptModel model) {
+     //  weIdentityService.registerCpt(model.getPublisher(),"", model.getClaim());
+
         return null;
     }
 
