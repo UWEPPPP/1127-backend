@@ -1,4 +1,4 @@
-package www.topview.entity.modle;
+package www.topview.entity.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

@@ -21,7 +21,7 @@
         <lombok>1.18.28</lombok>
         <jackson>2.15.2</jackson>
         <mybatis-plus.version>3.5.4</mybatis-plus.version>
-        <hutool-core>5.8.20</hutool-core>
+        <hutool>5.8.22</hutool>
     </properties>
 
     <dependencies>
@@ -33,6 +33,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool}</version>
         </dependency>
     </dependencies>
 
@@ -59,6 +64,8 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
