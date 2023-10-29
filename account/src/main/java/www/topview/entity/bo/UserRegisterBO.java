@@ -8,7 +8,7 @@ import lombok.Data;
  */
 
 @Data
-public class RegisterBO {
+public class UserRegisterBO {
 
 
     /**
@@ -21,10 +21,8 @@ public class RegisterBO {
      */
     private String password;
 
-    /**
-     * 公司的全局唯一Id
-     */
-    private String companyId;
-
-
+    public UserRegisterBO(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

@@ -3,6 +3,8 @@ package www.topview.service;
 import com.webank.weid.protocol.base.CptBaseInfo;
 import com.webank.weid.protocol.base.CredentialPojo;
 import com.webank.weid.protocol.response.CreateWeIdDataResult;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import www.topview.entity.model.AccountModel;
 import www.topview.exception.WeIdentityException;
 
@@ -12,6 +14,9 @@ import java.util.Map;
  * @author 刘家辉
  * @date 2023/10/28
  */
+
+
+
 public interface WeIdentityService {
     /**
      * 生成WeId及其公私钥
