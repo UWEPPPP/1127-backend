@@ -52,10 +52,10 @@ public class AccountServiceImpl implements AccountService {
                 accountModel.getWeId(),
                 accountModel.getPublicKey(),
                 //加密
-                Base64.encode(CryptoUtil.encrypt(accountModel.getPrivateKey(), PathConstant.PATH_PUBLIC_KEY))
+                CryptoUtil.encrypt(accountModel.getPrivateKey(), PathConstant.PATH_PUBLIC_KEY)
                 //解密方式
-                //byte[] decode = Base64.decode(s);
-                //String decrypt = CryptoUtil.decrypt(decode, PathConstant.PATH_PRIVATE_KEY);
+                //String encryptedKey
+                //String decrypt = CryptoUtil.decrypt(encrypted, PathConstant.PATH_PRIVATE_KEY);
 
         );
 
