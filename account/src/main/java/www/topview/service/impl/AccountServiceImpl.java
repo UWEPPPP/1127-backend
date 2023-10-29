@@ -25,6 +25,7 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private UserMapper userMapper;
 
+    @Override
     public boolean companyRegister(UserRegisterBO userRegisterBO) throws WeIdentityException {
         //为新用户注册weId
         AccountModel accountModel = weIdentityService.createWeId();
