@@ -10,10 +10,6 @@ import lombok.Data;
 @Data
 public class RegisterBO {
 
-    /**
-     * weId
-     */
-    private String weId;
 
     /**
      * 账号

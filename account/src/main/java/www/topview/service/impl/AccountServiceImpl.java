@@ -12,7 +12,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean register(RegisterBO registerBO) {
-        //检查对应weid是否已经存在
+
+        //为新用户注册weId
+
 
 
 
@@ -20,6 +22,8 @@ public class AccountServiceImpl implements AccountService {
 
 
         //调用合约
+
+
         return false;
     }
 }

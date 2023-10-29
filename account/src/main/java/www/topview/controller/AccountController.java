@@ -22,6 +22,7 @@ public class AccountController {
     @Resource
     private AccountService accountService;
 
+
     /**
      *  注册功能
      */
