@@ -1,15 +1,10 @@
 package www.topview.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import www.topview.entity.model.RegisterCptModel;
 import www.topview.result.CommonResult;
 import www.topview.service.DomainService;
-import www.topview.service.WeIdentityService;
-
-import javax.swing.text.StyledEditorKit;
 
 @RestController
 @RequestMapping("/api/domainAdmin")
@@ -33,9 +28,8 @@ public class DomainAdminController {
     }
 
     @PostMapping("/registerCpt")
-    public CommonResult<Boolean> registerCpt() {
-       // return CommonResult.operateSuccess("Register cpt Success",domainService.registerCpt());
-       return null;
+    public CommonResult<Void> registerCpt(@RequestBody RegisterCptModel model) {
+       return CommonResult.operateSuccess("Register cpt Success",domainService.registerCpt(model));
     }
 
     @PostMapping("/getCptTemplate")

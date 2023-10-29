@@ -1,5 +1,7 @@
 package www.topview.service;
 
+import www.topview.entity.model.RegisterCptModel;
+
 import java.util.Map;
 
 /**
@@ -14,10 +16,8 @@ public interface DomainService {
     public String getCptTemplate();
 
     /**
-     * @param publisher
-     * @param privateKey
-     * @param claim
+     * @param model
      * @return {@link Boolean}
      */
-    public Boolean registerCpt(String publisher, String privateKey, Map<String, Object> claim);
+    public Boolean registerCpt(RegisterCptModel model);
 }

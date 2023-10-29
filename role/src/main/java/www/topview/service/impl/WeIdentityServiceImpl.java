@@ -18,8 +18,11 @@ import com.webank.weid.service.rpc.CptService;
 import com.webank.weid.service.rpc.CredentialPojoService;
 import com.webank.weid.service.rpc.WeIdService;
 import lombok.extern.slf4j.Slf4j;
+import org.fisco.bcos.sdk.v3.crypto.keypair.ECDSAKeyPair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import www.topview.entity.model.AccountModel;
+import www.topview.exception.WeIdentityException;
 
 import java.util.Map;
 
@@ -33,6 +36,7 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
     @Value("${weIdentity.admin_private_key}")
     private String adminPrivateKeyPath;
 
+
     private final AuthorityIssuerService authorityIssuerService = new AuthorityIssuerServiceImpl();
 
     private final CptService cptService = new CptServiceImpl();
@@ -42,31 +46,36 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
     private final WeIdService weIdService = new WeIdServiceImpl();
 
 
-
-
     /**
      * 生成WeId及其公私钥
+     *
      * @return {@link CreateWeIdDataResult}
      */
     @Override
-    public CreateWeIdDataResult createWeId(){
+    public AccountModel createWeId() throws WeIdentityException {
         ResponseData<CreateWeIdDataResult> weId = weIdService.createWeId();
-        if (weId.getErrorCode() == ErrorCode.SUCCESS.getCode()){
+        ECDSAKeyPair ecdsaKeyPair = new ECDSAKeyPair();
+        if (weId.getErrorCode() == ErrorCode.SUCCESS.getCode()) {
+            String address = ecdsaKeyPair.getAddress(weId.getResult().getUserWeIdPublicKey().getPublicKey());
+            AccountModel accountModel = new AccountModel();
+            accountModel.setAccountAddress(address)
+                    .setPublicKey(weId.getResult().getUserWeIdPublicKey().getPublicKey())
+                    .setPrivateKey(weId.getResult().getUserWeIdPrivateKey().getPrivateKey());
             log.info("create weId success");
-            return weId.getResult();
+            return accountModel;
         }
-        log.error("create weId error");
-        return null;
+        throw new WeIdentityException("createWeId 异常");
     }
 
     /**
      * 注册权威机构
-     * @param issuerWeId 被授权方WeId
+     *
+     * @param issuerWeId    被授权方WeId
      * @param authorityName 名字
      * @return {@link Boolean}
      */
     @Override
-    public  Boolean registerAuthorityIssuer(String issuerWeId, String authorityName){
+    public Boolean registerAuthorityIssuer(String issuerWeId, String authorityName) throws WeIdentityException {
         AuthorityIssuer authorityIssuer = new AuthorityIssuer();
         authorityIssuer.setWeId(issuerWeId);
         authorityIssuer.setName(authorityName);
@@ -78,38 +87,37 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
         registerAuthorityIssuerArgs.setWeIdPrivateKey(new WeIdPrivateKey());
         registerAuthorityIssuerArgs.getWeIdPrivateKey().setPrivateKey(key);
         ResponseData<Boolean> booleanResponseData = authorityIssuerService.registerAuthorityIssuer(registerAuthorityIssuerArgs);
-        log.info(
-                "recognizeAuthorityIssuer is result,errorCode:{},errorMessage:{}",
-                booleanResponseData.getErrorCode(),
-                booleanResponseData.getErrorMessage()
-        );
-        return booleanResponseData.getResult();
+        if (booleanResponseData.getErrorCode() == ErrorCode.SUCCESS.getCode()) {
+            log.info("registerAuthorityIssuer success");
+            return booleanResponseData.getResult();
+        }
+        throw new WeIdentityException("registerAuthorityIssuer 异常");
     }
 
     /**
      * 是否为权威机构
+     *
      * @param issuerWeId weid
      * @return {@link Boolean}
      */
     @Override
-    public Boolean isAuthorityIssuer(String issuerWeId){
+    public Boolean isAuthorityIssuer(String issuerWeId) throws WeIdentityException {
         ResponseData<Boolean> booleanResponseData = authorityIssuerService.isAuthorityIssuer(issuerWeId);
-        log.info(
-                "recognizeAuthorityIssuer is result,errorCode:{},errorMessage:{}",
-                booleanResponseData.getErrorCode(),
-                booleanResponseData.getErrorMessage()
-        );
-        return booleanResponseData.getResult();
+        if (booleanResponseData.getErrorCode() == ErrorCode.SUCCESS.getCode()) {
+            log.info("isAuthorityIssuer success");
+            return booleanResponseData.getResult();
+        }
+        throw new WeIdentityException("isAuthorityIssuer 异常");
     }
 
     /**
-     * @param publisher 发行者
+     * @param publisher  发行者
      * @param privateKey 私钥
-     * @param claim CPT数据类型定义 必须为json格式 可自定义或者提供几个模板？
+     * @param claim      CPT数据类型定义 必须为json格式 可自定义或者提供几个模板？
      * @return {@link CptBaseInfo}
      */
     @Override
-    public CptBaseInfo registerCpt(String publisher, String privateKey, Map<String, Object> claim){
+    public CptBaseInfo registerCpt(String publisher, String privateKey, Map<String, Object> claim) throws WeIdentityException {
 
         CptMapArgs cptMapArgs = new CptMapArgs();
         WeIdAuthentication weIdAuthentication = new WeIdAuthentication();
@@ -119,16 +127,15 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
         cptMapArgs.setWeIdAuthentication(weIdAuthentication);
         cptMapArgs.setCptJsonSchema(claim);
         ResponseData<CptBaseInfo> cptBaseInfoResponseData = cptService.registerCpt(cptMapArgs);
-        log.info(
-                "registerCpt is result,errorCode:{},errorMessage:{}",
-                cptBaseInfoResponseData.getErrorCode(),
-                cptBaseInfoResponseData.getErrorMessage()
-        );
-        return cptBaseInfoResponseData.getResult();
+        if (cptBaseInfoResponseData.getErrorCode() == ErrorCode.SUCCESS.getCode()) {
+            log.info("registerCpt success");
+            return cptBaseInfoResponseData.getResult();
+        }
+        throw new WeIdentityException("registerCpt 异常");
     }
 
     @Override
-    public CredentialPojo createCredential(Integer cptId, String issuer, String privateKey, Long expirationDate, Map<String, Object> claimDate) {
+    public CredentialPojo createCredential(Integer cptId, String issuer, String privateKey, Long expirationDate, Map<String, Object> claimDate) throws WeIdentityException {
 
         CreateCredentialPojoArgs<Map<String, Object>> args = new CreateCredentialPojoArgs<>();
         args.setCptId(cptId);
@@ -146,16 +153,15 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
 
         ResponseData<CredentialPojo> response =
                 credentialService.createCredential(args);
-        log.info(
-                "createCredential is result,errorCode:{},errorMessage:{}",
-                response.getErrorCode(),
-                response.getErrorMessage()
-        );
-        return response.getResult();
+        if (response.getErrorCode() == ErrorCode.SUCCESS.getCode()) {
+            log.info("createCredential success");
+            return response.getResult();
+        }
+        throw new WeIdentityException("createCredential 异常");
     }
 
 
-    private String adminKey(){
+    private String adminKey() {
         FileReader privateKey = new FileReader(adminPrivateKeyPath);
         return privateKey.readString();
     }

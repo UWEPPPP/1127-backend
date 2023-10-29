@@ -3,6 +3,7 @@ package www.topview.service.impl;
 import www.topview.entity.bo.RegisterBO;
 import www.topview.result.CommonResult;
 import www.topview.service.AccountService;
+import www.topview.service.WeIdentityService;
 
 /**
  * @author :Lictory
@@ -12,7 +13,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean register(RegisterBO registerBO) {
-
         //为新用户注册weId
 
 

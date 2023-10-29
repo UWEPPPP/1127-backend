@@ -3,6 +3,8 @@ package www.topview.service;
 import com.webank.weid.protocol.base.CptBaseInfo;
 import com.webank.weid.protocol.base.CredentialPojo;
 import com.webank.weid.protocol.response.CreateWeIdDataResult;
+import www.topview.entity.model.AccountModel;
+import www.topview.exception.WeIdentityException;
 
 import java.util.Map;
 
@@ -16,7 +18,7 @@ public interface WeIdentityService {
      *
      * @return {@link CreateWeIdDataResult}
      */
-    CreateWeIdDataResult createWeId();
+    AccountModel createWeId() throws WeIdentityException;
 
     /**
      * 注册权威机构
@@ -25,7 +27,7 @@ public interface WeIdentityService {
      * @param authorityName 名字
      * @return {@link Boolean}
      */
-    Boolean registerAuthorityIssuer(String issuerWeId, String authorityName);
+    Boolean registerAuthorityIssuer(String issuerWeId, String authorityName) throws WeIdentityException;
 
     /**
      * 是否为权威机构
@@ -33,7 +35,7 @@ public interface WeIdentityService {
      * @param issuerWeId weid
      * @return {@link Boolean}
      */
-    Boolean isAuthorityIssuer(String issuerWeId);
+    Boolean isAuthorityIssuer(String issuerWeId) throws WeIdentityException;
 
     /**
      * 注册CPT
@@ -42,7 +44,7 @@ public interface WeIdentityService {
      * @param claim      CPT数据类型定义 必须为json格式 可自定义或者提供几个模板？
      * @return {@link CptBaseInfo}
      */
-    CptBaseInfo registerCpt(String publisher, String privateKey, Map<String, Object> claim);
+    CptBaseInfo registerCpt(String publisher, String privateKey, Map<String, Object> claim) throws WeIdentityException;
 
 
     /**
@@ -53,5 +55,5 @@ public interface WeIdentityService {
      * @param claimDate
      * @return {@link CredentialPojo}
      */
-    CredentialPojo createCredential(Integer cptId, String issuer, String privateKey, Long expirationDate, Map<String, Object> claimDate);
+    CredentialPojo createCredential(Integer cptId, String issuer, String privateKey, Long expirationDate, Map<String, Object> claimDate) throws WeIdentityException;
 }

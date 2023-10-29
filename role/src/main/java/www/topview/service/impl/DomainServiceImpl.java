@@ -4,6 +4,7 @@ import cn.hutool.core.io.file.FileReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import www.topview.entity.model.RegisterCptModel;
 import www.topview.mapper.WeIdToCptMapper;
 import www.topview.service.DomainService;
 import www.topview.service.WeIdentityService;
@@ -29,7 +30,8 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public Boolean registerCpt(String publisher, String privateKey, Map<String, Object> claim) {
+    public Boolean registerCpt(RegisterCptModel model) {
         return null;
     }
+
 }

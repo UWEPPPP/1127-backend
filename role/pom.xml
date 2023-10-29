@@ -15,7 +15,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mybatis-plus.version>3.5.4</mybatis-plus.version>
+
     </properties>
     <dependencies>
         <dependency>
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-core</artifactId>
-            <version>5.8.20</version>
+            <version>${hutool-core}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
