@@ -28,7 +28,7 @@ public class DomainAdminController {
     }
 
     @PostMapping("/registerCpt")
-    public CommonResult<Void> registerCpt(@RequestBody RegisterCptModel model) {
+    public CommonResult<Boolean> registerCpt(@RequestBody RegisterCptModel model) {
        return CommonResult.operateSuccess("Register cpt Success",domainService.registerCpt(model));
     }
 
