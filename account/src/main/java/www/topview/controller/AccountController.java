@@ -3,7 +3,7 @@ package www.topview.controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import www.topview.entity.bo.RegisterBO;
+import www.topview.entity.bo.UserRegisterBO;
 import www.topview.result.CommonResult;
 import www.topview.service.AccountService;
 
@@ -27,8 +27,8 @@ public class AccountController {
      *  注册功能
      */
     @PostMapping("/register")
-    CommonResult<Void> register(RegisterBO registerBO) {
-        return CommonResult.operateSuccess("message", accountService.register(registerBO));
+    CommonResult<Void> register(UserRegisterBO userRegisterBO) {
+        return CommonResult.operateSuccess("注册成功", accountService.register(userRegisterBO));
     }
 
 }
