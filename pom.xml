@@ -8,7 +8,9 @@
     <name>Archetype - Cloud</name>
     <url>http://maven.apache.org</url>
     <modules>
-
+        <module>account</module>
+        <module>role</module>
+        <module>common</module>
         <module>gateway</module>
     </modules>
     <properties>
@@ -16,8 +18,12 @@
         <spring.cloud.alibaba.version>2021.0.5.0</spring.cloud.alibaba.version>
         <spring.cloud.version>2021.0.5</spring.cloud.version>
         <spring.boot.version>2.6.13</spring.boot.version>
-        <lombock>1.18.28</lombock>
+        <weidentity.version>3.1.1-rc.1</weidentity.version>
+        <lombok>1.18.28</lombok>
         <jackson>2.15.2</jackson>
+        <mybatis-plus.version>3.5.4</mybatis-plus.version>
+        <hutool>5.8.22</hutool>
+        <juint>4.13.2</juint>
     </properties>
 
     <dependencies>
@@ -30,6 +36,24 @@
                     <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
                 </exclusion>
             </exclusions>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
