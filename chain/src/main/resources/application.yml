@@ -1,0 +1,13 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: 1127-blockchain
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.21.23.163
+        namespace: 1127
+
+fisco:
+  file-path: /fisco-config-dev.yml
