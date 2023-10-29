@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(WeIdentityException.class)
     public CommonResult<Void> handlerWeIdentityException(WeIdentityException ex){
-        log.error("IllegalArgumentException", ex);
+        log.error("WeIdentity调用异常", ex);
         return CommonResult.operateFailWithMessage(ex.getMessage());
     }
 }
