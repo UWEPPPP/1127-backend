@@ -11,6 +11,8 @@
         <module>account</module>
         <module>role</module>
         <module>common</module>
+        <module>gateway</module>
+        <module>chain</module>
     </modules>
     <properties>
         <java.version>11</java.version>
@@ -20,21 +22,13 @@
         <weidentity.version>3.1.1-rc.1</weidentity.version>
         <lombok>1.18.28</lombok>
         <jackson>2.15.2</jackson>
+        <fisco.bcos.version>3.4.0</fisco.bcos.version>
         <mybatis-plus.version>3.5.4</mybatis-plus.version>
         <hutool>5.8.22</hutool>
         <juint>4.13.2</juint>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <version>${spring.boot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
@@ -70,6 +64,11 @@
                 <version>${spring.cloud.alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.fisco-bcos.java-sdk</groupId>
+                <artifactId>fisco-bcos-java-sdk</artifactId>
+                <version>${fisco.bcos.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
