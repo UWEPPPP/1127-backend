@@ -122,7 +122,6 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
      */
     @Override
     public CptBaseInfo registerCpt(String publisher, String privateKey, Map<String, Object> claim) throws WeIdentityException {
-
         CptMapArgs cptMapArgs = new CptMapArgs();
         WeIdAuthentication weIdAuthentication = new WeIdAuthentication();
         weIdAuthentication.setWeId(publisher);
