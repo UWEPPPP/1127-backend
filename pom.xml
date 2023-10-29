@@ -8,10 +8,9 @@
     <name>Archetype - Cloud</name>
     <url>http://maven.apache.org</url>
     <modules>
-      <module>gateway</module>
+        <module>account</module>
         <module>role</module>
         <module>common</module>
-        <module>assert</module>
     </modules>
     <properties>
         <java.version>11</java.version>
@@ -19,11 +18,10 @@
         <spring.cloud.version>2021.0.5</spring.cloud.version>
         <spring.boot.version>2.6.13</spring.boot.version>
         <weidentity.version>3.1.1-rc.1</weidentity.version>
-        <lombock>1.18.28</lombock>
+        <lombok>1.18.28</lombok>
         <jackson>2.15.2</jackson>
         <mybatis-plus.version>3.5.4</mybatis-plus.version>
         <hutool-core>5.8.20</hutool-core>
-        <mysql-connector.version>8.0.31</mysql-connector.version>
     </properties>
 
     <dependencies>
@@ -35,10 +33,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-       </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 
@@ -64,16 +58,6 @@
                 <version>${spring.cloud.alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql-connector.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

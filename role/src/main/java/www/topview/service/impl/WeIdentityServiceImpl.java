@@ -17,6 +17,7 @@ import com.webank.weid.service.rpc.AuthorityIssuerService;
 import com.webank.weid.service.rpc.CptService;
 import com.webank.weid.service.rpc.CredentialPojoService;
 import com.webank.weid.service.rpc.WeIdService;
+import com.webank.weid.util.DataToolUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.fisco.bcos.sdk.v3.crypto.keypair.ECDSAKeyPair;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import www.topview.entity.model.AccountModel;
 import www.topview.exception.WeIdentityException;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 /**
@@ -56,9 +58,11 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
         ResponseData<CreateWeIdDataResult> weId = weIdService.createWeId();
         ECDSAKeyPair ecdsaKeyPair = new ECDSAKeyPair();
         if (weId.getErrorCode() == ErrorCode.SUCCESS.getCode()) {
-            String address = ecdsaKeyPair.getAddress(weId.getResult().getUserWeIdPublicKey().getPublicKey());
+            String address = ecdsaKeyPair.getAddress(DataToolUtils.addressFromPublic(new BigInteger( weId.getResult().getUserWeIdPublicKey().getPublicKey())));
             AccountModel accountModel = new AccountModel();
+
             accountModel.setAccountAddress(address)
+                    .setWeId(weId.getResult().getWeId())
                     .setPublicKey(weId.getResult().getUserWeIdPublicKey().getPublicKey())
                     .setPrivateKey(weId.getResult().getUserWeIdPrivateKey().getPrivateKey());
             log.info("create weId success");
