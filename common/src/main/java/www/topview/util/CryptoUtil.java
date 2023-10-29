@@ -26,17 +26,18 @@ public class CryptoUtil {
         return true;
     }
 
-    public static byte[] encrypt(String key,String pathPublicKey){
+    public static String encrypt(String key,String pathPublicKey){
         FileReader fileReader = new FileReader(pathPublicKey);
         String publicKey = fileReader.readString();
         RSA rsa = new RSA(null,Base64.decode(publicKey));
-        return rsa.encrypt(StrUtil.bytes(key, CharsetUtil.CHARSET_UTF_8), KeyType.PublicKey);
+        return Base64.encode(rsa.encrypt(StrUtil.bytes(key, CharsetUtil.CHARSET_UTF_8), KeyType.PublicKey));
     }
 
-    public static  String decrypt(byte[] key,String pathPrivateKey){
+    public static  String decrypt(String key,String pathPrivateKey){
+        byte[] decode = Base64.decode(key);
         FileReader fileReader = new FileReader(pathPrivateKey);
         String privateKey = fileReader.readString();
         RSA rsa = new RSA(Base64.decode(privateKey),null);
-        return StrUtil.str(rsa.decrypt(key, KeyType.PrivateKey),CharsetUtil.CHARSET_UTF_8);
+        return StrUtil.str(rsa.decrypt(decode, KeyType.PrivateKey),CharsetUtil.CHARSET_UTF_8);
     }
 }

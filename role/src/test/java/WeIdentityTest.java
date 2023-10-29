@@ -32,10 +32,8 @@ public class WeIdentityTest {
 //        FileWriter fileWriter1 = new FileWriter("public_key.txt");
 //        fileWriter.write(Base64.encode(rsa.getPrivate().getEncoded()));
 //        fileWriter1.write(Base64.encode(rsa.getPublic().getEncoded()));
-        byte[] encrypt = CryptoUtil.encrypt("123", PathConstant.PATH_PUBLIC_KEY);
-        String s = Base64.encode(encrypt);
-        byte[] decode = Base64.decode(s);
-        String decrypt = CryptoUtil.decrypt(decode, PathConstant.PATH_PRIVATE_KEY);
+        String encrypt = CryptoUtil.encrypt("123", PathConstant.PATH_PUBLIC_KEY);
+        String decrypt = CryptoUtil.decrypt(encrypt, PathConstant.PATH_PRIVATE_KEY);
         assert decrypt.equals("123");
         System.out.printf(StrUtil.str(decrypt,CharsetUtil.CHARSET_UTF_8));
 
