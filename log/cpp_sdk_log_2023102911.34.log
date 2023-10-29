@@ -610,3 +610,67 @@ info|2023-10-29 11:56:16.806254|[SDK][WS][STAT]connected nodes,count=2
 info|2023-10-29 11:56:17.160000|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
 info|2023-10-29 11:56:23.743265|[SDK][WS][STAT]connected nodes,count=2
 info|2023-10-29 11:56:24.053293|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:56:35.933261|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:56:36.179234|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:56:36.816859|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:56:37.173697|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:56:43.752985|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:56:44.059307|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:56:55.939868|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:56:56.188565|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:56:56.824946|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:56:57.178484|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:57:03.761865|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:57:04.069092|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:57:15.948789|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:57:16.199971|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:57:16.827433|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:57:17.182435|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:57:23.764033|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:57:24.072967|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:57:35.963873|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:57:36.211239|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:57:36.840865|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:57:37.194950|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:57:43.776052|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:57:44.088325|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:57:55.963890|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:57:56.211439|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:57:56.853143|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:57:57.196026|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:58:03.782187|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:58:04.089203|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:58:15.966046|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:58:16.213380|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:58:16.867013|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:58:17.206614|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:58:23.795971|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:58:24.103922|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:58:35.979114|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:58:36.224609|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:58:36.880941|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:58:37.207150|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:58:43.810057|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:58:44.106942|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:58:55.989999|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:58:56.236877|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:58:56.889246|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:58:57.216338|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:59:03.814226|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:59:04.122286|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:59:15.999199|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:59:16.249140|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:59:16.903296|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:59:17.229007|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:59:23.822967|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:59:24.132369|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:59:36.002073|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:59:36.262980|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:59:36.910941|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:59:37.235015|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:59:43.832441|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:59:44.144327|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:59:56.012640|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:59:56.278365|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0
+info|2023-10-29 11:59:56.917039|[SDK][WS][STAT]connected nodes,count=2
+info|2023-10-29 11:59:57.242340|[EVENT][SUB][doLoop]event sub tasks report,working event sub count=0,suspend event sub count=0

@@ -5,11 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import www.topview.entity.model.RegisterCptModel;
-import www.topview.mapper.WeIdToCptMapper;
 import www.topview.service.DomainService;
 import www.topview.service.WeIdentityService;
-
-import java.util.Map;
 
 /**
  * @author 刘家辉

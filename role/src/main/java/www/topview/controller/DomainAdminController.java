@@ -8,7 +8,7 @@ import www.topview.service.DomainService;
 
 @RestController
 @RequestMapping("/api/domainAdmin")
-@ControllerAdvice
+
 public class DomainAdminController {
     @Autowired
     DomainService domainService;
