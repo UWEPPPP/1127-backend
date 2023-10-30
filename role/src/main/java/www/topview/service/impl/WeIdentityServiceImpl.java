@@ -58,7 +58,7 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
         ResponseData<CreateWeIdDataResult> weId = weIdService.createWeId();
         ECDSAKeyPair ecdsaKeyPair = new ECDSAKeyPair();
         if (weId.getErrorCode() == ErrorCode.SUCCESS.getCode()) {
-            String address = ecdsaKeyPair.getAddress(DataToolUtils.addressFromPublic(new BigInteger( weId.getResult().getUserWeIdPublicKey().getPublicKey())));
+            String address = ecdsaKeyPair.getAddress(DataToolUtils.addressFromPublic(new BigInteger(weId.getResult().getUserWeIdPublicKey().getPublicKey())));
             AccountModel accountModel = new AccountModel();
 
             accountModel.setAccountAddress(address)

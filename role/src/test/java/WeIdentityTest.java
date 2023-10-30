@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import www.topview.constant.PathConstant;
 import www.topview.exception.WeIdentityException;
+import www.topview.service.DomainService;
 import www.topview.service.WeIdentityService;
 import www.topview.util.CryptoUtil;
 
@@ -24,7 +25,8 @@ import java.security.KeyPair;
 public class WeIdentityTest {
     @Autowired
     WeIdentityService weIdentityService;
-
+    @Autowired
+    DomainService domainService;
     @org.junit.Test
     public void test(){
 //        KeyPair rsa = SecureUtil.generateKeyPair("RSA");
@@ -75,6 +77,12 @@ public class WeIdentityTest {
         } catch (WeIdentityException e) {
             log.error("WeIdentity调用异常", e);
         }
+    }
+
+    @org.junit.Test
+    public void getCptTemplate(){
+        String s = domainService.getCptTemplate();
+        System.out.printf(s);
     }
 
 

@@ -1,8 +1,8 @@
 package www.topview.service;
 
 import www.topview.entity.model.RegisterCptModel;
-
-import java.util.Map;
+import www.topview.entity.vo.CptInfoVO;
+import www.topview.exception.WeIdentityException;
 
 /**
  * @author 刘家辉
@@ -11,13 +11,17 @@ import java.util.Map;
 public interface DomainService {
     /**
      * get Template
+     *
      * @return {@link String}
      */
     public String getCptTemplate();
 
     /**
-     * @param model
-     * @return {@link Boolean}
+     * register cpt
+     *
+     * @param model model
+     * @return {@link CptInfoVO}
+     * @throws WeIdentityException we identity exception
      */
-    public Boolean registerCpt(RegisterCptModel model);
+    public CptInfoVO registerCpt(RegisterCptModel model) throws WeIdentityException;
 }
