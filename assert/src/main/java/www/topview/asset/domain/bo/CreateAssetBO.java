@@ -1,4 +1,4 @@
-package www.topview.asset.domain.request;
+package www.topview.asset.domain.bo;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * @date 2023/10/29
  */
 @Data
-public class CreateAssetRequest {
+public class CreateAssetBO {
     /**
      * 文件
      */

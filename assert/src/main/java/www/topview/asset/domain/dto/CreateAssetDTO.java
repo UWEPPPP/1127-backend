@@ -1,7 +1,7 @@
 package www.topview.asset.domain.dto;
 
 import lombok.Data;
-import www.topview.asset.domain.request.CreateAssetRequest;
+import www.topview.asset.domain.bo.CreateAssetBO;
 
 /**
  * 创建资产的dto
@@ -18,5 +18,5 @@ public class CreateAssetDTO {
     /**
      * 创建资产请求类
      */
-    private CreateAssetRequest createAssetRequest;
+    private CreateAssetBO createAssetBO;
 }
