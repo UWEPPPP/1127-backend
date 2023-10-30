@@ -2,7 +2,7 @@ server:
   port: 8001
 spring:
   application:
-    name: 1127-blockchain
+    name: 1127-chain
   cloud:
     nacos:
       discovery:
@@ -11,3 +11,12 @@ spring:
 
 fisco:
   file-path: /fisco-config-dev.yml
+# 最多维护processor的数量
+  processor-num-max: 1000
+# 每次淘汰的processor数量
+  eliminate-num: 10
+  abi-file-path: "E:\\programing\\BlockChain\\1127-backend\\chain\\src\\main\\resources\\solidity\\abi"
+  contract:
+    address:
+      company: 0x89954db3548882b218cec4eac4b3919a819f2874
+      domain: 0x9062544f5deb261c4cdc813b8c762c7587d5fff8
