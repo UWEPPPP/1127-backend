@@ -4,12 +4,14 @@ import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.Digester;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 import www.topview.asset.client.IpfsClient;
 import www.topview.asset.domain.dto.CreateAssetDTO;
 import www.topview.asset.domain.po.Asset;
 import www.topview.asset.domain.bo.CreateAssetBO;
 import www.topview.asset.domain.vo.AssetDetailsVO;
+import www.topview.asset.domain.vo.AssetVO;
 import www.topview.asset.mapper.AssetMapper;
 import www.topview.asset.service.AssetService;
 import www.topview.util.StringUtils;
@@ -17,6 +19,7 @@ import www.topview.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * AssetService实现类
@@ -97,5 +100,22 @@ public class AssetServiceImpl implements AssetService {
                 .setUri(ipfsClient.getUri(cid))
                 .setCreateTime("")
                 .setCreatorAddress("");
+    }
+
+    public List<AssetVO> getAssetList() {
+        List<Asset> assetList = assetMapper.selectValidList();
+        if(assetList.isEmpty()){
+            return null;
+        }
+
+        return assetList.stream().map(asset -> {
+                    return new AssetVO()
+                                .setId(asset.getId())
+                                .setName(asset.getName())
+                                .setCreatorName(asset.getCreatorName())
+                                .setDomainName(asset.getDomainName())
+                                .setCompanyName(asset.getCompanyName())
+                                .setGroupName(asset.getGroupName());
+                }).collect(Collectors.toList());
     }
 }

@@ -2,6 +2,9 @@ package www.topview.asset.service;
 
 import www.topview.asset.domain.dto.CreateAssetDTO;
 import www.topview.asset.domain.vo.AssetDetailsVO;
+import www.topview.asset.domain.vo.AssetVO;
+
+import java.util.List;
 
 /**
  * 资产service
@@ -23,4 +26,10 @@ public interface AssetService {
      * @return 用于显示资产详细信息的vo
      */
     AssetDetailsVO getAssetMessage(Integer id);
+
+    /**
+     * 获取asset列表
+     * @return 返回asset列表
+     */
+    List<AssetVO> getAssetList();
 }
