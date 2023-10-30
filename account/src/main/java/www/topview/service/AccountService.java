@@ -10,12 +10,17 @@ import www.topview.exception.WeIdentityException;
  */
 public interface AccountService {
 
-
+    /**
+     * 用户申请注册
+     * @param userRegisterBO    包含用户注册信息
+     * @return  返回bool
+     * @throws WeIdentityException exception
+     */
      boolean userRegister(UserRegisterBO userRegisterBO) throws WeIdentityException;
 
 
     /**
-     *公司注册
+     *公司申请注册
      * @param companyRegisterBO 公司注册信息
      * @return  bool
      * @throws WeIdentityException WeIdentity

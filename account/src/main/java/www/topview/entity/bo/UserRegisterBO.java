@@ -21,8 +21,22 @@ public class UserRegisterBO {
      */
     private String password;
 
-    public UserRegisterBO(String username, String password) {
+    /**
+     * 公司ID
+     */
+    private Integer companyId;
+
+    /**
+     * 员工属于公司的证明材料
+     */
+    private String payload;
+    public UserRegisterBO() {
+    }
+
+    public UserRegisterBO(String username, String password, Integer companyId, String payload) {
         this.username = username;
         this.password = password;
+        this.companyId = companyId;
+        this.payload = payload;
     }
 }

@@ -28,14 +28,14 @@ public class AccountController {
     /**
      *  注册功能
      */
-    @PostMapping("/userRegister")
+    @PostMapping("/userRegisterApplicant")
     CommonResult<Boolean> userRegister(UserRegisterBO userRegisterBO) throws WeIdentityException {
-        return CommonResult.operateSuccess("注册成功", accountService.userRegister(userRegisterBO));
+        return CommonResult.operateSuccess("申请注册成功", accountService.userRegister(userRegisterBO));
     }
 
-    @PostMapping("/companyRegister")
+    @PostMapping("/companyRegisterApplicant")
     CommonResult<Boolean> companyRegister(CompanyRegisterBO companyRegisterBO) throws WeIdentityException {
-        return CommonResult.operateSuccess("注册成功", accountService.companyRegister(companyRegisterBO));
+        return CommonResult.operateSuccess("申请注册成功", accountService.companyRegister(companyRegisterBO));
     }
 
 
