@@ -45,7 +45,7 @@ public class IpfsClient {
      * @return 返回cid
      * @throws IOException 文件传输异常
      */
-    public String upload(MultipartFile file) throws IOException {
+    public String upload(MultipartFile file){
         if(file.isEmpty()){
             throw new RuntimeException("文件为空");
         }
@@ -82,9 +82,14 @@ public class IpfsClient {
      * @return 文件
      * @throws IOException 文件传输异常
      */
-    private File addIdentification(MultipartFile file,String prefix,String suffix) throws IOException {
-        File f = File.createTempFile(prefix + System.currentTimeMillis(),suffix);
-        file.transferTo(f);
+    private File addIdentification(MultipartFile file,String prefix,String suffix){
+        File f = null;
+        try {
+            f = File.createTempFile(prefix + System.currentTimeMillis(),suffix);
+            file.transferTo(f);
+        } catch (IOException e) {
+            throw new RuntimeException("文件添加唯一标识失败");
+        }
         return f;
     }
 
@@ -95,9 +100,14 @@ public class IpfsClient {
      * @return cid
      * @throws IOException 文件传输异常
      */
-    private String upload(File file) throws IOException {
+    private String upload(File file){
         NamedStreamable.FileWrapper fileBytes = new NamedStreamable.FileWrapper(file);
-        MerkleNode addResult = ipfsClient.add(fileBytes).get(0);
+        MerkleNode addResult = null;
+        try {
+            addResult = ipfsClient.add(fileBytes).get(0);
+        } catch (IOException e) {
+            throw new RuntimeException("文件上传失败");
+        }
         return addResult.hash.toString();
     }
 
