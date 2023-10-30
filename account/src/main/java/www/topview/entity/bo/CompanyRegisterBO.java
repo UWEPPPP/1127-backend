@@ -12,28 +12,20 @@ import lombok.Data;
 public class CompanyRegisterBO {
 
     /**
-     * 账号
+     * 账号,由申请者线下进行提供
      */
     private String username;
 
     /**
-     * 密码
+     * 密码,由申请者线下进行提供
      */
     private String password;
 
-    /**
-     * 公司的全局唯一Id
-     */
-    private String companyId;
+    public CompanyRegisterBO(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
-    /**
-     * 公司注册人的weId
-     */
-    private String weId;
-
-
-    /**
-     * 公司用于注册的证明证书
-     */
-    private Credential credential;
+    public CompanyRegisterBO() {
+    }
 }

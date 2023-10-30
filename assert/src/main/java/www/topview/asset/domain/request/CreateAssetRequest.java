@@ -1,6 +1,10 @@
 package www.topview.asset.domain.request;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 创建asset
@@ -10,5 +14,25 @@ import lombok.Data;
  */
 @Data
 public class CreateAssetRequest {
+    /**
+     * 文件
+     */
+    @NotNull
+    private MultipartFile file;
 
+    /**
+     * 资产名
+     */
+    @NotBlank
+    private String name;
+
+    /**
+     * 组名（为空则为default）
+     */
+    private String groupName;
+
+    /**
+     * 资产描述
+     */
+    private String description;
 }
