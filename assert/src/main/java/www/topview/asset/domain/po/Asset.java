@@ -1,9 +1,9 @@
 package www.topview.asset.domain.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 对应资产表的po类
@@ -12,12 +12,13 @@ import lombok.Data;
  * @date 2023/10/29
  */
 @Data
+@Accessors(chain = true)
 @TableName("tb_asset")
 public class Asset {
     /**
      * 主键
      */
-    @TableId(type = IdType.AUTO)
+    @TableId
     private Long id;
 
     /**
