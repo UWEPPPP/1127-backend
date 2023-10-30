@@ -4,11 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import www.topview.entity.bo.CompanyRegisterBO;
-import www.topview.entity.bo.LoginBO;
-import www.topview.entity.bo.QueryApplicationsBO;
-import www.topview.entity.bo.UserRegisterBO;
-import www.topview.entity.po.User;
+import www.topview.entity.bo.*;
 import www.topview.entity.vo.ApplicationUserVO;
 import www.topview.exception.WeIdentityException;
 import www.topview.result.CommonResult;
@@ -59,6 +55,11 @@ public class AccountController {
     @GetMapping("/queryApplications")
     CommonResult<List<ApplicationUserVO>> queryApplications(QueryApplicationsBO queryApplicationsBO) {
         return CommonResult.operateSuccess("获取申请列表成功", accountService.queryApplications(queryApplicationsBO));
+    }
+
+    @PostMapping("/judge")
+    CommonResult<Boolean>  judge(JudgeBO judgeBO){
+        return CommonResult.operateSuccess("操作成功",accountService.judge(judgeBO));
     }
 
 }

@@ -3,15 +3,13 @@ package www.topview.service.impl;
 import cn.hutool.core.lang.Assert;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import www.topview.constant.PathConstant;
-import www.topview.entity.bo.CompanyRegisterBO;
-import www.topview.entity.bo.LoginBO;
-import www.topview.entity.bo.QueryApplicationsBO;
-import www.topview.entity.bo.UserRegisterBO;
+import www.topview.entity.bo.*;
 import www.topview.entity.model.AccountModel;
 import www.topview.entity.po.ApplicationForUser;
 import www.topview.entity.po.Company;
@@ -135,6 +133,16 @@ public class AccountServiceImpl implements AccountService {
                     temp.getPayload()));
         }
         return result;
+    }
+
+    @Override
+    public boolean judge(JudgeBO judgeBO) {
+
+        applicationMapper.update(null,
+                new UpdateWrapper<ApplicationForUser>().
+                        set("status", judgeBO.getStatus()).
+                        eq("id", judgeBO.getId()));
+        return true;
     }
 
 

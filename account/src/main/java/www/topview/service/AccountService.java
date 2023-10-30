@@ -1,11 +1,6 @@
 package www.topview.service;
 
-import www.topview.entity.bo.CompanyRegisterBO;
-import www.topview.entity.bo.LoginBO;
-import www.topview.entity.bo.QueryApplicationsBO;
-import www.topview.entity.bo.UserRegisterBO;
-import www.topview.entity.po.Company;
-import www.topview.entity.po.User;
+import www.topview.entity.bo.*;
 import www.topview.entity.vo.ApplicationUserVO;
 import www.topview.exception.WeIdentityException;
 
@@ -43,4 +38,13 @@ public interface AccountService {
 
 
     List<ApplicationUserVO> queryApplications(QueryApplicationsBO queryApplicationsBO);
+
+
+    /**
+     * 通过申请的操作
+     * @param judgeBO 带有申请对象的主键id
+     * @return 操作成功与否
+     */
+    boolean judge(JudgeBO judgeBO);
+
 }
