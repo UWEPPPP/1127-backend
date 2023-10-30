@@ -32,6 +32,10 @@
             <artifactId>fisco-bcos-java-sdk</artifactId>
         </dependency>
         <dependency>
+            <groupId>www.topview</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
             <exclusions>
