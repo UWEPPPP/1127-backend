@@ -8,26 +8,26 @@ import www.topview.constant.ResultCode;
  * 前后端通讯标准
  *
  * @author ashinnotfound
- * @date 2023/01/29
+ * @date 2023/10/29
  */
 @Data
 @Accessors(chain = true)
 public class CommonResult<T> {
-    Integer code;
+    private Integer code;
 
     boolean isSuccess;
 
-    String message;
+    private String message;
 
-    Object data;
+    private T data;
 
-    public CommonResult(Integer code, boolean isSuccess, String message) {
+    private CommonResult(Integer code, boolean isSuccess, String message) {
         this.code = code;
         this.isSuccess = isSuccess;
         this.message = message;
     }
 
-    public CommonResult(Integer code, boolean isSuccess, String message, T data) {
+    private CommonResult(Integer code, boolean isSuccess, String message, T data) {
         this.code = code;
         this.isSuccess = isSuccess;
         this.message = message;
@@ -42,11 +42,11 @@ public class CommonResult<T> {
         return new CommonResult<>(code, false, message);
     }
 
-    public static CommonResult<Void> operateSuccess(String message, Boolean bool) {
+    public static CommonResult<Void> operateSuccess(String message) {
         return new CommonResult<>(ResultCode.SUCCESS_CODE, true, message);
     }
 
-    public static <P> CommonResult<P> operateSuccess(String message, P data) {
+    public static <T> CommonResult<T> operateSuccess(String message, T data) {
         return new CommonResult<>(
                 ResultCode.SUCCESS_CODE,
                 true,

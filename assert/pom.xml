@@ -33,5 +33,9 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>www.topview</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
     </dependencies>
 </project>

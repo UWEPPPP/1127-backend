@@ -23,6 +23,7 @@
         <lombok>1.18.28</lombok>
         <jackson>2.15.2</jackson>
         <fisco.bcos.version>3.4.0</fisco.bcos.version>
+        <mysql-connector.version>8.0.31</mysql-connector.version>
         <mybatis-plus.version>3.5.4</mybatis-plus.version>
         <hutool>5.8.22</hutool>
         <juint>4.13.2</juint>
@@ -69,6 +70,21 @@
                 <groupId>org.fisco-bcos.java-sdk</groupId>
                 <artifactId>fisco-bcos-java-sdk</artifactId>
                 <version>${fisco.bcos.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>www.topview</groupId>
+                <artifactId>common</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
