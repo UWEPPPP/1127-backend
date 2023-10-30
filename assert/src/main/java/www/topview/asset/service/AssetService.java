@@ -1,9 +1,7 @@
 package www.topview.asset.service;
 
 import www.topview.asset.domain.dto.CreateAssetDTO;
-import www.topview.asset.domain.request.CreateAssetRequest;
-
-import java.io.IOException;
+import www.topview.asset.domain.vo.AssetDetailsVO;
 
 /**
  * 资产service
@@ -18,4 +16,11 @@ public interface AssetService {
      * @return 创建成功返回true
      */
     Boolean createAsset(CreateAssetDTO createAssetDTO);
+
+    /**
+     * 通过id获取信息
+     * @param id 资产id
+     * @return 用于显示资产详细信息的vo
+     */
+    AssetDetailsVO getAssetMessage(Integer id);
 }
