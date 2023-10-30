@@ -1,6 +1,10 @@
 package www.topview.service;
 
 
+import www.topview.entity.vo.ApplyVO;
+
+import java.util.List;
+
 /**
  * 公司服务
  *
@@ -8,4 +12,16 @@ package www.topview.service;
  * {@code @date} 2023/10/30
  */
 public interface CompanyService {
+
+    /**
+     * add worker
+     */
+    public void addWorker();
+
+    /**
+     * get all apply from worker
+     *
+     * @return
+     */
+    public List<ApplyVO> getAllApplyFromWorker();
 }
