@@ -8,6 +8,8 @@ import www.topview.entity.model.RegisterCptModel;
 import www.topview.service.DomainService;
 import www.topview.service.WeIdentityService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author 刘家辉
  * @date 2023/10/28
@@ -19,6 +21,8 @@ public class DomainServiceImpl implements DomainService {
     private String cptTemplatePath;
     @Autowired
     WeIdentityService weIdentityService;
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     public String getCptTemplate() {
@@ -28,7 +32,7 @@ public class DomainServiceImpl implements DomainService {
 
     @Override
     public Boolean registerCpt(RegisterCptModel model) {
-     //  weIdentityService.registerCpt(model.getPublisher(),"", model.getClaim());
+     //  weIdentityService.registerCpt( , , model.getClaim());
 
         return null;
     }
