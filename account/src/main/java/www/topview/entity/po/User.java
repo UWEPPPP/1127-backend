@@ -1,5 +1,7 @@
 package www.topview.entity.po;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -9,13 +11,14 @@ import lombok.Data;
  */
 
 @Data
-@TableName("'user'")
+@TableName("user")
 public class User {
 
     /**
      * 用户主键
      */
-    private String id;
+    @TableId
+    private Integer id;
 
     /**
      * 用户名
@@ -30,26 +33,36 @@ public class User {
     /**
      * 用户的weId
      */
+    @TableField("weid_user")
     private String weIdUser;
 
     /**
      * 用户公钥
      */
+    @TableField("public_key")
     private String publicKey;
 
 
     /**
      * 用户私钥
      */
+    @TableField("private_key")
     private String privateKey;
 
+    /**
+     * 账户地址
+     */
+    private String address;
+    public User() {
+    }
 
-    public User(String id, String username, String password, String weIdUser, String publicKey, String privateKey) {
+    public User(Integer id, String username, String password, String weIdUser, String publicKey, String privateKey, String address) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.weIdUser = weIdUser;
         this.publicKey = publicKey;
         this.privateKey = privateKey;
+        this.address = address;
     }
 }

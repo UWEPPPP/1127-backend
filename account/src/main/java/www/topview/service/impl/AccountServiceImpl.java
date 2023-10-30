@@ -46,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
          * 以下这个PO尚未进行对账户密码的加密,用户私钥的加密,需要后续完成
          */
         User user = new User(
-                accountModel.getWeId(),
+                null,
                 userRegisterBO.getUsername(),
                 userRegisterBO.getPassword(),
                 accountModel.getWeId(),
@@ -56,8 +56,8 @@ public class AccountServiceImpl implements AccountService {
                 //解密方式
                 //String encryptedKey
                 //String decrypt = CryptoUtil.decrypt(encrypted, PathConstant.PATH_PRIVATE_KEY);
-
-        );
+                ,
+               "test" );
 
         //写入数据库
         Assert.isTrue(userMapper.insert(user) == 1, "注册失败,插入数据库失败");

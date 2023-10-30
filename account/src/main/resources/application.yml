@@ -6,3 +6,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: AccountService
+weIdentity:
+  cpt_template_path: cpt_template/cpt001.json
+  admin_private_key: conf/private_key.txt
