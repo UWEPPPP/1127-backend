@@ -53,10 +53,16 @@ public class User {
      * 账户地址
      */
     private String address;
+
+    /**
+     * 0为企业管理员      1为企业员工
+     */
+    private Integer role;
+
     public User() {
     }
 
-    public User(Integer id, String username, String password, String weIdUser, String publicKey, String privateKey, String address) {
+    public User(Integer id, String username, String password, String weIdUser, String publicKey, String privateKey, String address, Integer role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -64,5 +70,6 @@ public class User {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
         this.address = address;
+        this.role = role;
     }
 }

@@ -40,13 +40,16 @@ public class ApplicationForUser {
      */
     private String payload;
 
-    public ApplicationForUser(Integer id, Integer companyId, Integer status, String applicantUsername, String applicantPassword, String payload) {
+    private Integer role;
+
+    public ApplicationForUser(Integer id, Integer companyId, Integer status, String applicantUsername, String applicantPassword, String payload, Integer role) {
         this.id = id;
         this.companyId = companyId;
         this.status = status;
         this.applicantUsername = applicantUsername;
         this.applicantPassword = applicantPassword;
         this.payload = payload;
+        this.role = role;
     }
 
     public ApplicationForUser() {

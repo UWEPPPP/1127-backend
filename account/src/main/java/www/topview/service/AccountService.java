@@ -1,6 +1,7 @@
 package www.topview.service;
 
 import www.topview.entity.bo.CompanyRegisterBO;
+import www.topview.entity.bo.LoginBO;
 import www.topview.entity.bo.UserRegisterBO;
 import www.topview.exception.WeIdentityException;
 
@@ -26,5 +27,12 @@ public interface AccountService {
      * @throws WeIdentityException WeIdentity
      */
     boolean companyRegister(CompanyRegisterBO companyRegisterBO) throws WeIdentityException;
+
+    /**
+     * 用户登录
+     * @param loginBO 登录信息
+     * @return 登录是否成功
+     */
+    boolean login(LoginBO loginBO);
 
 }

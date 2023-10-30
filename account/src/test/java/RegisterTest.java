@@ -31,7 +31,7 @@ public class RegisterTest {
     @Test
     public void RegisterTest() throws WeIdentityException {
 
-        User user = new User(1,"1","1","11","1","1","1");
+        User user = new User(1,"1","1","11","1","1","1",1);
 
 
         userMapper.insert(user);
