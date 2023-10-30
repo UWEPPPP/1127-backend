@@ -10,11 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import www.topview.constant.PathConstant;
 import www.topview.entity.bo.CompanyRegisterBO;
 import www.topview.entity.bo.LoginBO;
+import www.topview.entity.bo.QueryApplicationsBO;
 import www.topview.entity.bo.UserRegisterBO;
 import www.topview.entity.model.AccountModel;
 import www.topview.entity.po.ApplicationForUser;
 import www.topview.entity.po.Company;
 import www.topview.entity.po.User;
+import www.topview.entity.vo.ApplicationUserVO;
 import www.topview.exception.WeIdentityException;
 import www.topview.mapper.ApplicationMapper;
 import www.topview.mapper.CompanyMapper;
@@ -22,6 +24,9 @@ import www.topview.mapper.UserMapper;
 import www.topview.service.AccountService;
 import www.topview.service.WeIdentityService;
 import www.topview.util.CryptoUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -116,4 +121,21 @@ public class AccountServiceImpl implements AccountService {
     public boolean login(LoginBO loginBO) {
         return true;
     }
+
+    @Override
+    public List<ApplicationUserVO> queryApplications(QueryApplicationsBO queryApplicationsBO) {
+        Integer companyId = queryApplicationsBO.getCompanyId();
+        List<ApplicationForUser> applications = applicationMapper.selectList(new QueryWrapper<ApplicationForUser>().eq("company_id", companyId));
+        List<ApplicationUserVO> result = new ArrayList<>();
+        for (ApplicationForUser temp : applications) {
+            result.add(new ApplicationUserVO(
+                    temp.getId(),
+                    temp.getCompanyId(),
+                    temp.getStatus(),
+                    temp.getPayload()));
+        }
+        return result;
+    }
+
+
 }

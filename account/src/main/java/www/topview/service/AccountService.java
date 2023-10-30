@@ -2,8 +2,14 @@ package www.topview.service;
 
 import www.topview.entity.bo.CompanyRegisterBO;
 import www.topview.entity.bo.LoginBO;
+import www.topview.entity.bo.QueryApplicationsBO;
 import www.topview.entity.bo.UserRegisterBO;
+import www.topview.entity.po.Company;
+import www.topview.entity.po.User;
+import www.topview.entity.vo.ApplicationUserVO;
 import www.topview.exception.WeIdentityException;
+
+import java.util.List;
 
 /**
  * @author :Lictory
@@ -35,4 +41,6 @@ public interface AccountService {
      */
     boolean login(LoginBO loginBO);
 
+
+    List<ApplicationUserVO> queryApplications(QueryApplicationsBO queryApplicationsBO);
 }
