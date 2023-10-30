@@ -5,6 +5,7 @@ import com.alibaba.nacos.api.config.annotation.NacosValue;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.MerkleNode;
 import io.ipfs.api.NamedStreamable;
+import io.ipfs.multihash.Multihash;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,7 +57,11 @@ public class IpfsClient {
         int index = fileName.lastIndexOf('.');
         File realFile = addIdentification(file, fileName.substring(0, index), fileName.substring(index));
 
-        return upload(realFile);
+        String cid = upload(realFile);
+        if(StringUtils.isEmpty(cid)){
+            throw new RuntimeException("cid为空,上传失败");
+        }
+        return cid;
     }
 
     /**
@@ -94,5 +99,17 @@ public class IpfsClient {
         NamedStreamable.FileWrapper fileBytes = new NamedStreamable.FileWrapper(file);
         MerkleNode addResult = ipfsClient.add(fileBytes).get(0);
         return addResult.hash.toString();
+    }
+
+    /**
+     * 移除文件
+     * @param cid 文件cid
+     */
+    public void remove(String cid){
+        try {
+            ipfsClient.pin.rm(Multihash.fromBase58(cid));
+        } catch (IOException e) {
+            throw new RuntimeException("文件移除失败");
+        }
     }
 }
