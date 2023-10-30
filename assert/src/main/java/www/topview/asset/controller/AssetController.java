@@ -5,10 +5,12 @@ import org.springframework.web.bind.annotation.*;
 import www.topview.asset.domain.dto.CreateAssetDTO;
 import www.topview.asset.domain.vo.AssetDetailsVO;
 import www.topview.asset.domain.bo.CreateAssetBO;
+import www.topview.asset.domain.vo.AssetVO;
 import www.topview.asset.service.AssetService;
 import www.topview.result.CommonResult;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 资产controller
@@ -32,7 +34,12 @@ public class AssetController {
     }
 
     @GetMapping("/{id}")
-    public CommonResult<AssetDetailsVO> getAsset(@PathVariable Integer id){
+    public CommonResult<AssetDetailsVO> getAssetInfo(@PathVariable Integer id){
         return CommonResult.operateSuccess("查询成功",assetService.getAssetMessage(id));
+    }
+
+    @GetMapping("/list")
+    public CommonResult<List<AssetVO>> getAssetList(){
+        return CommonResult.operateSuccess("查询成功",assetService.getAssetList());
     }
 }
