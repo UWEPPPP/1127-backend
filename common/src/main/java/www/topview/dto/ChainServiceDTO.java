@@ -26,6 +26,11 @@ public class ChainServiceDTO {
     @NotBlank
     private String contractName;
     /**
+     * 合约地址
+     */
+    @NotBlank
+    private String contractAddress;
+    /**
      * 函数名称
      */
     @NotBlank
