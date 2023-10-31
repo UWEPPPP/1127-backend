@@ -9,5 +9,5 @@ import java.util.Map;
 public interface ChainService {
     Map<String, Object> call(ChainServiceBO chainServiceBO) throws TransactionBaseException, ContractCodecException;
 
-    void send(ChainServiceBO chainServiceBO) throws TransactionBaseException, ContractCodecException;
+    Map<String, Object> send(ChainServiceBO chainServiceBO) throws TransactionBaseException, ContractCodecException;
 }
