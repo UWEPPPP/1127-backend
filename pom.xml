@@ -13,6 +13,7 @@
         <module>common</module>
         <module>gateway</module>
         <module>chain</module>
+        <module>asset</module>
     </modules>
     <properties>
         <java.version>11</java.version>

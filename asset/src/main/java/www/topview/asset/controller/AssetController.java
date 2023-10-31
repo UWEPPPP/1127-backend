@@ -42,4 +42,9 @@ public class AssetController {
     public CommonResult<List<AssetVO>> getAssetList(){
         return CommonResult.operateSuccess("查询成功",assetService.getAssetList());
     }
+
+    @PostMapping("/group")
+    public CommonResult<Boolean> updateGroup(){
+        return CommonResult.operateSuccess("修改成功",true);
+    }
 }

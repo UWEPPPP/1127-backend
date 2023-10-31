@@ -32,4 +32,11 @@ public interface AssetService {
      * @return 返回asset列表
      */
     List<AssetVO> getAssetList();
+
+    /**
+     * 修改组别
+     *
+     * @return 修改成功返回true
+     */
+    Boolean updateAssetGroup();
 }
