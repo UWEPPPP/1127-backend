@@ -38,7 +38,7 @@ public class ChainController {
     }
 
     @PostMapping
-    public CommonResult<Void> send(@Validated ChainServiceDTO chainServiceDTO) throws TransactionBaseException, ContractCodecException {
+    public CommonResult<Object> send(@Validated ChainServiceDTO chainServiceDTO) throws TransactionBaseException, ContractCodecException {
         ChainServiceBO chainServiceBO = new ChainServiceBO();
 
         chainServiceBO.setUserId(chainServiceDTO.getUserId());
@@ -47,7 +47,6 @@ public class ChainController {
         chainServiceBO.setFunctionName(chainServiceDTO.getFunctionName());
         chainServiceBO.setFunctionParams(chainServiceDTO.getFunctionParams());
 
-        chainService.send(chainServiceBO);
-        return CommonResult.operateSuccess("调用" + chainServiceBO.getContractName() + "::" + chainServiceBO.getFunctionName() + "成功");
+        return CommonResult.operateSuccess("调用" + chainServiceBO.getContractName() + "::" + chainServiceBO.getFunctionName() + "成功", chainService.send(chainServiceBO));
     }
 }

@@ -10,7 +10,6 @@ import org.fisco.bcos.sdk.v3.transaction.model.exception.TransactionBaseExceptio
 import org.springframework.stereotype.Service;
 import com.topview.bo.ChainServiceBO;
 import org.springframework.util.Assert;
-import www.topview.result.CommonResult;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -47,13 +46,15 @@ public class ChainServiceImpl implements ChainService {
      * 发送交易
      *
      * @param chainServiceBO 链服务bo
+     * @return {@code Map<String, Object>}
      * @throws ContractCodecException   合约编解码器异常
      * @throws TransactionBaseException 事务基础异常
      */
     @Override
-    public void send(ChainServiceBO chainServiceBO) throws TransactionBaseException, ContractCodecException {
+    public Map<String, Object> send(ChainServiceBO chainServiceBO) throws TransactionBaseException, ContractCodecException {
         TransactionResponse transactionResponse = processorPool.getProcessor(chainServiceBO.getUserId()).sendTransactionAndGetResponseByContractLoader(
                 chainServiceBO.getContractName(), chainServiceBO.getContractAddress(), chainServiceBO.getFunctionName(), chainServiceBO.getFunctionParams());
         Assert.isTrue(transactionResponse.getTransactionReceipt().isStatusOK(), transactionResponse.getReceiptMessages());
+        return ContractUtil.decodeReturnStruct(transactionResponse.getReturnABIObject());
     }
 }
