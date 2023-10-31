@@ -118,4 +118,9 @@ public class AssetServiceImpl implements AssetService {
                                 .setGroupName(asset.getGroupName());
                 }).collect(Collectors.toList());
     }
+
+    @Override
+    public Boolean updateAssetGroup() {
+        return null;
+    }
 }
