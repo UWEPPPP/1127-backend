@@ -95,9 +95,9 @@ public class AccountServiceImpl implements AccountService {
                 accountModel.getPublicKey(),
                 accountModel.getAccountAddress()
         );
-        // TODO     进行企业注册
+        //  进行企业注册
         Assert.isTrue(companyMapper.insert(company) == 1, "公司创建失败,数据库更新时发生异常");
-        //TODO 进行企业管理员的注册
+        // 进行企业管理员的注册
         Company newCompany = companyMapper.selectOne(new QueryWrapper<Company>().eq("account_address", accountModel.getAccountAddress()));
         Integer companyId = newCompany.getId();
         User user = new User(
@@ -136,12 +136,31 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean judge(JudgeBO judgeBO) {
+    public boolean judge(JudgeBO judgeBO) throws WeIdentityException {
 
         applicationMapper.update(null,
                 new UpdateWrapper<ApplicationForUser>().
                         set("status", judgeBO.getStatus()).
                         eq("id", judgeBO.getId()));
+
+        //判断是否通过申请      如果不通过则直接返回,通过则进行新用户创建操作
+        if (judgeBO.getStatus() == 0) {
+            return true;
+        }
+        ApplicationForUser applicationForUser = applicationMapper.selectOne(new QueryWrapper<ApplicationForUser>().eq("id", judgeBO.getId()));
+        //从申请表中获取的密码已经是加密过的了.在这里无需再次加密
+        AccountModel weId = weIdentityService.createWeId();
+        User user = new User(
+                null,
+                applicationForUser.getApplicantUsername(),
+                applicationForUser.getApplicantPassword(),
+                weId.getWeId(),
+                weId.getPublicKey(),
+                CryptoUtil.encrypt(weId.getPrivateKey(), PathConstant.PATH_PUBLIC_KEY),
+                weId.getAccountAddress(),
+                1
+        );
+        Assert.isTrue(userMapper.insert(user) == 1, "新用户创建失败,数据库异常");
         return true;
     }
 

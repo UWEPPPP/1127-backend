@@ -58,7 +58,7 @@ public class AccountController {
     }
 
     @PostMapping("/judge")
-    CommonResult<Boolean>  judge(JudgeBO judgeBO){
+    CommonResult<Boolean>  judge(JudgeBO judgeBO) throws WeIdentityException {
         return CommonResult.operateSuccess("操作成功",accountService.judge(judgeBO));
     }
 

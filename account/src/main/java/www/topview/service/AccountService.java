@@ -45,6 +45,6 @@ public interface AccountService {
      * @param judgeBO 带有申请对象的主键id
      * @return 操作成功与否
      */
-    boolean judge(JudgeBO judgeBO);
+    boolean judge(JudgeBO judgeBO) throws WeIdentityException;
 
 }
