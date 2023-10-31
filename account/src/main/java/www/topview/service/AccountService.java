@@ -1,7 +1,7 @@
 package www.topview.service;
 
 import www.topview.entity.bo.*;
-import www.topview.entity.vo.ApplicationUserVO;
+import www.topview.entity.vo.ApplicationWorkerVO;
 import www.topview.exception.WeIdentityException;
 
 import java.util.List;
@@ -15,11 +15,11 @@ public interface AccountService {
     /**
      * 用户申请注册
      *
-     * @param userRegisterBO 包含用户注册信息
+     * @param workerRegisterBO 包含用户注册信息
      * @return 返回bool
      * @throws WeIdentityException exception
      */
-    boolean userRegister(UserRegisterBO userRegisterBO) throws WeIdentityException;
+    boolean userRegister(WorkerRegisterBO workerRegisterBO) throws WeIdentityException;
 
 
     /**
@@ -46,7 +46,7 @@ public interface AccountService {
      * @param queryApplicationsBO 对应的公司id
      * @return 申请列表
      */
-    List<ApplicationUserVO> queryApplications(QueryApplicationsBO queryApplicationsBO);
+    List<ApplicationWorkerVO> queryApplications(QueryApplicationsBO queryApplicationsBO);
 
 
     /**

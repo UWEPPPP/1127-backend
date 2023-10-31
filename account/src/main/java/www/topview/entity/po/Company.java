@@ -40,5 +40,8 @@ public class Company {
      */
     private Integer domainId;
 
-
+    /**
+     * 公司名字
+     */
+    private String companyName;
 }

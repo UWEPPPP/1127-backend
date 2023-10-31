@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import www.topview.entity.bo.*;
-import www.topview.entity.vo.ApplicationUserVO;
+import www.topview.entity.vo.ApplicationWorkerVO;
 import www.topview.exception.WeIdentityException;
 import www.topview.result.CommonResult;
 import www.topview.service.AccountService;
@@ -31,8 +31,8 @@ public class AccountController {
      * 注册功能
      */
     @PostMapping("/userRegisterApplicant")
-    CommonResult<Boolean> userRegister(UserRegisterBO userRegisterBO) throws WeIdentityException {
-        return CommonResult.operateSuccess("申请注册成功", accountService.userRegister(userRegisterBO));
+    CommonResult<Boolean> userRegister(WorkerRegisterBO workerRegisterBO) throws WeIdentityException {
+        return CommonResult.operateSuccess("申请注册成功", accountService.userRegister(workerRegisterBO));
     }
 
     /**
@@ -59,7 +59,7 @@ public class AccountController {
     }
 
     @GetMapping("/queryApplications")
-    CommonResult<List<ApplicationUserVO>> queryApplications(QueryApplicationsBO queryApplicationsBO) {
+    CommonResult<List<ApplicationWorkerVO>> queryApplications(QueryApplicationsBO queryApplicationsBO) {
         return CommonResult.operateSuccess("获取申请列表成功", accountService.queryApplications(queryApplicationsBO));
     }
 
