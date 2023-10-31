@@ -14,23 +14,26 @@ public interface AccountService {
 
     /**
      * 用户申请注册
-     * @param userRegisterBO    包含用户注册信息
-     * @return  返回bool
+     *
+     * @param userRegisterBO 包含用户注册信息
+     * @return 返回bool
      * @throws WeIdentityException exception
      */
-     boolean userRegister(UserRegisterBO userRegisterBO) throws WeIdentityException;
+    boolean userRegister(UserRegisterBO userRegisterBO) throws WeIdentityException;
 
 
     /**
-     *公司申请注册
+     * 公司申请注册
+     *
      * @param companyRegisterBO 公司注册信息
-     * @return  bool
+     * @return bool
      * @throws WeIdentityException WeIdentity
      */
     boolean companyRegister(CompanyRegisterBO companyRegisterBO) throws WeIdentityException;
 
     /**
      * 用户登录
+     *
      * @param loginBO 登录信息
      * @return 登录是否成功
      */
@@ -39,6 +42,7 @@ public interface AccountService {
 
     /**
      * 查询申请列表
+     *
      * @param queryApplicationsBO 对应的公司id
      * @return 申请列表
      */
@@ -47,10 +51,11 @@ public interface AccountService {
 
     /**
      * 通过申请的操作
+     *
      * @param judgeBO 带有申请对象的主键id
      * @return 操作成功与否
      * @throws WeIdentityException exception
      */
-    boolean judge(JudgeBO judgeBO) throws WeIdentityException;
+    boolean judgeWorker(JudgeBO judgeBO) throws WeIdentityException;
 
 }

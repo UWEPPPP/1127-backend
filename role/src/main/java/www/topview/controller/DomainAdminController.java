@@ -11,9 +11,14 @@ import www.topview.exception.WeIdentityException;
 import www.topview.result.CommonResult;
 import www.topview.service.DomainService;
 
+/**
+ * domain admin controller
+ *
+ * @author 刘家辉
+ * @date 2023/10/31
+ */
 @RestController
 @RequestMapping("/api/domainAdmin")
-
 public class DomainAdminController {
     @Autowired
     DomainService domainService;

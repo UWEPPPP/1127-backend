@@ -1,13 +1,10 @@
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import www.topview.entity.bo.UserRegisterBO;
-import www.topview.entity.po.User;
 import www.topview.exception.WeIdentityException;
-import www.topview.mapper.UserMapper;
+import www.topview.mapper.WorkerMapper;
 import www.topview.service.AccountService;
 
 /**
@@ -23,7 +20,7 @@ import www.topview.service.AccountService;
 public class RegisterTest {
 
     @Autowired
-    UserMapper userMapper;
+    WorkerMapper workerMapper;
 
     @Autowired
     AccountService accountService;
@@ -31,10 +28,10 @@ public class RegisterTest {
     @Test
     public void RegisterTest() throws WeIdentityException {
 
-        User user = new User(1,"1","1","11","1","1","1",1);
+//        Worker worker = new Worker(1, "1", "1", "11", "1", "1", "1", 1);
 
 
-        userMapper.insert(user);
+//        workerMapper.insert(worker);
 //        System.out.println(accountService.userRegister(new UserRegisterBO("testUser1","testUser1")));
     }
 

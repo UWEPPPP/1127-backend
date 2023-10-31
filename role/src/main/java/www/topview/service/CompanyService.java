@@ -1,7 +1,7 @@
 package www.topview.service;
 
 
-import www.topview.entity.vo.ApplyVO;
+import www.topview.entity.vo.WorkerVO;
 
 import java.util.List;
 
@@ -19,9 +19,16 @@ public interface CompanyService {
     public void addWorker();
 
     /**
-     * get all apply from worker
+     * delete worker
      *
-     * @return
+     * @param workerId worker id
      */
-    public List<ApplyVO> getAllApplyFromWorker();
+    public void deleteWorker(int workerId);
+
+    /**
+     * get worker list
+     *
+     * @return {@link List}<{@link WorkerVO}>
+     */
+    public List<WorkerVO> getWorkerList();
 }

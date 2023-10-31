@@ -1,6 +1,8 @@
 package www.topview.entity.bo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author :Lictory
@@ -8,6 +10,8 @@ import lombok.Data;
  */
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserRegisterBO {
 
 
@@ -27,16 +31,13 @@ public class UserRegisterBO {
     private Integer companyId;
 
     /**
+     * domain id
+     */
+    private Integer domainId;
+
+    /**
      * 员工属于公司的证明材料
      */
     private String payload;
-    public UserRegisterBO() {
-    }
 
-    public UserRegisterBO(String username, String password, Integer companyId, String payload) {
-        this.username = username;
-        this.password = password;
-        this.companyId = companyId;
-        this.payload = payload;
-    }
 }

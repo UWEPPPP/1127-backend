@@ -49,6 +49,7 @@ public class AccountController {
 
     /**
      * 返回token
+     *
      * @param loginBO 用户的账户密码
      * @return token
      */
@@ -63,8 +64,8 @@ public class AccountController {
     }
 
     @PostMapping("/judge")
-    CommonResult<Boolean>  judge(JudgeBO judgeBO) throws WeIdentityException {
-        return CommonResult.operateSuccess("操作成功",accountService.judge(judgeBO));
+    CommonResult<Boolean> judge(JudgeBO judgeBO) throws WeIdentityException {
+        return CommonResult.operateSuccess("操作成功", accountService.judgeWorker(judgeBO));
     }
 
 }

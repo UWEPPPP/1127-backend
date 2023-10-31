@@ -1,8 +1,14 @@
 package www.topview.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import www.topview.entity.vo.WorkerVO;
+import www.topview.result.CommonResult;
+import www.topview.service.CompanyService;
+
+import java.util.List;
 
 /**
  * company admin controller
@@ -13,11 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/companyAdmin")
 public class CompanyAdminController {
-
-    @PostMapping("/getAllApplyFromWorker")
-    public void getAllApplyFromWorker() {
-
-    }
+    @Autowired
+    private CompanyService service;
 
     @PostMapping("/addWorker")
     public void addWorker() {
@@ -26,22 +29,13 @@ public class CompanyAdminController {
 
 
     @PostMapping("/getWorkerList")
-    public void getWorkerList() {
-
+    public CommonResult<List<WorkerVO>> getWorkerList() {
+        return CommonResult.operateSuccess("获取员工列表成功", service.getWorkerList());
     }
 
     @PostMapping("/deleteWorker")
-    public void deleteWorker() {
-
-    }
-
-    @PostMapping("/openDataGroup")
-    public void openDataGroup() {
-
-    }
-
-    @PostMapping("/closeDataGroup")
-    public void closeDataGroup() {
-
+    public CommonResult<Void> deleteWorker(int workerId) {
+        service.deleteWorker(workerId);
+        return CommonResult.operateSuccess("删除成功");
     }
 }

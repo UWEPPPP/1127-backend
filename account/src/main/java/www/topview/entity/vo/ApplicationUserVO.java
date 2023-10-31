@@ -16,11 +16,6 @@ public class ApplicationUserVO {
     private Integer id;
 
     /**
-     * 申请的公司id
-     */
-    private Integer companyId;
-
-    /**
      * 申请状态
      */
     private Integer status;
@@ -33,9 +28,8 @@ public class ApplicationUserVO {
     public ApplicationUserVO() {
     }
 
-    public ApplicationUserVO(Integer id, Integer companyId, Integer status, String payload) {
+    public ApplicationUserVO(Integer id, Integer status, String payload) {
         this.id = id;
-        this.companyId = companyId;
         this.status = status;
         this.payload = payload;
     }
