@@ -1,7 +1,6 @@
 package com.topview.controller;
 
 import com.topview.bo.ChainServiceBO;
-import com.topview.config.ContractConfig;
 import com.topview.service.ChainService;
 import org.fisco.bcos.sdk.v3.codec.ContractCodecException;
 import org.fisco.bcos.sdk.v3.transaction.model.exception.TransactionBaseException;
@@ -18,9 +17,6 @@ import javax.annotation.Resource;
 public class ChainController {
 
     @Resource
-    private ContractConfig contractConfig;
-
-    @Resource
     private ChainService chainService;
 
     @GetMapping
@@ -29,7 +25,7 @@ public class ChainController {
 
         chainServiceBO.setUserId(chainServiceDTO.getUserId());
         chainServiceBO.setContractName(chainServiceDTO.getContractName());
-        chainServiceBO.setContractAddress(contractConfig.contractName2Address(chainServiceDTO.getContractName()));
+        chainServiceBO.setContractAddress(chainServiceDTO.getContractName());
         chainServiceBO.setFunctionName(chainServiceDTO.getFunctionName());
         chainServiceBO.setFunctionParams(chainServiceDTO.getFunctionParams());
 
@@ -43,7 +39,7 @@ public class ChainController {
 
         chainServiceBO.setUserId(chainServiceDTO.getUserId());
         chainServiceBO.setContractName(chainServiceDTO.getContractName());
-        chainServiceBO.setContractAddress(contractConfig.contractName2Address(chainServiceDTO.getContractName()));
+        chainServiceBO.setContractAddress(chainServiceDTO.getContractName());
         chainServiceBO.setFunctionName(chainServiceDTO.getFunctionName());
         chainServiceBO.setFunctionParams(chainServiceDTO.getFunctionParams());
 
