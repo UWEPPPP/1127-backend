@@ -57,6 +57,7 @@ public class Admin {
      */
     private String address;
     /**
+     * 如果companyId为-1 则为域管理员
      * company id
      */
     private Integer companyId;
