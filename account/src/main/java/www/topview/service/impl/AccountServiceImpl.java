@@ -122,7 +122,6 @@ public class AccountServiceImpl implements AccountService {
         companyMapper.update(company1,new UpdateWrapper<Company>().eq("contract_address",accountModel.getAccountAddress()));
 
         //  TODO 调用合约
-
         return true;
     }
 
