@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * @author :Lictory
@@ -16,7 +17,9 @@ import lombok.NoArgsConstructor;
 @TableName("user")
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+@Accessors(chain = true)
+public class Worker {
+
 
     /**
      * 用户主键
@@ -46,7 +49,6 @@ public class User {
     @TableField("public_key")
     private String publicKey;
 
-
     /**
      * 用户私钥
      */
@@ -62,4 +64,13 @@ public class User {
      * group name
      */
     private String groupName;
+    /**
+     * company id
+     */
+    private Integer companyId;
+    /**
+     * domain id
+     */
+    private Integer domainId;
+
 }

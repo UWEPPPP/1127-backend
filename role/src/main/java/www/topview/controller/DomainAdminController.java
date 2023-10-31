@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import www.topview.entity.model.RegisterCptModel;
+import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;
 import www.topview.exception.WeIdentityException;
 import www.topview.result.CommonResult;
 import www.topview.service.DomainService;
+
+import java.util.List;
 
 /**
  * domain admin controller
@@ -29,8 +32,8 @@ public class DomainAdminController {
     }
 
     @PostMapping("/getCompanyList")
-    public void getCompanyList() {
-
+    public CommonResult<List<CompanyVO>> getCompanyList() {
+        return CommonResult.operateSuccess("成功获取公司信息列表", domainService.getCompanyList());
     }
 
     @PostMapping("/deleteCompany")

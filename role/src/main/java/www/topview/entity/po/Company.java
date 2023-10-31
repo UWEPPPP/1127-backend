@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
  */
 
 @Data
-@TableName("company")
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("company")
 public class Company {
 
     /**
@@ -28,6 +28,11 @@ public class Company {
     @TableField("register_id")
     private Integer registerId;
 
+    /**
+     * company name
+     */
+    private String companyName;
+
 
     /**
      * 公司账户地址
@@ -35,7 +40,10 @@ public class Company {
     @TableField("contract_address")
     private String contractAddress;
 
-    private String companyName;
+    /**
+     * domain id
+     */
+    private Integer domainId;
 
 
 }

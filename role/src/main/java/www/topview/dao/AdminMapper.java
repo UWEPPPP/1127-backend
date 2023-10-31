@@ -1,13 +1,13 @@
 package www.topview.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import www.topview.entity.po.User;
+import www.topview.entity.po.Admin;
 
 /**
- * user mapper
+ * admin mapper
  *
  * @author 刘家辉
  * @date 2023/10/31
  */
-public interface UserMapper extends BaseMapper<User> {
+public interface AdminMapper extends BaseMapper<Admin> {
 }
