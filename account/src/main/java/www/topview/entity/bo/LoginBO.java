@@ -20,4 +20,9 @@ public class LoginBO {
      * 密码
      */
     private String password;
+
+    /**
+     * role 0 普通公司员工 1 公司管理员 2 域管理员
+     */
+    private Integer role;
 }

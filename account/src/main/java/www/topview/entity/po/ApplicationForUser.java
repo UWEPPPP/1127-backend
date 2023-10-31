@@ -2,7 +2,9 @@ package www.topview.entity.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author :Lictory
@@ -10,6 +12,8 @@ import lombok.Data;
  */
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName("application_user")
 public class ApplicationForUser {
 
@@ -24,8 +28,10 @@ public class ApplicationForUser {
     @TableField("company_id")
     private Integer companyId;
 
+    private Integer domainId;
+
     /**
-     *  申请状态(1 表示申请通过  2  表示申请中  0表示申请失败)
+     * 申请状态(1 表示申请通过  2  表示申请中  0表示申请失败)
      */
     private Integer status;
 
@@ -40,18 +46,4 @@ public class ApplicationForUser {
      */
     private String payload;
 
-    private Integer role;
-
-    public ApplicationForUser(Integer id, Integer companyId, Integer status, String applicantUsername, String applicantPassword, String payload, Integer role) {
-        this.id = id;
-        this.companyId = companyId;
-        this.status = status;
-        this.applicantUsername = applicantUsername;
-        this.applicantPassword = applicantPassword;
-        this.payload = payload;
-        this.role = role;
-    }
-
-    public ApplicationForUser() {
-    }
 }

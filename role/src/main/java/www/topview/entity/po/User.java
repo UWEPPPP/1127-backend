@@ -3,7 +3,9 @@ package www.topview.entity.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author :Lictory
@@ -12,6 +14,8 @@ import lombok.Data;
 
 @Data
 @TableName("user")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     /**
@@ -55,21 +59,7 @@ public class User {
     private String address;
 
     /**
-     * 0为企业管理员      1为企业员工
+     * group name
      */
-    private Integer role;
-
-    public User() {
-    }
-
-    public User(Integer id, String username, String password, String weIdUser, String publicKey, String privateKey, String address, Integer role) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.weIdUser = weIdUser;
-        this.publicKey = publicKey;
-        this.privateKey = privateKey;
-        this.address = address;
-        this.role = role;
-    }
+    private String groupName;
 }

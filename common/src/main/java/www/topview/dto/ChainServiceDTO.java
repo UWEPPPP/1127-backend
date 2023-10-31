@@ -1,6 +1,7 @@
 package www.topview.dto;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import java.util.List;
  * @date 2023/10/30
  */
 @Data
+@Accessors(chain = true)
 public class ChainServiceDTO {
     /**
      * 用户 ID

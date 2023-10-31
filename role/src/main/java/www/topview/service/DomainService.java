@@ -1,8 +1,12 @@
 package www.topview.service;
 
 import www.topview.entity.model.RegisterCptModel;
+import www.topview.entity.po.Company;
+import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;
 import www.topview.exception.WeIdentityException;
+
+import java.util.List;
 
 /**
  * @author 刘家辉
@@ -21,7 +25,14 @@ public interface DomainService {
      *
      * @param model model
      * @return {@link CptInfoVO}
-     * @throws WeIdentityException we identity exception
+     * @throws WeIdentityException weidentity exception
      */
     public CptInfoVO registerCpt(RegisterCptModel model) throws WeIdentityException;
+
+    /**
+     * get company list
+     *
+     * @return {@link List}<{@link Company}>
+     */
+    public List<CompanyVO> getCompanyList();
 }

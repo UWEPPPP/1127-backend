@@ -1,7 +1,8 @@
 package www.topview.entity.bo;
 
-import com.webank.weid.protocol.base.Credential;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author :Lictory
@@ -9,6 +10,8 @@ import lombok.Data;
  */
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CompanyRegisterBO {
 
     /**
@@ -21,11 +24,10 @@ public class CompanyRegisterBO {
      */
     private String password;
 
-    public CompanyRegisterBO(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
+    /**
+     * domain id
+     */
+    private Integer domainId;
 
-    public CompanyRegisterBO() {
-    }
+
 }
