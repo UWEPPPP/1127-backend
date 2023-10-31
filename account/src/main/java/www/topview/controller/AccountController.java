@@ -47,8 +47,13 @@ public class AccountController {
         return CommonResult.operateSuccess("申请注册成功", accountService.companyRegister(companyRegisterBO));
     }
 
+    /**
+     * 返回token
+     * @param loginBO 用户的账户密码
+     * @return token
+     */
     @PostMapping("/login")
-    CommonResult<Boolean> login(LoginBO loginBO) {
+    CommonResult<String> login(LoginBO loginBO) {
         return CommonResult.operateSuccess("登录成功", accountService.login(loginBO));
     }
 

@@ -86,20 +86,22 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(rollbackFor = Exception.class)
     public boolean companyRegister(CompanyRegisterBO companyRegisterBO) throws WeIdentityException {
 
+
+        //由于公司表跟user表中的主键具有相互依赖,故进行间接创建
+        //根据accountAddress进行公司Id的创建
         AccountModel accountModel = weIdentityService.createWeId();
         Company company = new Company(
                 null,
-                accountModel.getWeId(),
                 null,
-                CryptoUtil.encrypt(accountModel.getPrivateKey(), PathConstant.PATH_PUBLIC_KEY),
-                accountModel.getPublicKey(),
                 accountModel.getAccountAddress()
         );
         //  进行企业注册
         Assert.isTrue(companyMapper.insert(company) == 1, "公司创建失败,数据库更新时发生异常");
         // 进行企业管理员的注册
-        Company newCompany = companyMapper.selectOne(new QueryWrapper<Company>().eq("account_address", accountModel.getAccountAddress()));
+        Company newCompany = companyMapper.selectOne(new QueryWrapper<Company>().eq("contract_address", accountModel.getAccountAddress()));
         Integer companyId = newCompany.getId();
+
+        //根据公司Id进行userId的创建
         User user = new User(
                 null,
                 companyRegisterBO.getUsername(),
@@ -111,13 +113,26 @@ public class AccountServiceImpl implements AccountService {
                 0
         );
         Assert.isTrue(userMapper.insert(user) == 1, "企业管理员注册失败");
+
+        //获取registerId
+        Integer registerId = userMapper.selectOne(new QueryWrapper<User>().eq("company_id", companyId)).getId();
+        //将注册人的id更新至company中
+        Company company1=new Company();
+        company1.setRegisterId(registerId);
+        companyMapper.update(company1,new UpdateWrapper<Company>().eq("contract_address",accountModel.getAccountAddress()));
+
         //  TODO 调用合约
+
         return true;
     }
 
     @Override
-    public boolean login(LoginBO loginBO) {
-        return true;
+    public String login(LoginBO loginBO) {
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("username", loginBO.getUsername()));
+        Assert.notNull(user, "登录失败,用户名不存在");
+
+
+        return "true";
     }
 
     @Override

@@ -34,9 +34,14 @@ public interface AccountService {
      * @param loginBO 登录信息
      * @return 登录是否成功
      */
-    boolean login(LoginBO loginBO);
+    String login(LoginBO loginBO);
 
 
+    /**
+     * 查询申请列表
+     * @param queryApplicationsBO 对应的公司id
+     * @return 申请列表
+     */
     List<ApplicationUserVO> queryApplications(QueryApplicationsBO queryApplicationsBO);
 
 
@@ -44,6 +49,7 @@ public interface AccountService {
      * 通过申请的操作
      * @param judgeBO 带有申请对象的主键id
      * @return 操作成功与否
+     * @throws WeIdentityException exception
      */
     boolean judge(JudgeBO judgeBO) throws WeIdentityException;
 
