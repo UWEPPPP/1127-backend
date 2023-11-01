@@ -13,6 +13,10 @@ spring:
         namespace: 1127
 server:
   port: 9001
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
 weIdentity:
   cpt_template_path: cpt_template/cpt001.json
   admin_private_key: conf/private_key.txt

@@ -25,4 +25,5 @@ public class User {
     private String address;
     private String publicKey;
     private String privateKey;
+    private Integer role;
 }

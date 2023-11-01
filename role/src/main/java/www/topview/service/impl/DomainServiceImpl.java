@@ -7,7 +7,9 @@ import com.webank.weid.protocol.base.CptBaseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import www.topview.constant.PathConstant;
+import www.topview.constant.RoleConstant;
 import www.topview.dao.*;
 import www.topview.entity.dto.AddCompanyDTO;
 import www.topview.entity.model.AccountModel;
@@ -34,7 +36,9 @@ public class DomainServiceImpl implements DomainService {
     @Value("${weIdentity.cpt_template_path}")
     private String cptTemplatePath;
     @Autowired
-    WeIdentityService weIdentityService;
+    private WeIdentityService weIdentityService;
+    @Autowired
+    private WorkerInfoMapper workerInfoMapper;
     @Autowired
     private HttpServletRequest request;
     @Autowired
@@ -49,9 +53,12 @@ public class DomainServiceImpl implements DomainService {
     private CompanyAdminMapper companyAdminMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void addCompany(AddCompanyDTO addCompanyDTO) throws WeIdentityException {
-        //由于公司表跟worker表中的主键具有相互依赖,故进行间接创建
-        //根据accountAddress进行公司Id的创建
+//        String header = request.getHeader("token"); 账户服务调用 不用token
+//        String id = null;
+//        checkCompanyAdmin(id);
+
         AccountModel accountModel = weIdentityService.createWeId();
         Integer passer = addCompanyDTO.getPasser();
         User user1 = userMapper.selectById(passer);
@@ -59,7 +66,6 @@ public class DomainServiceImpl implements DomainService {
         Assert.notNull(domainAdminMapper.selectOne(new QueryWrapper<DomainAdminInfo>().eq("weid", user1.getWeId())), "不是domain管理员！");
         //TODO 调用合约
         String contractAddr = null;
-
         User user = new User(
                 null,
                 addCompanyDTO.getFounderName(),
@@ -67,7 +73,8 @@ public class DomainServiceImpl implements DomainService {
                 accountModel.getWeId(),
                 accountModel.getAccountAddress(),
                 accountModel.getPublicKey(),
-                accountModel.getPrivateKey()
+                CryptoUtil.encrypt(accountModel.getPrivateKey(), PathConstant.PATH_PUBLIC_KEY)
+                , RoleConstant.COMPANY_ADMIN
         );
         Assert.isTrue(userMapper.insert(user) == 1, "企业管理员注册失败");
         Company company = new Company(
@@ -92,6 +99,23 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
+    public void deleteCompany(int companyId) throws WeIdentityException {
+        String header = request.getHeader("token");
+        //TODO 尚未完成 等待token
+        String id = null;
+        checkDomainAdmin(id);
+
+        int result = companyMapper.deleteById(companyId);
+        Assert.isTrue(result == 1, "公司不存在或者删除失败");
+        int delete1 = workerInfoMapper.delete(new QueryWrapper<WorkerInfo>().eq("company_id", companyId));
+//        Assert.isTrue(companyId1 > 0, "公司不存在或者删除失败"); 有无员工？
+        int delete2 = companyAdminMapper.delete(new QueryWrapper<CompanyAdminInfo>().eq("company_id", companyId));
+        Assert.isTrue(delete2 > 0, "公司管理员删除失败：公司不存在或者删除失败");
+
+        //TODO 调用合约
+    }
+
+    @Override
     public String getCptTemplate() {
         FileReader fileReader = new FileReader(cptTemplatePath);
         return fileReader.readString();
@@ -102,11 +126,9 @@ public class DomainServiceImpl implements DomainService {
         String header = request.getHeader("token");
         //TODO 尚未完成 等待token
         String id = null;
+
+        checkDomainAdmin(id);
         User admin = userMapper.selectById(id);
-        Assert.notNull(admin, "id不存在");
-        QueryWrapper<DomainAdminInfo> adminWrapper = new QueryWrapper<>();
-        adminWrapper.eq("weid", admin.getWeId());
-        Assert.notNull(domainAdminMapper.selectOne(adminWrapper), "该用户不是域管理员");
         String privateKey = CryptoUtil.decrypt(admin.getPrivateKey(), PathConstant.PATH_PRIVATE_KEY);
         CptBaseInfo cptBaseInfo = weIdentityService.registerCpt(admin.getWeId(), privateKey, model.getClaim());
         CptInfoVO cptInfoVO = new CptInfoVO();
@@ -120,13 +142,11 @@ public class DomainServiceImpl implements DomainService {
         String header = request.getHeader("token");
         //TODO 尚未完成 等待token
         String id = null;
-        QueryWrapper<Domain> domainQueryWrapper = new QueryWrapper<>();
-        domainQueryWrapper.eq("domain_admin_id", id);
-        Domain domain = domainMapper.selectOne(domainQueryWrapper);
+
+        checkDomainAdmin(id);
+        Domain domain = domainMapper.selectOne(new QueryWrapper<Domain>().eq("domain_admin_id", id));
         Assert.notNull(domain, "该域不存在");
-        QueryWrapper<Company> companyWrapper = new QueryWrapper<>();
-        companyWrapper.eq("domain_id", domain.getId());
-        List<Company> companies = companyMapper.selectList(companyWrapper);
+        List<Company> companies = companyMapper.selectList(new QueryWrapper<Company>().eq("domain_id", domain.getId()));
         List<CompanyVO> companyList = new ArrayList<>();
         for (Company company : companies) {
             User admin = userMapper.selectById(company.getRegisterId());
@@ -140,6 +160,13 @@ public class DomainServiceImpl implements DomainService {
             companyList.add(companyVO);
         }
         return companyList;
+    }
+
+    public void checkDomainAdmin(String id) {
+        User admin = userMapper.selectById(id);
+        Assert.notNull(admin, "操作者id不存在");
+        DomainAdminInfo weid = domainAdminMapper.selectOne(new QueryWrapper<DomainAdminInfo>().eq("weid", admin.getWeId()));
+        Assert.notNull(weid, "该用户不是域管理员");
     }
 
 }
