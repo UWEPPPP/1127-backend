@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("application_user")
-public class ApplicationForUser {
+public class ApplicationForWorker {
 
     /**
      * 用户主键(自增)
@@ -28,6 +28,7 @@ public class ApplicationForUser {
     @TableField("company_id")
     private Integer companyId;
 
+    @TableField("domain_id")
     private Integer domainId;
 
     /**

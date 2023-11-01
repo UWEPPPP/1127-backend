@@ -21,4 +21,8 @@ public class JudgeBO {
      */
     private Integer status;
 
+    /**
+     * 管理员在judge的时候给员工分的组的名字
+     */
+    private String groupName;
 }
