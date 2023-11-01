@@ -10,6 +10,7 @@ spring:
     nacos:
       discovery:
         server-addr: 10.21.23.163:8848
+        namespace: 1127
 server:
   port: 9001
 weIdentity:

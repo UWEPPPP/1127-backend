@@ -1,6 +1,6 @@
 package www.topview.entity.po;
 
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class DomainAdminInfo {
     private Integer id;
-    @TableId("weid")
+    @TableField("weid")
     private String weId;
     private Integer domainId;
 }

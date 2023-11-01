@@ -1,6 +1,6 @@
 package www.topview.entity.po;
 
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class User {
     private Integer id;
     private String username;
     private String password;
-    @TableId("weid")
+    @TableField("weid")
     private String weId;
     private String address;
     private String publicKey;

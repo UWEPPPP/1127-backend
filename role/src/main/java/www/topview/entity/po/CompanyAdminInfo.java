@@ -1,5 +1,6 @@
 package www.topview.entity.po;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class CompanyAdminInfo {
     /**
      * 用户的weId
      */
-    @TableId("weid")
+    @TableField("weid")
     private String weId;
 
     /**

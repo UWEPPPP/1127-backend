@@ -11,8 +11,8 @@ spring:
 
 fisco:
   file-path: /fisco-config-dev.yml
-# 最多维护processor的数量
+  # 最多维护processor的数量
   processor-num-max: 1000
-# 每次淘汰的processor数量
+  # 每次淘汰的processor数量
   eliminate-num: 10
-  abi-file-path: "src\\main\\resources\\solidity\\abi"
+  abi-file-path: "chain/src/main/resources/solidity/abi"
