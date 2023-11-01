@@ -71,6 +71,16 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
         throw new WeIdentityException("createWeId 异常");
     }
 
+    @Override
+    public String createWeId(String publicKey, String privateKey) {
+        WeIdPublicKey weIdPublicKey = new WeIdPublicKey();
+        weIdPublicKey.setPublicKey(publicKey);
+        WeIdPrivateKey weIdPrivateKey = new WeIdPrivateKey();
+        weIdPrivateKey.setPrivateKey(privateKey);
+        ResponseData<String> weIdByPublicKey = weIdService.createWeIdByPublicKey(weIdPublicKey, weIdPrivateKey);
+        return weIdByPublicKey.getResult();
+    }
+
     /**
      * 注册权威机构
      *

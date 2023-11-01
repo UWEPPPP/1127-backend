@@ -1,5 +1,6 @@
 package www.topview.controller;
 
+import org.checkerframework.checker.index.qual.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import www.topview.entity.dto.AddCompanyDTO;
@@ -37,8 +38,9 @@ public class DomainAdminController {
     }
 
     @PostMapping("/deleteCompany")
-    public void deleteCompany() {
-
+    public CommonResult<Void> deleteCompany(@Positive int domainId) throws WeIdentityException {
+        domainService.deleteCompany(domainId);
+        return CommonResult.operateSuccess("公司删除成功");
     }
 
     @PostMapping("/registerCpt")

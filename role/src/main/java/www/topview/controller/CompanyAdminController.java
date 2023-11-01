@@ -1,5 +1,6 @@
 package www.topview.controller;
 
+import org.checkerframework.checker.index.qual.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,7 @@ public class CompanyAdminController {
     }
 
     @PostMapping("/deleteWorker")
-    public CommonResult<Void> deleteWorker(int workerId) {
+    public CommonResult<Void> deleteWorker(@Positive int workerId) {
         service.deleteWorker(workerId);
         return CommonResult.operateSuccess("删除成功");
     }

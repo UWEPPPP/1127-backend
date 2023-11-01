@@ -24,6 +24,14 @@ public interface DomainService {
     public void addCompany(AddCompanyDTO addCompanyDTO) throws WeIdentityException;
 
     /**
+     * delete company
+     *
+     * @param companyId company id
+     * @throws WeIdentityException we identity exception
+     */
+    public void deleteCompany(int companyId) throws WeIdentityException;
+
+    /**
      * get Template
      *
      * @return {@link String}

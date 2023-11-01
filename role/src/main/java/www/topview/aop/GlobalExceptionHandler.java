@@ -19,8 +19,15 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(WeIdentityException.class)
-    public CommonResult<Void> handlerWeIdentityException(WeIdentityException ex){
+    public CommonResult<Void> handlerWeIdentityException(WeIdentityException ex) {
         log.error("WeIdentity调用异常", ex);
+        return CommonResult.operateFailWithMessage(ex.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(IllegalArgumentException.class)
+    public CommonResult<Void> handlerIllegalArgumentException(IllegalArgumentException ex) {
+        log.error("用户信息或数据库异常", ex);
         return CommonResult.operateFailWithMessage(ex.getMessage());
     }
 }

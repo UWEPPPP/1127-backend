@@ -1,6 +1,8 @@
 package www.topview.entity.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +22,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("user")
 public class User {
+
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     private String username;
     private String password;
@@ -28,4 +32,5 @@ public class User {
     private String address;
     private String publicKey;
     private String privateKey;
+    private Integer role;
 }

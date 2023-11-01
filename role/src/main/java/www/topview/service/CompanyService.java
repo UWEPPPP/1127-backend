@@ -16,6 +16,12 @@ import java.util.List;
 public interface CompanyService {
 
 
+    /**
+     * add worker
+     *
+     * @param addWorkerDTO add worker dto
+     * @throws WeIdentityException we identity exception
+     */
     void addWorker(AddWorkerDTO addWorkerDTO) throws WeIdentityException;
 
     /**
