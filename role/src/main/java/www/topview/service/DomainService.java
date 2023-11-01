@@ -1,5 +1,6 @@
 package www.topview.service;
 
+import www.topview.entity.dto.AddCompanyDTO;
 import www.topview.entity.model.RegisterCptModel;
 import www.topview.entity.po.Company;
 import www.topview.entity.vo.CompanyVO;
@@ -13,6 +14,15 @@ import java.util.List;
  * @date 2023/10/28
  */
 public interface DomainService {
+    /**
+     * add company
+     * add company
+     *
+     * @param addCompanyDTO add company dto
+     * @throws WeIdentityException we identity exception
+     */
+    public void addCompany(AddCompanyDTO addCompanyDTO) throws WeIdentityException;
+
     /**
      * get Template
      *

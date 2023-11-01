@@ -1,5 +1,6 @@
 package www.topview.controller;
 
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -9,5 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2023/10/31
  */
 @RestController
+@ResponseBody
 public class WorkerController {
 }

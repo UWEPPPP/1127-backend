@@ -8,15 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import www.topview.constant.PathConstant;
-import www.topview.dao.CompanyMapper;
-import www.topview.dao.DomainAdminInfoMapper;
-import www.topview.dao.DomainMapper;
-import www.topview.dao.UserMapper;
+import www.topview.dao.*;
+import www.topview.entity.dto.AddCompanyDTO;
+import www.topview.entity.model.AccountModel;
 import www.topview.entity.model.RegisterCptModel;
-import www.topview.entity.po.Company;
-import www.topview.entity.po.Domain;
-import www.topview.entity.po.DomainAdminInfo;
-import www.topview.entity.po.User;
+import www.topview.entity.po.*;
 import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;
 import www.topview.exception.WeIdentityException;
@@ -49,6 +45,51 @@ public class DomainServiceImpl implements DomainService {
     private DomainMapper domainMapper;
     @Autowired
     private DomainAdminInfoMapper domainAdminMapper;
+    @Autowired
+    private CompanyAdminMapper companyAdminMapper;
+
+    @Override
+    public void addCompany(AddCompanyDTO addCompanyDTO) throws WeIdentityException {
+        //由于公司表跟worker表中的主键具有相互依赖,故进行间接创建
+        //根据accountAddress进行公司Id的创建
+        AccountModel accountModel = weIdentityService.createWeId();
+        Integer passer = addCompanyDTO.getPasser();
+        User user1 = userMapper.selectById(passer);
+        Assert.notNull(user1, "该用户不存在");
+        Assert.notNull(domainAdminMapper.selectOne(new QueryWrapper<DomainAdminInfo>().eq("weid", user1.getWeId())), "不是domain管理员！");
+        //TODO 调用合约
+        String contractAddr = null;
+
+        User user = new User(
+                null,
+                addCompanyDTO.getFounderName(),
+                addCompanyDTO.getFounderPassword(),
+                accountModel.getWeId(),
+                accountModel.getAccountAddress(),
+                accountModel.getPublicKey(),
+                accountModel.getPrivateKey()
+        );
+        Assert.isTrue(userMapper.insert(user) == 1, "企业管理员注册失败");
+        Company company = new Company(
+                null,
+                user.getId(),
+                //TODO 等待调用合约
+                contractAddr,
+                addCompanyDTO.getDomainId(),
+                addCompanyDTO.getCompanyName()
+        );
+        //  进行企业注册
+        Assert.isTrue(companyMapper.insert(company) == 1, "公司创建失败,数据库更新时发生异常");
+        // 进行企业管理员的注册
+        //根据公司Id进行userId的创建
+        CompanyAdminInfo admin = new CompanyAdminInfo(
+                null,
+                accountModel.getWeId(),
+                company.getId(),
+                addCompanyDTO.getDomainId()
+        );
+        Assert.isTrue(companyAdminMapper.insert(admin) == 1, "企业管理员注册失败");
+    }
 
     @Override
     public String getCptTemplate() {

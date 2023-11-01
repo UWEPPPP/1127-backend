@@ -9,7 +9,7 @@ import www.topview.dao.CompanyMapper;
 import www.topview.dao.UserMapper;
 import www.topview.dao.WorkerInfoMapper;
 import www.topview.dto.ChainServiceDTO;
-import www.topview.entity.bo.AddWorkerBO;
+import www.topview.entity.dto.AddWorkerDTO;
 import www.topview.entity.model.AccountModel;
 import www.topview.entity.po.Company;
 import www.topview.entity.po.User;
@@ -44,7 +44,7 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
     private WeIdentityService weIdentityService;
 
     @Override
-    public void addWorker(AddWorkerBO addWorkerBO) throws WeIdentityException {
+    public void addWorker(AddWorkerDTO addWorkerDTO) throws WeIdentityException {
         String header = request.getHeader("token");
         //TODO 尚未完成 等待token
 
@@ -52,8 +52,8 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         AccountModel weId = weIdentityService.createWeId();
         User user = new User(
                 null,
-                addWorkerBO.getUsername(),
-                addWorkerBO.getPassword(),
+                addWorkerDTO.getUsername(),
+                addWorkerDTO.getPassword(),
                 weId.getWeId(),
                 weId.getAccountAddress(),
                 weId.getPublicKey(),
@@ -63,9 +63,9 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         WorkerInfo workerInfo = new WorkerInfo(
                 null,
                 weId.getWeId(),
-                addWorkerBO.getGroupName(),
-                addWorkerBO.getCompanyId(),
-                addWorkerBO.getDomainId()
+                addWorkerDTO.getGroupName(),
+                addWorkerDTO.getCompanyId(),
+                addWorkerDTO.getDomainId()
         );
         Assert.isTrue(workerInfoMapper.insert(workerInfo) == 1, "新用户创建失败,数据库异常");
 

@@ -1,9 +1,7 @@
-package www.topview.entity.bo;
+package www.topview.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -13,11 +11,9 @@ import lombok.experimental.Accessors;
  * @date 2023/11/01
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@TableName("domain_admin_info")
+
 @Accessors(chain = true)
-public class AddWorkerBO {
+public class AddWorkerDTO {
     private Integer passer;
     private String username;
     private String password;

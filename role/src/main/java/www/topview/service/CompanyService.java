@@ -1,7 +1,7 @@
 package www.topview.service;
 
 
-import www.topview.entity.bo.AddWorkerBO;
+import www.topview.entity.dto.AddWorkerDTO;
 import www.topview.entity.vo.WorkerVO;
 import www.topview.exception.WeIdentityException;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public interface CompanyService {
 
 
-    void addWorker(AddWorkerBO addWorkerBO) throws WeIdentityException;
+    void addWorker(AddWorkerDTO addWorkerDTO) throws WeIdentityException;
 
     /**
      * delete worker

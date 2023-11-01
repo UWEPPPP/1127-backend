@@ -1,10 +1,8 @@
 package www.topview.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import www.topview.entity.dto.AddCompanyDTO;
 import www.topview.entity.model.RegisterCptModel;
 import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;
@@ -21,14 +19,16 @@ import java.util.List;
  * @date 2023/10/31
  */
 @RestController
-@RequestMapping("/api/domainAdmin")
+@RequestMapping("/role/domainAdmin")
+@ResponseBody
 public class DomainAdminController {
     @Autowired
     DomainService domainService;
 
     @PostMapping("/addCompany")
-    public void addCompany() {
-
+    public CommonResult<Void> addCompany(AddCompanyDTO addCompanyDTO) throws WeIdentityException {
+        domainService.addCompany(addCompanyDTO);
+        return CommonResult.operateSuccess("公司创建成功");
     }
 
     @PostMapping("/getCompanyList")
