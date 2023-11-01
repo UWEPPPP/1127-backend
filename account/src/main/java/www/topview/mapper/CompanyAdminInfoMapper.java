@@ -2,7 +2,7 @@ package www.topview.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
-import www.topview.entity.po.Admin;
+import www.topview.entity.po.CompanyAdminInfo;
 
 /**
  * admin mapper
@@ -12,5 +12,5 @@ import www.topview.entity.po.Admin;
  */
 
 @Component
-public interface AdminMapper extends BaseMapper<Admin> {
+public interface CompanyAdminInfoMapper extends BaseMapper<CompanyAdminInfo> {
 }

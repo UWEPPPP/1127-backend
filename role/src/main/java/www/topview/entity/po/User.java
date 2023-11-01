@@ -1,5 +1,6 @@
 package www.topview.entity.po;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,20 +8,24 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * domain
+ * 总用户表
  *
  * @author 刘家辉
- * @date 2023/10/31
+ * @date 2023/11/01
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 
 @Accessors(chain = true)
-@TableName("domain")
-public class Domain {
+@TableName("user")
+public class User {
     private Integer id;
-    private String domainName;
-    private String domainAddress;
-    private Integer domainAdminId;
+    private String username;
+    private String password;
+    @TableId("weid")
+    private String weId;
+    private String address;
+    private String publicKey;
+    private String privateKey;
 }

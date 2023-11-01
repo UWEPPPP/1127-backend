@@ -1,11 +1,11 @@
 package www.topview.entity.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * admin
@@ -16,8 +16,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("admin")
-public class Admin {
+@TableName("company_admin_info")
+
+@Accessors(chain = true)
+public class CompanyAdminInfo {
     /**
      * 用户主键
      */
@@ -25,39 +27,13 @@ public class Admin {
     private Integer id;
 
     /**
-     * 用户名
-     */
-    private String username;
-
-    /**
-     * 密码
-     */
-    private String password;
-
-    /**
      * 用户的weId
      */
-    @TableField("weid")
+    @TableId("weid")
     private String weId;
 
     /**
-     * 用户公钥
-     */
-    @TableField("public_key")
-    private String publicKey;
-
-    /**
-     * 用户私钥
-     */
-    @TableField("private_key")
-    private String privateKey;
-
-    /**
-     * 账户地址
-     */
-    private String address;
-    /**
-     * 如果companyId为-1 则为域管理员
+     * 如果companyId为-1域管理员
      * company id
      */
     private Integer companyId;

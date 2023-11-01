@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * @author :Lictory
@@ -15,6 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("company")
+
+@Accessors(chain = true)
 public class Company {
 
     /**
@@ -28,11 +31,6 @@ public class Company {
     @TableField("register_id")
     private Integer registerId;
 
-    /**
-     * company name
-     */
-    private String companyName;
-
 
     /**
      * 公司账户地址
@@ -45,5 +43,8 @@ public class Company {
      */
     private Integer domainId;
 
-
+    /**
+     * 公司名字
+     */
+    private String companyName;
 }

@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import www.topview.entity.bo.AddWorkerBO;
 import www.topview.entity.vo.WorkerVO;
+import www.topview.exception.WeIdentityException;
 import www.topview.result.CommonResult;
 import www.topview.service.CompanyService;
 
@@ -17,14 +19,15 @@ import java.util.List;
  * @date 2023/10/30
  */
 @RestController
-@RequestMapping("/api/companyAdmin")
+@RequestMapping("/companyAdmin")
 public class CompanyAdminController {
     @Autowired
     private CompanyService service;
 
     @PostMapping("/addWorker")
-    public void addWorker() {
-
+    public CommonResult<Void> addWorker(AddWorkerBO addWorkerBO) throws WeIdentityException {
+        service.addWorker(addWorkerBO);
+        return CommonResult.operateSuccess("添加成功");
     }
 
 

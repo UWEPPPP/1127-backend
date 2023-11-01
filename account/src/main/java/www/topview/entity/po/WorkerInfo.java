@@ -15,48 +15,19 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("worker")
-public class Worker {
+@TableName("worker_info")
+public class WorkerInfo {
 
     /**
      * 用户主键
      */
     @TableId
     private Integer id;
-
     /**
-     * 用户名
+     * we id
      */
-    private String username;
-
-    /**
-     * 密码
-     */
-    private String password;
-
-    /**
-     * 用户的weId
-     */
-    @TableField("weid_user")
-    private String weIdUser;
-
-    /**
-     * 用户公钥
-     */
-    @TableField("public_key")
-    private String publicKey;
-
-    /**
-     * 用户私钥
-     */
-    @TableField("private_key")
-    private String privateKey;
-
-    /**
-     * 账户地址
-     */
-    private String address;
-
+    @TableField("weid")
+    private String weId;
     /**
      * group name
      */

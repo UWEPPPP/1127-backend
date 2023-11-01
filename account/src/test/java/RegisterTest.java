@@ -4,7 +4,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import www.topview.exception.WeIdentityException;
-import www.topview.mapper.WorkerMapper;
+import www.topview.mapper.WorkerInfoMapper;
 import www.topview.service.AccountService;
 
 /**
@@ -20,7 +20,7 @@ import www.topview.service.AccountService;
 public class RegisterTest {
 
     @Autowired
-    WorkerMapper workerMapper;
+    WorkerInfoMapper workerInfoMapper;
 
     @Autowired
     AccountService accountService;

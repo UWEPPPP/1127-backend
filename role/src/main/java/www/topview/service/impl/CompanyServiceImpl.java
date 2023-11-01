@@ -6,13 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import www.topview.dao.CompanyMapper;
-import www.topview.dao.WorkerMapper;
+import www.topview.dao.UserMapper;
+import www.topview.dao.WorkerInfoMapper;
 import www.topview.dto.ChainServiceDTO;
+import www.topview.entity.bo.AddWorkerBO;
+import www.topview.entity.model.AccountModel;
 import www.topview.entity.po.Company;
-import www.topview.entity.po.Worker;
+import www.topview.entity.po.User;
+import www.topview.entity.po.WorkerInfo;
 import www.topview.entity.vo.WorkerVO;
+import www.topview.exception.WeIdentityException;
 import www.topview.result.CommonResult;
 import www.topview.rpc.ContractService;
+import www.topview.service.WeIdentityService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -29,15 +35,39 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
     @Autowired
     private ContractService contractService;
     @Autowired
-    private WorkerMapper workerMapper;
+    private WorkerInfoMapper workerInfoMapper;
     @Autowired
     private CompanyMapper companyMapper;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private WeIdentityService weIdentityService;
 
     @Override
-    public void addWorker() {
+    public void addWorker(AddWorkerBO addWorkerBO) throws WeIdentityException {
         String header = request.getHeader("token");
         //TODO 尚未完成 等待token
 
+
+        AccountModel weId = weIdentityService.createWeId();
+        User user = new User(
+                null,
+                addWorkerBO.getUsername(),
+                addWorkerBO.getPassword(),
+                weId.getWeId(),
+                weId.getAccountAddress(),
+                weId.getPublicKey(),
+                weId.getPrivateKey()
+        );
+        Assert.isTrue(userMapper.insert(user) == 1, "新用户创建失败,数据库异常");
+        WorkerInfo workerInfo = new WorkerInfo(
+                null,
+                weId.getWeId(),
+                addWorkerBO.getGroupName(),
+                addWorkerBO.getCompanyId(),
+                addWorkerBO.getDomainId()
+        );
+        Assert.isTrue(workerInfoMapper.insert(workerInfo) == 1, "新用户创建失败,数据库异常");
 
         //TODO 尚未完成 等待链端接口
         //调合约接口 将员工注册进合约
@@ -53,7 +83,8 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         //TODO 尚未完成 等待token
         Integer id = null;
 
-        Worker worker = workerMapper.selectById(workerId);
+        User worker = userMapper.selectById(workerId);
+        String weid = worker.getWeId();
         Assert.notNull(worker, "该员工不存在");
         ArrayList<Object> objects = new ArrayList<>();
         objects.add(worker.getAddress());
@@ -61,17 +92,18 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         chainServiceDTO.setUserId(id).setContractName("CompanyLogic").setFunctionName("removedWorker").setFunctionParams(objects);
         CommonResult<Object> send = contractService.send(chainServiceDTO);
         Assert.isTrue(send.getCode() == 200, "调用合约删除员工失败");
-        QueryWrapper<Worker> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", workerId);
-        workerMapper.updateById(worker);
-        worker.setCompanyId(-1)
-                .setPrivateKey("")
+        worker.setPrivateKey("")
                 .setPublicKey("")
                 .setAddress("")
-                .setGroupName("")
-                .setWeIdUser("");
-        int update = workerMapper.update(worker, queryWrapper);
+                .setWeId("");
+        int update = userMapper.update(worker, queryWrapper);
         Assert.isTrue(update == 1, "调用数据库删除员工失败");
+        QueryWrapper<WorkerInfo> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.eq("weid", weid);
+        int delete = workerInfoMapper.delete(queryWrapper1);
+        Assert.isTrue(delete == 1, "调用数据库删除员工失败");
     }
 
     @Override
@@ -83,12 +115,15 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         companyWrapper.eq("register_id", id);
         Company company = companyMapper.selectOne(companyWrapper);
         Assert.notNull(company, "用户id异常 无法查询到公司");
-        QueryWrapper<Worker> userWrapper = new QueryWrapper<>();
-        userWrapper.eq("company_id", company.getId());
-        List<Worker> workers = workerMapper.selectList(userWrapper);
+        QueryWrapper<WorkerInfo> workerInfoWrapper = new QueryWrapper<>();
+        workerInfoWrapper.eq("company_id", company.getId());
+        List<WorkerInfo> workers = workerInfoMapper.selectList(workerInfoWrapper);
         ArrayList<WorkerVO> workerList = new ArrayList<>();
-        for (Worker worker : workers) {
-            workerList.add(new WorkerVO(worker));
+        for (WorkerInfo worker : workers) {
+            QueryWrapper<User> userWrapper = new QueryWrapper<>();
+            userWrapper.eq("weid", worker.getWeId());
+            User user = userMapper.selectOne(userWrapper);
+            workerList.add(new WorkerVO(worker, user));
         }
         return workerList;
     }

@@ -1,7 +1,8 @@
 package www.topview.entity.vo;
 
 import lombok.Data;
-import www.topview.entity.po.Worker;
+import www.topview.entity.po.User;
+import www.topview.entity.po.WorkerInfo;
 
 /**
  * worker vo
@@ -16,10 +17,10 @@ public class WorkerVO {
     private String userWeId;
     private String userGroup;
 
-    public WorkerVO(Worker worker) {
-        this.userId = worker.getId();
-        this.userName = worker.getUsername();
-        this.userWeId = worker.getWeIdUser();
+    public WorkerVO(WorkerInfo worker, User user) {
+        this.userId = user.getId();
+        this.userName = user.getUsername();
+        this.userWeId = user.getWeId();
         this.userGroup = worker.getGroupName();
     }
 }

@@ -10,16 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import www.topview.constant.PathConstant;
 import www.topview.entity.bo.*;
 import www.topview.entity.model.AccountModel;
-import www.topview.entity.po.Admin;
-import www.topview.entity.po.ApplicationForWorker;
-import www.topview.entity.po.Company;
-import www.topview.entity.po.Worker;
+import www.topview.entity.po.*;
 import www.topview.entity.vo.ApplicationWorkerVO;
 import www.topview.exception.WeIdentityException;
-import www.topview.mapper.AdminMapper;
-import www.topview.mapper.ApplicationMapper;
-import www.topview.mapper.CompanyMapper;
-import www.topview.mapper.WorkerMapper;
+import www.topview.mapper.*;
 import www.topview.service.AccountService;
 import www.topview.service.WeIdentityService;
 import www.topview.util.CryptoUtil;
@@ -40,10 +34,10 @@ public class AccountServiceImpl implements AccountService {
     private WeIdentityService weIdentityService;
 
     @Autowired
-    private WorkerMapper workerMapper;
+    private WorkerInfoMapper workerInfoMapper;
 
     @Autowired
-    private AdminMapper adminMapper;
+    private CompanyAdminInfoMapper companyAdminMapper;
 
     @Autowired
     private CompanyMapper companyMapper;
@@ -51,18 +45,21 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private ApplicationMapper applicationMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean userRegister(WorkerRegisterBO workerRegisterBO) throws WeIdentityException {
 
 
         //判断账号是否已经存在
-        QueryWrapper<ApplicationForWorker> queryWrapper = Wrappers.query();
+        QueryWrapper<ApplicationForUser> queryWrapper = Wrappers.query();
         queryWrapper.eq("applicant_username", workerRegisterBO.getUsername());
         Assert.isTrue(applicationMapper.selectOne(queryWrapper) == null, "对应账户已经存在");
 
         //封装PO对象
-        ApplicationForWorker applicationForWorker = new ApplicationForWorker(
+        ApplicationForUser applicationForUser = new ApplicationForUser(
                 null,
                 null,
                 workerRegisterBO.getDomainId(),
@@ -72,18 +69,19 @@ public class AccountServiceImpl implements AccountService {
                 workerRegisterBO.getPayload()
         );
         //添加到申请列表中
-        Assert.isTrue(applicationMapper.insert(applicationForWorker) == 1, "注册申请失败,数据库插入异常");
+        Assert.isTrue(applicationMapper.insert(applicationForUser) == 1, "注册申请失败,数据库插入异常");
         //调用合约
         return true;
     }
 
 
     /**
+     * company register
      * 公司进行注册
      *
      * @param companyRegisterBO 包含公司的注册信息
-     * @return
-     * @throws WeIdentityException
+     * @return boolean
+     * @throws WeIdentityException we identity exception
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -105,23 +103,27 @@ public class AccountServiceImpl implements AccountService {
         // 进行企业管理员的注册
         Company newCompany = companyMapper.selectOne(new QueryWrapper<Company>().eq("contract_address", accountModel.getAccountAddress()));
         Integer companyId = newCompany.getId();
-
-        //根据公司Id进行userId的创建
-        Admin admin = new Admin(
+        User user = new User(
                 null,
                 companyRegisterBO.getUsername(),
                 companyRegisterBO.getPassword(),
                 accountModel.getWeId(),
-                accountModel.getPublicKey(),
-                CryptoUtil.encrypt(accountModel.getPrivateKey(), PathConstant.PATH_PUBLIC_KEY),
                 accountModel.getAccountAddress(),
+                accountModel.getPublicKey(),
+                accountModel.getPrivateKey()
+        );
+        Assert.isTrue(userMapper.insert(user) == 1, "企业管理员注册失败");
+        //根据公司Id进行userId的创建
+        CompanyAdminInfo admin = new CompanyAdminInfo(
+                null,
+                accountModel.getWeId(),
                 companyId,
                 companyRegisterBO.getDomainId()
         );
-        Assert.isTrue(adminMapper.insert(admin) == 1, "企业管理员注册失败");
+        Assert.isTrue(companyAdminMapper.insert(admin) == 1, "企业管理员注册失败");
 
         //获取registerId
-        Integer registerId = adminMapper.selectOne(new QueryWrapper<Admin>().eq("company_id", companyId)).getId();
+        Integer registerId = companyAdminMapper.selectOne(new QueryWrapper<CompanyAdminInfo>().eq("company_id", companyId)).getId();
         //将注册人的id更新至company中
         Company company1 = new Company();
         company1.setRegisterId(registerId);
@@ -140,8 +142,8 @@ public class AccountServiceImpl implements AccountService {
         //TODO 上JWT
         switch (loginBO.getRole()) {
             case 0:
-                Worker worker = workerMapper.selectOne(new QueryWrapper<Worker>().eq("username", loginBO.getUsername()));
-                Assert.notNull(worker, "登录失败,用户名不存在");
+                User user = userMapper.selectOne(new QueryWrapper<User>().eq("username", loginBO.getUsername()));
+                Assert.notNull(user, "登录失败,用户名不存在");
                 break;
             case 1:
             case 2:
@@ -150,17 +152,16 @@ public class AccountServiceImpl implements AccountService {
         }
 
 
-
         return "true";
     }
 
     @Override
     public List<ApplicationWorkerVO> queryApplications(QueryApplicationsBO queryApplicationsBO) {
-        List<ApplicationForWorker> applications = applicationMapper.selectList(new QueryWrapper<ApplicationForWorker>()
+        List<ApplicationForUser> applications = applicationMapper.selectList(new QueryWrapper<ApplicationForUser>()
                 .eq("company_id", queryApplicationsBO.getCompanyId())
                 .eq("domain_id", queryApplicationsBO.getDomainId()));
         List<ApplicationWorkerVO> result = new ArrayList<>();
-        for (ApplicationForWorker temp : applications) {
+        for (ApplicationForUser temp : applications) {
             //TODO ApplicationUserVO 是否需要公司id
             result.add(new ApplicationWorkerVO(
                     temp.getId(),
@@ -174,7 +175,7 @@ public class AccountServiceImpl implements AccountService {
     public boolean judgeWorker(JudgeBO judgeBO) throws WeIdentityException {
 
         applicationMapper.update(null,
-                new UpdateWrapper<ApplicationForWorker>().
+                new UpdateWrapper<ApplicationForUser>().
                         set("status", judgeBO.getStatus()).
                         eq("id", judgeBO.getId()));
 
@@ -182,22 +183,27 @@ public class AccountServiceImpl implements AccountService {
         if (judgeBO.getStatus() == 0) {
             return true;
         }
-        ApplicationForWorker applicationForWorker = applicationMapper.selectOne(new QueryWrapper<ApplicationForWorker>().eq("id", judgeBO.getId()));
+        ApplicationForUser applicationForUser = applicationMapper.selectOne(new QueryWrapper<ApplicationForUser>().eq("id", judgeBO.getId()));
         //从申请表中获取的密码已经是加密过的了.在这里无需再次加密
         AccountModel weId = weIdentityService.createWeId();
-        Worker worker = new Worker(
+        User user = new User(
                 null,
-                applicationForWorker.getApplicantUsername(),
-                applicationForWorker.getApplicantPassword(),
+                applicationForUser.getApplicantUsername(),
+                applicationForUser.getApplicantPassword(),
                 weId.getWeId(),
-                weId.getPublicKey(),
-                CryptoUtil.encrypt(weId.getPrivateKey(), PathConstant.PATH_PUBLIC_KEY),
                 weId.getAccountAddress(),
-                judgeBO.getGroupName(),
-                applicationForWorker.getCompanyId(),
-                applicationForWorker.getDomainId()
+                weId.getPublicKey(),
+                weId.getPrivateKey()
         );
-        Assert.isTrue(workerMapper.insert(worker) == 1, "新用户创建失败,数据库异常");
+        Assert.isTrue(userMapper.insert(user) == 1, "新用户创建失败,数据库异常");
+        WorkerInfo workerInfo = new WorkerInfo(
+                null,
+                weId.getWeId(),
+                judgeBO.getGroupName(),
+                applicationForUser.getCompanyId(),
+                applicationForUser.getDomainId()
+        );
+        Assert.isTrue(workerInfoMapper.insert(workerInfo) == 1, "新用户创建失败,数据库异常");
         return true;
     }
 

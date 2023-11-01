@@ -8,13 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import www.topview.constant.PathConstant;
-import www.topview.dao.AdminMapper;
 import www.topview.dao.CompanyMapper;
+import www.topview.dao.DomainAdminInfoMapper;
 import www.topview.dao.DomainMapper;
+import www.topview.dao.UserMapper;
 import www.topview.entity.model.RegisterCptModel;
-import www.topview.entity.po.Admin;
 import www.topview.entity.po.Company;
 import www.topview.entity.po.Domain;
+import www.topview.entity.po.DomainAdminInfo;
+import www.topview.entity.po.User;
 import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;
 import www.topview.exception.WeIdentityException;
@@ -40,11 +42,13 @@ public class DomainServiceImpl implements DomainService {
     @Autowired
     private HttpServletRequest request;
     @Autowired
+    private UserMapper userMapper;
+    @Autowired
     private CompanyMapper companyMapper;
     @Autowired
     private DomainMapper domainMapper;
     @Autowired
-    private AdminMapper adminMapper;
+    private DomainAdminInfoMapper domainAdminMapper;
 
     @Override
     public String getCptTemplate() {
@@ -57,8 +61,11 @@ public class DomainServiceImpl implements DomainService {
         String header = request.getHeader("token");
         //TODO 尚未完成 等待token
         String id = null;
-        Admin admin = adminMapper.selectById(id);
+        User admin = userMapper.selectById(id);
         Assert.notNull(admin, "id不存在");
+        QueryWrapper<DomainAdminInfo> adminWrapper = new QueryWrapper<>();
+        adminWrapper.eq("weid", admin.getWeId());
+        Assert.notNull(domainAdminMapper.selectOne(adminWrapper), "该用户不是域管理员");
         String privateKey = CryptoUtil.decrypt(admin.getPrivateKey(), PathConstant.PATH_PRIVATE_KEY);
         CptBaseInfo cptBaseInfo = weIdentityService.registerCpt(admin.getWeId(), privateKey, model.getClaim());
         CptInfoVO cptInfoVO = new CptInfoVO();
@@ -81,7 +88,8 @@ public class DomainServiceImpl implements DomainService {
         List<Company> companies = companyMapper.selectList(companyWrapper);
         List<CompanyVO> companyList = new ArrayList<>();
         for (Company company : companies) {
-            Admin admin = adminMapper.selectById(company.getRegisterId());
+            User admin = userMapper.selectById(company.getRegisterId());
+            Assert.notNull(admin, "该公司管理员不存在");
             CompanyVO companyVO = new CompanyVO();
             companyVO.setCompanyName(company.getCompanyName())
                     .setCompanyContractAddress(company.getContractAddress())

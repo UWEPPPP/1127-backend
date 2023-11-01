@@ -33,7 +33,7 @@ public class Company {
      * 公司账户地址
      */
     @TableField("contract_address")
-    private String accountAddress;
+    private String contractAddress;
 
     /**
      * domain id

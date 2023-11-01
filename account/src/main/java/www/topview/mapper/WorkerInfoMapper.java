@@ -2,7 +2,7 @@ package www.topview.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
-import www.topview.entity.po.Worker;
+import www.topview.entity.po.WorkerInfo;
 
 /**
  * @author :Lictory
@@ -10,7 +10,7 @@ import www.topview.entity.po.Worker;
  */
 
 @Component
-public interface WorkerMapper extends BaseMapper<Worker> {
+public interface WorkerInfoMapper extends BaseMapper<WorkerInfo> {
 
 
 }
