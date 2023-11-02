@@ -4,6 +4,7 @@ import www.topview.entity.bo.*;
 import www.topview.entity.vo.ApplicationWorkerVO;
 import www.topview.exception.WeIdentityException;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public interface AccountService {
      * @param loginBO 登录信息
      * @return 登录是否成功
      */
-    String login(LoginBO loginBO);
+    String login(LoginBO loginBO) throws IOException;
 
 
     /**

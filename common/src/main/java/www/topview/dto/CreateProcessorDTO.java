@@ -1,6 +1,7 @@
 package www.topview.dto;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
  * @date 2023/10/30
  */
 @Data
+@Accessors(chain = true)
 public class CreateProcessorDTO {
     /**
      * 用户 ID

@@ -2,8 +2,6 @@ package www.topview.service.impl;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTException;
-import cn.hutool.jwt.JWTPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -13,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import www.topview.constant.PathConstant;
 import www.topview.dto.AddCompanyDTO;
 import www.topview.dto.AddWorkerDTO;
+import www.topview.dto.CreateProcessorDTO;
 import www.topview.dto.PayLoad;
 import www.topview.entity.bo.*;
 import www.topview.entity.po.ApplicationForUser;
@@ -21,12 +20,14 @@ import www.topview.entity.vo.ApplicationWorkerVO;
 import www.topview.mapper.ApplicationMapper;
 import www.topview.mapper.UserMapper;
 import www.topview.result.CommonResult;
+import www.topview.rpc.ChainService;
 import www.topview.rpc.RoleService;
 import www.topview.service.AccountService;
 import www.topview.util.CryptoUtil;
 import www.topview.util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class AccountServiceImpl implements AccountService {
     private RoleService roleService;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private ChainService chainService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -87,7 +90,7 @@ public class AccountServiceImpl implements AccountService {
 
         JWT jwt = JWT.of(request.getHeader("token"));
         //token异常包括了    1. 过期 2. 签名不对
-        Assert.isTrue(JwtUtil.validateToken(jwt),"token异常");
+        Assert.isTrue(JwtUtil.validateToken(jwt), "token异常");
 
         PayLoad payload = (PayLoad) jwt.getPayload("payload");
         Integer adminId = payload.getUserId();
@@ -104,7 +107,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String login(LoginBO loginBO) {
+    public String login(LoginBO loginBO) throws IOException {
 
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("username", loginBO.getUsername()));
 
@@ -114,6 +117,11 @@ public class AccountServiceImpl implements AccountService {
                 , "登录失败,账户名或密码错误");
 
         //TODO 调用链端
+        CreateProcessorDTO createProcessorDTO = new CreateProcessorDTO();
+        createProcessorDTO.setUserId(user.getId())
+                .setPrivateKey(CryptoUtil.decrypt(user.getPrivateKey(), PathConstant.PATH_PRIVATE_KEY));
+        CommonResult<Void> voidCommonResult = chainService.create(createProcessorDTO);
+        Assert.isTrue(voidCommonResult.getCode() == 200, "调用链端创建processor失败");
 
         PayLoad payLoad = new PayLoad(user.getId());
         return JwtUtil.createJwtToken(loginBO.getRole().toString(), payLoad);

@@ -40,9 +40,11 @@ public class SystemServiceImpl implements SystemService {
         UserAllInfoVO userAllInfoVO = new UserAllInfoVO();
         userAllInfoVO.setUserId(user.getId())
                 .setName(user.getUsername())
+                //TODO 是否需要解密？
                 .setPassword(user.getPassword())
                 .setAddress(user.getWeId())
                 .setPublicKey(user.getPublicKey())
+                //TODO 是否需要解密？
                 .setPrivateKey(user.getPrivateKey())
                 .setWeid(user.getWeId());
         Map<String, Object> map = new HashMap<>(5);
