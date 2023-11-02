@@ -19,6 +19,9 @@ import java.util.List;
  *
  * @author 刘家辉
  * @date 2023/10/30
+ * @eo.api-type http
+ * @eo.groupName 默认分组
+ * @eo.path /role/companyAdmin
  */
 @RestController
 @RequestMapping("/role/companyAdmin")
@@ -27,6 +30,14 @@ public class CompanyAdminController {
     @Autowired
     private CompanyService service;
 
+    /**
+     * @param addWorkerDTO
+     * @return CommonResult
+     * @eo.name addWorker
+     * @eo.url /addWorker
+     * @eo.method post
+     * @eo.request-type formdata
+     */
     @PostMapping("/addWorker")
     public CommonResult<Void> addWorker(AddWorkerDTO addWorkerDTO) throws WeIdentityException {
         service.addWorker(addWorkerDTO);
@@ -34,12 +45,26 @@ public class CompanyAdminController {
     }
 
 
-
+    /**
+     * @return CommonResult
+     * @eo.name getWorkerList
+     * @eo.url /getWorkerList
+     * @eo.method post
+     * @eo.request-type formdata
+     */
     @PostMapping("/getWorkerList")
     public CommonResult<List<WorkerVO>> getWorkerList() {
         return CommonResult.operateSuccess("获取员工列表成功", service.getWorkerList());
     }
 
+    /**
+     * @param workerId
+     * @return CommonResult
+     * @eo.name deleteWorker
+     * @eo.url /deleteWorker
+     * @eo.method post
+     * @eo.request-type formdata
+     */
     @PostMapping("/deleteWorker")
     public CommonResult<Void> deleteWorker(@Positive int workerId) {
         service.deleteWorker(workerId);

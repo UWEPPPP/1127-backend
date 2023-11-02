@@ -1,5 +1,6 @@
 package www.topview.service.impl;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import www.topview.constant.PathConstant;
 import www.topview.constant.RoleConstant;
 import www.topview.dao.*;
+import www.topview.dto.ChainServiceDTO;
 import www.topview.entity.dto.AddCompanyDTO;
 import www.topview.entity.model.AccountModel;
 import www.topview.entity.model.RegisterCptModel;
@@ -18,13 +20,17 @@ import www.topview.entity.po.*;
 import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;
 import www.topview.exception.WeIdentityException;
+import www.topview.result.CommonResult;
+import www.topview.rpc.ContractService;
 import www.topview.service.DomainService;
 import www.topview.service.WeIdentityService;
 import www.topview.util.CryptoUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 刘家辉
@@ -51,6 +57,8 @@ public class DomainServiceImpl implements DomainService {
     private DomainAdminInfoMapper domainAdminMapper;
     @Autowired
     private CompanyAdminMapper companyAdminMapper;
+    @Autowired
+    private ContractService contractService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -61,11 +69,27 @@ public class DomainServiceImpl implements DomainService {
 
         AccountModel accountModel = weIdentityService.createWeId();
         Integer passer = addCompanyDTO.getPasser();
-        User user1 = userMapper.selectById(passer);
-        Assert.notNull(user1, "该用户不存在");
-        Assert.notNull(domainAdminMapper.selectOne(new QueryWrapper<DomainAdminInfo>().eq("weid", user1.getWeId())), "不是domain管理员！");
-        //TODO 调用合约
-        String contractAddr = null;
+        checkDomainAdmin(String.valueOf(passer));
+        //TODO 合约调用
+        Domain domain = domainMapper.selectOne(new QueryWrapper<Domain>().eq("domain_admin_id", passer));
+        ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
+        chainServiceDTO.setUserId(passer).
+                setContractName("DomainLogic").
+                setFunctionName("registerCompany").
+                setFunctionParams(new ArrayList<>() {
+                    {
+                        add(accountModel.getWeId());
+                        add(addCompanyDTO.getCompanyName());
+                        add(accountModel.getAccountAddress());
+                    }
+                }).
+                setContractAddress(domain.getDomainAddress());
+        CommonResult<Object> send = contractService.send(chainServiceDTO);
+        Assert.isTrue(send.getCode() == 200, "合约调用失败");
+        Map<String, Object> data = Convert.toMap(String.class, Object.class, send.getData());
+        String companyAddr = Convert.toStr(data.get("companyAddr"));
+
+
         User user = new User(
                 null,
                 addCompanyDTO.getFounderName(),
@@ -80,8 +104,7 @@ public class DomainServiceImpl implements DomainService {
         Company company = new Company(
                 null,
                 user.getId(),
-                //TODO 等待调用合约
-                contractAddr,
+                companyAddr,
                 addCompanyDTO.getDomainId(),
                 addCompanyDTO.getCompanyName()
         );
@@ -96,6 +119,8 @@ public class DomainServiceImpl implements DomainService {
                 addCompanyDTO.getDomainId()
         );
         Assert.isTrue(companyAdminMapper.insert(admin) == 1, "企业管理员注册失败");
+
+
     }
 
     @Override
@@ -104,6 +129,22 @@ public class DomainServiceImpl implements DomainService {
         //TODO 尚未完成 等待token
         String id = null;
         checkDomainAdmin(id);
+        CompanyAdminInfo companyAdmin = companyAdminMapper.selectOne(new QueryWrapper<CompanyAdminInfo>().eq("company_id", companyId));
+        //TODO 调用合约
+        Domain domain = domainMapper.selectOne(new QueryWrapper<Domain>().eq("domain_admin_id", id));
+        ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
+        chainServiceDTO.setUserId(Integer.valueOf(id)).
+                setContractName("DomainLogic").
+                setFunctionName("removeCompany").
+                setFunctionParams(new ArrayList<>() {
+                    {
+                        add(companyAdmin.getWeId());
+                    }
+                }).
+                setContractAddress(domain.getDomainAddress());
+        CommonResult<Object> send = contractService.send(chainServiceDTO);
+        Assert.isTrue(send.getCode() == 200, "合约调用失败");
+
 
         int result = companyMapper.deleteById(companyId);
         Assert.isTrue(result == 1, "公司不存在或者删除失败");
@@ -112,7 +153,7 @@ public class DomainServiceImpl implements DomainService {
         int delete2 = companyAdminMapper.delete(new QueryWrapper<CompanyAdminInfo>().eq("company_id", companyId));
         Assert.isTrue(delete2 > 0, "公司管理员删除失败：公司不存在或者删除失败");
 
-        //TODO 调用合约
+
     }
 
     @Override
@@ -167,6 +208,9 @@ public class DomainServiceImpl implements DomainService {
         Assert.notNull(admin, "操作者id不存在");
         DomainAdminInfo weid = domainAdminMapper.selectOne(new QueryWrapper<DomainAdminInfo>().eq("weid", admin.getWeId()));
         Assert.notNull(weid, "该用户不是域管理员");
+        Map<String, String> map = new HashMap<>(3);
+
+        return;
     }
 
 }
