@@ -1,6 +1,9 @@
 package www.topview.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTException;
+import cn.hutool.jwt.JWTPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -10,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import www.topview.constant.PathConstant;
 import www.topview.dto.AddCompanyDTO;
 import www.topview.dto.AddWorkerDTO;
+import www.topview.dto.PayLoad;
 import www.topview.entity.bo.*;
 import www.topview.entity.po.ApplicationForUser;
 import www.topview.entity.po.User;
@@ -20,6 +24,7 @@ import www.topview.result.CommonResult;
 import www.topview.rpc.RoleService;
 import www.topview.service.AccountService;
 import www.topview.util.CryptoUtil;
+import www.topview.util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -79,9 +84,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean companyRegister(CompanyRegisterBO companyRegisterBO) {
-        String header = request.getHeader("token");
-        //TODO 尚未完成 等待token
-        Integer adminId = null;
+
+        JWT jwt = JWT.of(request.getHeader("token"));
+        //token异常包括了    1. 过期 2. 签名不对
+        Assert.isTrue(JwtUtil.validateToken(jwt),"token异常");
+
+        PayLoad payload = (PayLoad) jwt.getPayload("payload");
+        Integer adminId = payload.getUserId();
 
         AddCompanyDTO addCompanyDTO = new AddCompanyDTO();
         addCompanyDTO.setCompanyName(companyRegisterBO.getCompanyName())
@@ -96,22 +105,19 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String login(LoginBO loginBO) {
-        //加了role lictory注意自己看看
 
-        //TODO 上JWT
-        switch (loginBO.getRole()) {
-            case 0:
-                User user = userMapper.selectOne(new QueryWrapper<User>().eq("username", loginBO.getUsername()));
-                Assert.notNull(user, "登录失败,用户名不存在");
-                break;
-            case 1:
-            case 2:
-                break;
-            default:
-        }
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("username", loginBO.getUsername()));
 
+        Assert.notNull(user, "登录失败,用户名不存在");
+        Assert.isTrue(user.getPassword().equals(CryptoUtil.encrypt(
+                        loginBO.getPassword(), PathConstant.PATH_PUBLIC_KEY))
+                , "登录失败,账户名或密码错误");
 
-        return "true";
+        //TODO 调用链端
+
+        PayLoad payLoad = new PayLoad(user.getId());
+        return JwtUtil.createJwtToken(loginBO.getRole().toString(), payLoad);
+
     }
 
     @Override
@@ -132,9 +138,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean judgeWorker(JudgeBO judgeBO) {
-        String header = request.getHeader("token");
-        //TODO 尚未完成 等待token
-        Integer adminId = null;
+
+        String jwt = request.getHeader("token");
+        JWT of = JWT.of(jwt);
+        PayLoad payload = (PayLoad) of.getPayload("payload");
+        Integer adminId = payload.getUserId();
 
         applicationMapper.update(null,
                 new UpdateWrapper<ApplicationForUser>().
@@ -157,6 +165,5 @@ public class AccountServiceImpl implements AccountService {
         Assert.isTrue(voidCommonResult.getCode() == 200, "调用角色服务添加员工失败");
         return true;
     }
-
 
 }
