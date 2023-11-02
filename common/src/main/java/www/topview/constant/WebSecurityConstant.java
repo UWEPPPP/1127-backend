@@ -16,5 +16,7 @@ public class WebSecurityConstant {
     public static final Integer EXPIRE_TIME = 30 * 60 * 1000;
 
     public static final String ISSUER = "TopView-BlockChain";
+    public static final String SIGN_KEY = "TopView-BlockChain";
+
 
 }

@@ -1,12 +1,16 @@
 package www.topview.entity.bo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author :Lictory
  * @date : 2023/10/30
  */
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class LoginBO {
 

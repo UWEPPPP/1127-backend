@@ -49,6 +49,8 @@ public class AccountServiceImpl implements AccountService {
     private HttpServletRequest request;
     @Autowired
     private ChainService chainService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -88,9 +90,10 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(rollbackFor = Exception.class)
     public boolean companyRegister(CompanyRegisterBO companyRegisterBO) {
 
-        JWT jwt = JWT.of(request.getHeader("token"));
+        String token=request.getHeader("token");
+        JWT jwt = JWT.of(token);
         //token异常包括了    1. 过期 2. 签名不对
-        Assert.isTrue(JwtUtil.validateToken(jwt), "token异常");
+        Assert.isTrue(jwtUtil.validateToken(token), "token异常");
 
         PayLoad payload = (PayLoad) jwt.getPayload("payload");
         Integer adminId = payload.getUserId();
@@ -112,8 +115,9 @@ public class AccountServiceImpl implements AccountService {
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("username", loginBO.getUsername()));
 
         Assert.notNull(user, "登录失败,用户名不存在");
-        Assert.isTrue(user.getPassword().equals(CryptoUtil.encrypt(
-                        loginBO.getPassword(), PathConstant.PATH_PUBLIC_KEY))
+        Assert.isTrue(CryptoUtil.decrypt(user.getPassword(),
+                                PathConstant.PATH_PRIVATE_KEY).
+                        equals(loginBO.getPassword())
                 , "登录失败,账户名或密码错误");
 
         //TODO 调用链端
@@ -124,7 +128,7 @@ public class AccountServiceImpl implements AccountService {
         Assert.isTrue(voidCommonResult.getCode() == 200, "调用链端创建processor失败");
 
         PayLoad payLoad = new PayLoad(user.getId());
-        return JwtUtil.createJwtToken(loginBO.getRole().toString(), payLoad);
+        return jwtUtil.createJwtToken(loginBO.getRole().toString(), payLoad);
 
     }
 
