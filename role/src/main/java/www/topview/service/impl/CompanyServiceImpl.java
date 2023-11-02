@@ -104,12 +104,6 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         User worker = userMapper.selectById(workerId);
         String weid = worker.getWeId();
         Assert.notNull(worker, "该员工不存在");
-        ArrayList<Object> objects = new ArrayList<>();
-        objects.add(worker.getAddress());
-        ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
-        chainServiceDTO.setUserId(Integer.valueOf(id)).setContractName("CompanyLogic").setFunctionName("removedWorker").setFunctionParams(objects);
-        CommonResult<Object> send = contractService.send(chainServiceDTO);
-        Assert.isTrue(send.getCode() == 200, "调用合约删除员工失败");
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", workerId);
         worker.setPrivateKey("")
@@ -122,6 +116,15 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         queryWrapper1.eq("weid", weid);
         int delete = workerInfoMapper.delete(queryWrapper1);
         Assert.isTrue(delete == 1, "调用数据库删除员工失败");
+
+        //TODO 调用合约
+
+        ArrayList<Object> objects = new ArrayList<>();
+        objects.add(worker.getAddress());
+        ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
+        chainServiceDTO.setUserId(Integer.valueOf(id)).setContractName("CompanyLogic").setFunctionName("removedWorker").setFunctionParams(objects);
+        CommonResult<Object> send = contractService.send(chainServiceDTO);
+        Assert.isTrue(send.getCode() == 200, "调用合约删除员工失败");
     }
 
     @Override
