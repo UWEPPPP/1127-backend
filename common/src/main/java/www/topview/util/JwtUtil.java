@@ -2,9 +2,6 @@ package www.topview.util;
 
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTException;
-import cn.hutool.jwt.JWTUtil;
-import cn.hutool.jwt.JWTValidator;
-import cn.hutool.jwt.signers.AlgorithmUtil;
 import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
 import org.springframework.stereotype.Component;
@@ -12,10 +9,7 @@ import www.topview.constant.WebSecurityConstant;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * @author :Lictory
@@ -24,15 +18,12 @@ import java.util.Map;
 
 @Component
 public class JwtUtil {
-
-
+    private static final byte[] key = "这是一个key".getBytes();
     private static JWTSigner jwtSigner;
-    private static byte[] key;
 
     @PostConstruct
     public void init() throws IOException {
-        //TODO 设置指定加密算法     以及私钥路径
-        key = Files.newInputStream(Paths.get("common/src/main/resources/test_private_key.txt")).readAllBytes();
+        //TODO 设置指定加密算法
         jwtSigner = JWTSignerUtil.createSigner("HMD5", key);
 
     }
