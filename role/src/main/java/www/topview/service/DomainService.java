@@ -16,7 +16,6 @@ import java.util.List;
 public interface DomainService {
     /**
      * add company
-     * add company
      *
      * @param addCompanyDTO add company dto
      * @throws WeIdentityException we identity exception

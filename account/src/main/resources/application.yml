@@ -5,6 +5,14 @@ spring:
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   application:
-    name: AccountService
+    name: 1127-account
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.21.23.163
+        namespace: 1127
+
 weIdentity:
   cpt_template_path: cpt_template/cpt001.json
+server:
+  port: 9010
