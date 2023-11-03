@@ -28,7 +28,7 @@ public class DomainAdminController {
     DomainService domainService;
 
     @PostMapping("/addCompany")
-    public CommonResult<Void> addCompany(@Validated AddCompanyDTO addCompanyDTO) throws WeIdentityException {
+    public CommonResult<Void> addCompany(@Validated @RequestBody AddCompanyDTO addCompanyDTO) throws WeIdentityException {
         domainService.addCompany(addCompanyDTO);
         return CommonResult.operateSuccess("公司创建成功");
     }

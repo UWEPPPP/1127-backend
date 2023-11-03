@@ -1,3 +1,4 @@
+import cn.hutool.core.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +25,10 @@ public class ChainTest {
         AccountModel weId = weIdentityService.createWeId();
         CreateProcessorDTO createProcessorDTO = new CreateProcessorDTO();
         createProcessorDTO.setUserId(1);
+        System.out.println(weId.getPrivateKey());
         createProcessorDTO.setPrivateKey(weId.getPrivateKey());
         CommonResult<Void> voidCommonResult = processorClient.create(createProcessorDTO);
         System.out.println(voidCommonResult.getMessage());
+        Assert.isTrue(voidCommonResult.getCode() == 200, "创建processor失败");
     }
 }

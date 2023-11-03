@@ -3,10 +3,7 @@ package www.topview.controller;
 import org.checkerframework.checker.index.qual.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import www.topview.dto.AddWorkerDTO;
 import www.topview.entity.bo.AddWorkerBO;
 import www.topview.entity.po.CompanyAdminInfo;
@@ -50,7 +47,7 @@ public class CompanyAdminController {
      * @eo.request-type formdata
      */
     @PostMapping("/registerWorker")
-    public CommonResult<Void> addWorker(@Validated AddWorkerDTO addWorkerDTO) throws WeIdentityException {
+    public CommonResult<Void> addWorker(@Validated @RequestBody AddWorkerDTO addWorkerDTO) throws WeIdentityException {
         service.addWorker(addWorkerDTO);
         return CommonResult.operateSuccess("添加成功");
     }
@@ -64,7 +61,7 @@ public class CompanyAdminController {
      * @throws WeIdentityException weidentity exception
      */
     @PostMapping("/addWorker")
-    public CommonResult<Void> addWorker(@Validated AddWorkerBO addWorkerBO) throws WeIdentityException {
+    public CommonResult<Void> addWorker(@Validated @RequestBody AddWorkerBO addWorkerBO) throws WeIdentityException {
         Integer id = JwtUtil.getUserId(request);
         CompanyAdminInfo companyByAdminId = service.getCompanyByAdminId(id);
         AddWorkerDTO addWorkerDTO = new AddWorkerDTO();

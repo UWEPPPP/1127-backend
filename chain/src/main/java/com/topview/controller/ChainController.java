@@ -20,7 +20,7 @@ public class ChainController {
     private ChainService chainService;
 
     @GetMapping
-    public CommonResult<Object> call(@Validated ChainServiceDTO chainServiceDTO) throws TransactionBaseException, ContractCodecException {
+    public CommonResult<Object> call(@Validated @RequestBody ChainServiceDTO chainServiceDTO) throws TransactionBaseException, ContractCodecException {
         ChainServiceBO chainServiceBO = new ChainServiceBO();
 
         chainServiceBO.setUserId(chainServiceDTO.getUserId());
@@ -34,7 +34,7 @@ public class ChainController {
     }
 
     @PostMapping
-    public CommonResult<Object> send(@Validated ChainServiceDTO chainServiceDTO) throws TransactionBaseException, ContractCodecException {
+    public CommonResult<Object> send(@Validated @RequestBody ChainServiceDTO chainServiceDTO) throws TransactionBaseException, ContractCodecException {
         ChainServiceBO chainServiceBO = new ChainServiceBO();
 
         chainServiceBO.setUserId(chainServiceDTO.getUserId());
