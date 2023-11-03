@@ -9,10 +9,10 @@ import www.topview.result.CommonResult;
 
 @FeignClient("1127-chain")
 public interface ChainClient {
-    @GetMapping("/chain")
+    @GetMapping("chain")
     CommonResult<Object> call(ChainServiceDTO chainServiceDTO);
 
-    @PostMapping("/chain")
+    @PostMapping("chain")
     CommonResult<Object> send(ChainServiceDTO chainServiceDTO);
 
     @PostMapping("processor")

@@ -26,7 +26,7 @@ import java.util.List;
  * @eo.path /role/companyAdmin
  */
 @RestController
-@RequestMapping("/role/companyAdmin")
+@RequestMapping("/companyAdmin")
 @ResponseBody
 public class CompanyAdminController {
     @Autowired

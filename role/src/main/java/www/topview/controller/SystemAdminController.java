@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2023/10/31
  */
 @RestController
-@RequestMapping("/role/systemAdmin")
+@RequestMapping("/systemAdmin")
 @ResponseBody
 public class SystemAdminController {
 
