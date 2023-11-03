@@ -39,7 +39,7 @@ public class DomainAdminController {
     }
 
     @PostMapping("/deleteCompany")
-    public CommonResult<Void> deleteCompany(@Positive int domainId) throws WeIdentityException {
+    public CommonResult<Void> deleteCompany(@Positive int domainId) {
         domainService.deleteCompany(domainId);
         return CommonResult.operateSuccess("公司删除成功");
     }

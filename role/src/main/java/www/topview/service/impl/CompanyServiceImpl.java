@@ -1,7 +1,6 @@
 package www.topview.service.impl;
 
 import cn.hutool.core.lang.Assert;
-import cn.hutool.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import www.topview.dao.UserMapper;
 import www.topview.dao.WorkerInfoMapper;
 import www.topview.dto.AddWorkerDTO;
 import www.topview.dto.ChainServiceDTO;
-import www.topview.dto.PayLoad;
 import www.topview.entity.model.AccountModel;
 import www.topview.entity.po.Company;
 import www.topview.entity.po.CompanyAdminInfo;
@@ -26,6 +24,7 @@ import www.topview.result.CommonResult;
 import www.topview.rpc.ContractService;
 import www.topview.service.WeIdentityService;
 import www.topview.util.CryptoUtil;
+import www.topview.util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -98,9 +97,7 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteWorker(int workerId) {
-        JWT jwt = JWT.of(request.getHeader("token"));
-        PayLoad payload = (PayLoad) jwt.getPayload("payload");
-        Integer id = payload.getUserId();
+        Integer id = JwtUtil.getUserId(request);
         User worker = userMapper.selectById(workerId);
         String weid = worker.getWeId();
         Assert.notNull(worker, "该员工不存在");
@@ -123,9 +120,7 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
 
     @Override
     public List<WorkerVO> getWorkerList() {
-        JWT jwt = JWT.of(request.getHeader("token"));
-        PayLoad payload = (PayLoad) jwt.getPayload("payload");
-        Integer id = payload.getUserId();
+        Integer id = JwtUtil.getUserId(request);
         Company company = companyMapper.selectOne(new QueryWrapper<Company>().eq("register_id", id));
         Assert.notNull(company, "用户id异常 无法查询到公司");
         List<WorkerInfo> workers = workerInfoMapper.selectList(new QueryWrapper<WorkerInfo>().eq("company_id", company.getId()));
