@@ -2,6 +2,7 @@ package www.topview.controller;
 
 import org.checkerframework.checker.index.qual.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import www.topview.dto.AddCompanyDTO;
 import www.topview.entity.model.RegisterCptModel;
@@ -27,7 +28,7 @@ public class DomainAdminController {
     DomainService domainService;
 
     @PostMapping("/addCompany")
-    public CommonResult<Void> addCompany(AddCompanyDTO addCompanyDTO) throws WeIdentityException {
+    public CommonResult<Void> addCompany(@Validated AddCompanyDTO addCompanyDTO) throws WeIdentityException {
         domainService.addCompany(addCompanyDTO);
         return CommonResult.operateSuccess("公司创建成功");
     }
