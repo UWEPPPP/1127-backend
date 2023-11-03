@@ -16,5 +16,5 @@ public interface SystemService {
      * @param id id
      * @return {@link UserAllInfoVO}
      */
-    public UserAllInfoVO getUserAllInfo(Integer id);
+    UserAllInfoVO getUserAllInfo(Integer id);
 }

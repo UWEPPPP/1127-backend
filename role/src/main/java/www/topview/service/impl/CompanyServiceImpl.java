@@ -104,17 +104,13 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         User worker = userMapper.selectById(workerId);
         String weid = worker.getWeId();
         Assert.notNull(worker, "该员工不存在");
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id", workerId);
         worker.setPrivateKey("")
                 .setPublicKey("")
                 .setAddress("")
                 .setWeId("");
-        int update = userMapper.update(worker, queryWrapper);
+        int update = userMapper.update(worker, new QueryWrapper<User>().eq("id", workerId));
         Assert.isTrue(update == 1, "调用数据库删除员工失败");
-        QueryWrapper<WorkerInfo> queryWrapper1 = new QueryWrapper<>();
-        queryWrapper1.eq("weid", weid);
-        int delete = workerInfoMapper.delete(queryWrapper1);
+        int delete = workerInfoMapper.delete(new QueryWrapper<WorkerInfo>().eq("weid", weid));
         Assert.isTrue(delete == 1, "调用数据库删除员工失败");
         //链端调用
         ArrayList<Object> objects = new ArrayList<>();
@@ -130,18 +126,12 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         JWT jwt = JWT.of(request.getHeader("token"));
         PayLoad payload = (PayLoad) jwt.getPayload("payload");
         Integer id = payload.getUserId();
-        QueryWrapper<Company> companyWrapper = new QueryWrapper<>();
-        companyWrapper.eq("register_id", id);
-        Company company = companyMapper.selectOne(companyWrapper);
+        Company company = companyMapper.selectOne(new QueryWrapper<Company>().eq("register_id", id));
         Assert.notNull(company, "用户id异常 无法查询到公司");
-        QueryWrapper<WorkerInfo> workerInfoWrapper = new QueryWrapper<>();
-        workerInfoWrapper.eq("company_id", company.getId());
-        List<WorkerInfo> workers = workerInfoMapper.selectList(workerInfoWrapper);
+        List<WorkerInfo> workers = workerInfoMapper.selectList(new QueryWrapper<WorkerInfo>().eq("company_id", company.getId()));
         ArrayList<WorkerVO> workerList = new ArrayList<>();
         for (WorkerInfo worker : workers) {
-            QueryWrapper<User> userWrapper = new QueryWrapper<>();
-            userWrapper.eq("weid", worker.getWeId());
-            User user = userMapper.selectOne(userWrapper);
+            User user = userMapper.selectOne(new QueryWrapper<User>().eq("weid", worker.getWeId()));
             workerList.add(new WorkerVO(worker, user));
         }
         return workerList;

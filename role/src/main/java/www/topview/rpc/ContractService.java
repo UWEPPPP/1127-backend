@@ -22,7 +22,7 @@ public interface ContractService {
      * @return {@link CommonResult}<{@link Object}>
      */
     @GetMapping("/chain")
-    public CommonResult<Object> call(ChainServiceDTO chainServiceDTO);
+    CommonResult<Object> call(ChainServiceDTO chainServiceDTO);
 
     /**
      * send
@@ -31,5 +31,5 @@ public interface ContractService {
      * @return {@link CommonResult}<{@link Object}>
      */
     @PostMapping("/chain")
-    public CommonResult<Object> send(ChainServiceDTO chainServiceDTO);
+    CommonResult<Object> send(ChainServiceDTO chainServiceDTO);
 }

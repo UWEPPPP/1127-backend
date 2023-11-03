@@ -32,14 +32,14 @@ public interface CompanyService {
      *
      * @param workerId worker id
      */
-    public void deleteWorker(int workerId);
+    void deleteWorker(int workerId);
 
     /**
      * get worker list
      *
      * @return {@link List}<{@link WorkerVO}>
      */
-    public List<WorkerVO> getWorkerList();
+    List<WorkerVO> getWorkerList();
 
     /**
      * get company by admin id

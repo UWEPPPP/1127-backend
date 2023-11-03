@@ -3,6 +3,7 @@ package www.topview.controller;
 import cn.hutool.jwt.JWT;
 import org.checkerframework.checker.index.qual.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,17 +39,19 @@ public class CompanyAdminController {
     private HttpServletRequest request;
 
     /**
+     * add worker
      * 被账户服务调用的方法
      *
-     * @param addWorkerDTO
+     * @param addWorkerDTO add worker dto
      * @return CommonResult
+     * @throws WeIdentityException weidentity exception
      * @eo.name addWorker
      * @eo.url /addWorker
      * @eo.method post
      * @eo.request-type formdata
      */
     @PostMapping("/registerWorker")
-    public CommonResult<Void> addWorker(AddWorkerDTO addWorkerDTO) throws WeIdentityException {
+    public CommonResult<Void> addWorker(@Validated AddWorkerDTO addWorkerDTO) throws WeIdentityException {
         service.addWorker(addWorkerDTO);
         return CommonResult.operateSuccess("添加成功");
     }
@@ -62,7 +65,7 @@ public class CompanyAdminController {
      * @throws WeIdentityException weidentity exception
      */
     @PostMapping("/addWorker")
-    public CommonResult<Void> addWorker(AddWorkerBO addWorkerBO) throws WeIdentityException {
+    public CommonResult<Void> addWorker(@Validated AddWorkerBO addWorkerBO) throws WeIdentityException {
         JWT jwt = JWT.of(request.getHeader("token"));
         PayLoad payload = (PayLoad) jwt.getPayload("payload");
         Integer id = payload.getUserId();
