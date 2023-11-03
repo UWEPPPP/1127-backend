@@ -28,7 +28,7 @@ public class JwtUtil {
 
     }
 
-    public static String createJwtToken(String subject, Object payload) {
+    public String createJwtToken(String subject, Object payload) {
         String token;
         try {
             token = JWT.create()
@@ -46,13 +46,14 @@ public class JwtUtil {
 
     }
 
-    public static boolean validateToken(JWT jwt) {
+    public boolean validateToken(String jwt) {
         return validateDate(jwt) || validateSignature(jwt);
     }
 
-    public static boolean validateSignature(JWT jwt) {
+    public boolean validateSignature(String token) {
         //验证签名算法
         boolean validSignature;
+        JWT jwt=JWT.of(token);
         try {
             //验证JWT的有效性跟签名
             validSignature = jwt.setKey(KEY).verify(jwtSigner);
@@ -63,19 +64,13 @@ public class JwtUtil {
     }
 
 
-    public static boolean validateDate(JWT jwt) {
+    public boolean validateDate(String token) {
         boolean validateDate = true;
         try {
-            Date exp = (Date) jwt.getPayload().getClaim("exp");
-            if (exp.before(new Date())) {
-                //证明token过期
-                validateDate = false;
-            }
+            return token != null && JWT.of(token).setKey(WebSecurityConstant.SIGN_KEY.getBytes()).validate(0);
         } catch (JWTException e) {
-            throw new JWTException("校验token日期时发生异常");
+            return false;
         }
-
-        return validateDate;
     }
 
 }

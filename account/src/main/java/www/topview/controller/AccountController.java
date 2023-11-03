@@ -11,6 +11,7 @@ import www.topview.result.CommonResult;
 import www.topview.service.AccountService;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public class AccountController {
      * @return token
      */
     @PostMapping("/login")
-    CommonResult<String> login(LoginBO loginBO) {
+    CommonResult<String> login(LoginBO loginBO) throws IOException {
         return CommonResult.operateSuccess("登录成功", accountService.login(loginBO));
     }
 

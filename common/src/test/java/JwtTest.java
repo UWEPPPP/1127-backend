@@ -2,9 +2,14 @@ import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import www.topview.constant.WebSecurityConstant;
 import www.topview.util.JwtUtil;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,27 +21,28 @@ import java.util.Map;
  * @author :Lictory
  * @date : 2023/11/01
  */
+
+@Slf4j
+@SpringBootTest
 public class JwtTest {
-    public static void main(String[] args) throws IOException {
-        //admin_key_0x720fa5d41557624e24ba9771266de383e2b8f47c.pem
-        //
-        Map<String,Object> headers=new HashMap<>();
-        headers.put("head","test");
-        Map<String,Object> payloads=new HashMap<>();
-        payloads.put("payload","test");
 
 
-        byte[] key = Files.newInputStream(Paths.get("common/src/main/resources/test_private_key.txt")).readAllBytes();
-        JWTSigner jwtSigner = JWTSignerUtil.createSigner("HMD5", key);
+    private final JwtUtil jwtUtil = new JwtUtil();
 
+    @Test
+    public void test() throws IOException {
+        jwtUtil.init();
 
-        String token = JWT.create()
-                .setIssuer(WebSecurityConstant.ISSUER)
-                .setSubject("subject")
-                .setPayload("payload", payloads)
-                .setExpiresAt(new Date(System.currentTimeMillis() + WebSecurityConstant.EXPIRE_TIME))
-                .sign(jwtSigner);
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("head", "test");
+        Map<String, Object> payloads = new HashMap<>();
+        payloads.put("payload", "test");
+
+        String token = jwtUtil.createJwtToken("1", payloads);
+
         System.out.println(token);
+        System.out.println(jwtUtil.validateToken(token));
     }
+
 
 }
