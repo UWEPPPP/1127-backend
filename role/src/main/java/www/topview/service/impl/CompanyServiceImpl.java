@@ -50,13 +50,15 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
     @Autowired
     private CompanyAdminMapper companyAdminMapper;
 
+    /**
+     * add worker
+     *
+     * @param addWorkerDTO add worker dto
+     * @throws WeIdentityException we identity exception
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addWorker(AddWorkerDTO addWorkerDTO) throws WeIdentityException {
-//        String header = request.getHeader("token"); 账户服务调用 无需token
-//
-
-
         AccountModel weId = weIdentityService.createWeId();
         User user = new User(
                 null,
@@ -156,5 +158,12 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         Assert.notNull(admin, "操作者id不存在");
         CompanyAdminInfo weid = companyAdminMapper.selectOne(new QueryWrapper<CompanyAdminInfo>().eq("weid", admin.getWeId()));
         Assert.notNull(weid, "该用户不是公司管理员");
+    }
+
+    @Override
+    public CompanyAdminInfo getCompanyByAdminId(String id) {
+        CompanyAdminInfo companyAdminInfo = companyAdminMapper.selectById(id);
+        Assert.notNull(companyAdminInfo, "该用户不是公司管理员");
+        return companyAdminInfo;
     }
 }

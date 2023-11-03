@@ -124,6 +124,7 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteCompany(int companyId) throws WeIdentityException {
         String header = request.getHeader("token");
         //TODO 尚未完成 等待token
