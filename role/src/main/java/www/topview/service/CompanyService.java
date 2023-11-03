@@ -47,5 +47,5 @@ public interface CompanyService {
      * @param id id
      * @return {@link CompanyAdminInfo}
      */
-    CompanyAdminInfo getCompanyByAdminId(String id);
+    CompanyAdminInfo getCompanyByAdminId(Integer id);
 }

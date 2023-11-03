@@ -21,7 +21,7 @@ public interface RoleService {
      * @param addWorkerDTO add worker dto
      * @return {@link CommonResult}<{@link Void}>
      */
-    @PostMapping("/1127-role/companyAdmin/addWorker")
+    @PostMapping("/1127-role/companyAdmin/registerWorker")
     public CommonResult<Void> addWorker(AddWorkerDTO addWorkerDTO);
 
     /**

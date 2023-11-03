@@ -3,6 +3,7 @@ package www.topview.service.impl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.webank.weid.protocol.base.CptBaseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import www.topview.constant.RoleConstant;
 import www.topview.dao.*;
 import www.topview.dto.AddCompanyDTO;
 import www.topview.dto.ChainServiceDTO;
+import www.topview.dto.PayLoad;
 import www.topview.entity.model.AccountModel;
 import www.topview.entity.model.RegisterCptModel;
 import www.topview.entity.po.*;
@@ -28,7 +30,6 @@ import www.topview.util.CryptoUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,14 +64,9 @@ public class DomainServiceImpl implements DomainService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addCompany(AddCompanyDTO addCompanyDTO) throws WeIdentityException {
-//        String header = request.getHeader("token"); 账户服务调用 不用token
-//        String id = null;
-//        checkCompanyAdmin(id);
-
         AccountModel accountModel = weIdentityService.createWeId();
         Integer passer = addCompanyDTO.getPasser();
-        checkDomainAdmin(String.valueOf(passer));
-        //TODO 合约调用
+        //链端调用
         Domain domain = domainMapper.selectOne(new QueryWrapper<Domain>().eq("domain_admin_id", passer));
         ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
         chainServiceDTO.setUserId(passer).
@@ -88,8 +84,6 @@ public class DomainServiceImpl implements DomainService {
         Assert.isTrue(send.getCode() == 200, "合约调用失败");
         Map<String, Object> data = Convert.toMap(String.class, Object.class, send.getData());
         String companyAddr = Convert.toStr(data.get("companyAddr"));
-
-
         User user = new User(
                 null,
                 addCompanyDTO.getFounderName(),
@@ -108,10 +102,7 @@ public class DomainServiceImpl implements DomainService {
                 addCompanyDTO.getDomainId(),
                 addCompanyDTO.getCompanyName()
         );
-        //  进行企业注册
         Assert.isTrue(companyMapper.insert(company) == 1, "公司创建失败,数据库更新时发生异常");
-        // 进行企业管理员的注册
-        //根据公司Id进行userId的创建
         CompanyAdminInfo admin = new CompanyAdminInfo(
                 null,
                 accountModel.getWeId(),
@@ -126,12 +117,11 @@ public class DomainServiceImpl implements DomainService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteCompany(int companyId) throws WeIdentityException {
-        String header = request.getHeader("token");
-        //TODO 尚未完成 等待token
-        String id = null;
-        checkDomainAdmin(id);
+        JWT jwt = JWT.of(request.getHeader("token"));
+        PayLoad payload = (PayLoad) jwt.getPayload("payload");
+        Integer id = payload.getUserId();
         CompanyAdminInfo companyAdmin = companyAdminMapper.selectOne(new QueryWrapper<CompanyAdminInfo>().eq("company_id", companyId));
-        //TODO 调用合约
+        //链端调用
         Domain domain = domainMapper.selectOne(new QueryWrapper<Domain>().eq("domain_admin_id", id));
         ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
         chainServiceDTO.setUserId(Integer.valueOf(id)).
@@ -145,8 +135,6 @@ public class DomainServiceImpl implements DomainService {
                 setContractAddress(domain.getDomainAddress());
         CommonResult<Object> send = contractService.send(chainServiceDTO);
         Assert.isTrue(send.getCode() == 200, "合约调用失败");
-
-
         int result = companyMapper.deleteById(companyId);
         Assert.isTrue(result == 1, "公司不存在或者删除失败");
         int delete1 = workerInfoMapper.delete(new QueryWrapper<WorkerInfo>().eq("company_id", companyId));
@@ -165,11 +153,9 @@ public class DomainServiceImpl implements DomainService {
 
     @Override
     public CptInfoVO registerCpt(RegisterCptModel model) throws WeIdentityException {
-        String header = request.getHeader("token");
-        //TODO 尚未完成 等待token
-        String id = null;
-
-        checkDomainAdmin(id);
+        JWT jwt = JWT.of(request.getHeader("token"));
+        PayLoad payload = (PayLoad) jwt.getPayload("payload");
+        Integer id = payload.getUserId();
         User admin = userMapper.selectById(id);
         String privateKey = CryptoUtil.decrypt(admin.getPrivateKey(), PathConstant.PATH_PRIVATE_KEY);
         CptBaseInfo cptBaseInfo = weIdentityService.registerCpt(admin.getWeId(), privateKey, model.getClaim());
@@ -181,11 +167,9 @@ public class DomainServiceImpl implements DomainService {
 
     @Override
     public List<CompanyVO> getCompanyList() {
-        String header = request.getHeader("token");
-        //TODO 尚未完成 等待token
-        String id = null;
-
-        checkDomainAdmin(id);
+        JWT jwt = JWT.of(request.getHeader("token"));
+        PayLoad payload = (PayLoad) jwt.getPayload("payload");
+        Integer id = payload.getUserId();
         Domain domain = domainMapper.selectOne(new QueryWrapper<Domain>().eq("domain_admin_id", id));
         Assert.notNull(domain, "该域不存在");
         List<Company> companies = companyMapper.selectList(new QueryWrapper<Company>().eq("domain_id", domain.getId()));
@@ -202,16 +186,6 @@ public class DomainServiceImpl implements DomainService {
             companyList.add(companyVO);
         }
         return companyList;
-    }
-
-    public void checkDomainAdmin(String id) {
-        User admin = userMapper.selectById(id);
-        Assert.notNull(admin, "操作者id不存在");
-        DomainAdminInfo weid = domainAdminMapper.selectOne(new QueryWrapper<DomainAdminInfo>().eq("weid", admin.getWeId()));
-        Assert.notNull(weid, "该用户不是域管理员");
-        Map<String, String> map = new HashMap<>(3);
-
-        return;
     }
 
 }

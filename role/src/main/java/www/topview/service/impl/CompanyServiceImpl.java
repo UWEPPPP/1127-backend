@@ -1,6 +1,7 @@
 package www.topview.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import www.topview.dao.UserMapper;
 import www.topview.dao.WorkerInfoMapper;
 import www.topview.dto.AddWorkerDTO;
 import www.topview.dto.ChainServiceDTO;
+import www.topview.dto.PayLoad;
 import www.topview.entity.model.AccountModel;
 import www.topview.entity.po.Company;
 import www.topview.entity.po.CompanyAdminInfo;
@@ -54,7 +56,7 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
      * add worker
      *
      * @param addWorkerDTO add worker dto
-     * @throws WeIdentityException we identity exception
+     * @throws WeIdentityException weidentity exception
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -79,11 +81,9 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
                 addWorkerDTO.getDomainId()
         );
         Assert.isTrue(workerInfoMapper.insert(workerInfo) == 1, "新用户创建失败,数据库异常");
-
-        //TODO 尚未完成 等待链端接口
         Company company = companyMapper.selectById(addWorkerDTO.getCompanyId());
+        //链端调用
         ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
-
         ArrayList<Object> objects = new ArrayList<>();
         objects.add(addWorkerDTO.getGroupName());
         objects.add(weId.getAccountAddress());
@@ -98,11 +98,9 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteWorker(int workerId) {
-        String header = request.getHeader("token");
-        //TODO 尚未完成 等待token
-        String id = null;
-        checkCompanyAdmin(id);
-
+        JWT jwt = JWT.of(request.getHeader("token"));
+        PayLoad payload = (PayLoad) jwt.getPayload("payload");
+        Integer id = payload.getUserId();
         User worker = userMapper.selectById(workerId);
         String weid = worker.getWeId();
         Assert.notNull(worker, "该员工不存在");
@@ -118,24 +116,20 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         queryWrapper1.eq("weid", weid);
         int delete = workerInfoMapper.delete(queryWrapper1);
         Assert.isTrue(delete == 1, "调用数据库删除员工失败");
-
-        //TODO 调用合约
-
+        //链端调用
         ArrayList<Object> objects = new ArrayList<>();
         objects.add(worker.getAddress());
         ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
-        chainServiceDTO.setUserId(Integer.valueOf(id)).setContractName("CompanyLogic").setFunctionName("removedWorker").setFunctionParams(objects);
+        chainServiceDTO.setUserId(id).setContractName("CompanyLogic").setFunctionName("removedWorker").setFunctionParams(objects);
         CommonResult<Object> send = contractService.send(chainServiceDTO);
         Assert.isTrue(send.getCode() == 200, "调用合约删除员工失败");
     }
 
     @Override
     public List<WorkerVO> getWorkerList() {
-        String header = request.getHeader("token");
-        //TODO 尚未完成 等待token
-        String id = null;
-
-        checkCompanyAdmin(id);
+        JWT jwt = JWT.of(request.getHeader("token"));
+        PayLoad payload = (PayLoad) jwt.getPayload("payload");
+        Integer id = payload.getUserId();
         QueryWrapper<Company> companyWrapper = new QueryWrapper<>();
         companyWrapper.eq("register_id", id);
         Company company = companyMapper.selectOne(companyWrapper);
@@ -153,15 +147,9 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         return workerList;
     }
 
-    public void checkCompanyAdmin(String id) {
-        User admin = userMapper.selectById(id);
-        Assert.notNull(admin, "操作者id不存在");
-        CompanyAdminInfo weid = companyAdminMapper.selectOne(new QueryWrapper<CompanyAdminInfo>().eq("weid", admin.getWeId()));
-        Assert.notNull(weid, "该用户不是公司管理员");
-    }
 
     @Override
-    public CompanyAdminInfo getCompanyByAdminId(String id) {
+    public CompanyAdminInfo getCompanyByAdminId(Integer id) {
         CompanyAdminInfo companyAdminInfo = companyAdminMapper.selectById(id);
         Assert.notNull(companyAdminInfo, "该用户不是公司管理员");
         return companyAdminInfo;

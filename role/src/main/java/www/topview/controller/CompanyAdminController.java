@@ -1,5 +1,6 @@
 package www.topview.controller;
 
+import cn.hutool.jwt.JWT;
 import org.checkerframework.checker.index.qual.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import www.topview.dto.AddWorkerDTO;
+import www.topview.dto.PayLoad;
 import www.topview.entity.bo.AddWorkerBO;
 import www.topview.entity.po.CompanyAdminInfo;
 import www.topview.entity.vo.WorkerVO;
@@ -61,14 +63,14 @@ public class CompanyAdminController {
      */
     @PostMapping("/addWorker")
     public CommonResult<Void> addWorker(AddWorkerBO addWorkerBO) throws WeIdentityException {
-        String header = request.getHeader("token");
-        //TODO 尚未完成 等待token
-        String id = null;
+        JWT jwt = JWT.of(request.getHeader("token"));
+        PayLoad payload = (PayLoad) jwt.getPayload("payload");
+        Integer id = payload.getUserId();
         CompanyAdminInfo companyByAdminId = service.getCompanyByAdminId(id);
         AddWorkerDTO addWorkerDTO = new AddWorkerDTO();
         addWorkerDTO.setCompanyId(companyByAdminId.getCompanyId())
                 .setDomainId(companyByAdminId.getDomainId())
-                .setPasser(Integer.valueOf(id))
+                .setPasser(id)
                 .setUsername(addWorkerBO.getUsername())
                 .setPassword(addWorkerBO.getPassword())
                 .setGroupName(addWorkerBO.getGroupName());
