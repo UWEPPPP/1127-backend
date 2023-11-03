@@ -116,7 +116,7 @@ public class DomainServiceImpl implements DomainService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteCompany(int companyId) throws WeIdentityException {
+    public void deleteCompany(int companyId) {
         JWT jwt = JWT.of(request.getHeader("token"));
         PayLoad payload = (PayLoad) jwt.getPayload("payload");
         Integer id = payload.getUserId();
@@ -124,7 +124,7 @@ public class DomainServiceImpl implements DomainService {
         //链端调用
         Domain domain = domainMapper.selectOne(new QueryWrapper<Domain>().eq("domain_admin_id", id));
         ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
-        chainServiceDTO.setUserId(Integer.valueOf(id)).
+        chainServiceDTO.setUserId(id).
                 setContractName("DomainLogic").
                 setFunctionName("removeCompany").
                 setFunctionParams(new ArrayList<>() {

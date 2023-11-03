@@ -21,22 +21,21 @@ public interface DomainService {
      * @param addCompanyDTO add company dto
      * @throws WeIdentityException we identity exception
      */
-    public void addCompany(AddCompanyDTO addCompanyDTO) throws WeIdentityException;
+    void addCompany(AddCompanyDTO addCompanyDTO) throws WeIdentityException;
 
     /**
      * delete company
      *
      * @param companyId company id
-     * @throws WeIdentityException we identity exception
      */
-    public void deleteCompany(int companyId) throws WeIdentityException;
+    void deleteCompany(int companyId);
 
     /**
      * get Template
      *
      * @return {@link String}
      */
-    public String getCptTemplate();
+    String getCptTemplate();
 
     /**
      * register cpt
@@ -45,12 +44,12 @@ public interface DomainService {
      * @return {@link CptInfoVO}
      * @throws WeIdentityException weidentity exception
      */
-    public CptInfoVO registerCpt(RegisterCptModel model) throws WeIdentityException;
+    CptInfoVO registerCpt(RegisterCptModel model) throws WeIdentityException;
 
     /**
      * get company list
      *
      * @return {@link List}<{@link Company}>
      */
-    public List<CompanyVO> getCompanyList();
+    List<CompanyVO> getCompanyList();
 }
