@@ -28,7 +28,7 @@ public class WorkerInfo {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     /**
-     * we id
+     * weid
      */
     @TableField("weid")
     private String weId;

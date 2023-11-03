@@ -20,8 +20,8 @@ import www.topview.entity.po.User;
 import www.topview.entity.po.WorkerInfo;
 import www.topview.entity.vo.WorkerVO;
 import www.topview.exception.WeIdentityException;
+import www.topview.feign.ChainClient;
 import www.topview.result.CommonResult;
-import www.topview.rpc.ContractService;
 import www.topview.service.WeIdentityService;
 import www.topview.util.CryptoUtil;
 import www.topview.util.JwtUtil;
@@ -39,7 +39,7 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
     @Autowired
     private HttpServletRequest request;
     @Autowired
-    private ContractService contractService;
+    private ChainClient chainClient;
     @Autowired
     private WorkerInfoMapper workerInfoMapper;
     @Autowired
@@ -91,7 +91,7 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
                 setFunctionName("addWorker").
                 setFunctionParams(objects).
                 setContractAddress(company.getContractAddress());
-        contractService.send(chainServiceDTO);
+        chainClient.send(chainServiceDTO);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         objects.add(worker.getAddress());
         ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
         chainServiceDTO.setUserId(id).setContractName("CompanyLogic").setFunctionName("removedWorker").setFunctionParams(objects);
-        CommonResult<Object> send = contractService.send(chainServiceDTO);
+        CommonResult<Object> send = chainClient.send(chainServiceDTO);
         Assert.isTrue(send.getCode() == 200, "调用合约删除员工失败");
     }
 

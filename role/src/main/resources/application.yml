@@ -1,4 +1,6 @@
 spring:
+  #  main:
+  #    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:mysql://10.21.23.42:3306/golden_age?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
     username: user

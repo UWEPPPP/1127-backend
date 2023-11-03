@@ -1,7 +1,7 @@
 package www.topview.service;
 
 import www.topview.dto.AddCompanyDTO;
-import www.topview.entity.model.RegisterCptModel;
+import www.topview.entity.bo.RegisterCptBO;
 import www.topview.entity.po.Company;
 import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;
@@ -44,7 +44,7 @@ public interface DomainService {
      * @return {@link CptInfoVO}
      * @throws WeIdentityException weidentity exception
      */
-    CptInfoVO registerCpt(RegisterCptModel model) throws WeIdentityException;
+    CptInfoVO registerCpt(RegisterCptBO model) throws WeIdentityException;
 
     /**
      * get company list

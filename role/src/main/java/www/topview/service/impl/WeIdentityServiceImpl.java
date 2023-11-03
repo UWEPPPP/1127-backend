@@ -38,7 +38,6 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
     @Value("${weIdentity.admin_private_key}")
     private String adminPrivateKeyPath;
 
-
     private final AuthorityIssuerService authorityIssuerService = new AuthorityIssuerServiceImpl();
 
     private final CptService cptService = new CptServiceImpl();
@@ -58,13 +57,15 @@ public class WeIdentityServiceImpl implements www.topview.service.WeIdentityServ
         ResponseData<CreateWeIdDataResult> weId = weIdService.createWeId();
         ECDSAKeyPair ecdsaKeyPair = new ECDSAKeyPair();
         if (weId.getErrorCode() == ErrorCode.SUCCESS.getCode()) {
+            CreateWeIdDataResult result = weId.getResult();
             String address = ecdsaKeyPair.getAddress(DataToolUtils.addressFromPublic(new BigInteger(weId.getResult().getUserWeIdPublicKey().getPublicKey())));
             AccountModel accountModel = new AccountModel();
-
+            String publicKey = new BigInteger(result.getUserWeIdPublicKey().getPublicKey()).toString(16);
+            String privateKey = new BigInteger(result.getUserWeIdPrivateKey().getPrivateKey()).toString(16);
             accountModel.setAccountAddress(address)
-                    .setWeId(weId.getResult().getWeId())
-                    .setPublicKey(weId.getResult().getUserWeIdPublicKey().getPublicKey())
-                    .setPrivateKey(weId.getResult().getUserWeIdPrivateKey().getPrivateKey());
+                    .setWeId(result.getWeId())
+                    .setPublicKey(publicKey)
+                    .setPrivateKey(privateKey);
             log.info("create weId success");
             return accountModel;
         }

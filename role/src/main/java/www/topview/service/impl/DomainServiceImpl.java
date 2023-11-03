@@ -14,14 +14,14 @@ import www.topview.constant.RoleConstant;
 import www.topview.dao.*;
 import www.topview.dto.AddCompanyDTO;
 import www.topview.dto.ChainServiceDTO;
+import www.topview.entity.bo.RegisterCptBO;
 import www.topview.entity.model.AccountModel;
-import www.topview.entity.model.RegisterCptModel;
 import www.topview.entity.po.*;
 import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;
 import www.topview.exception.WeIdentityException;
+import www.topview.feign.ChainClient;
 import www.topview.result.CommonResult;
-import www.topview.rpc.ContractService;
 import www.topview.service.DomainService;
 import www.topview.service.WeIdentityService;
 import www.topview.util.CryptoUtil;
@@ -58,7 +58,7 @@ public class DomainServiceImpl implements DomainService {
     @Autowired
     private CompanyAdminMapper companyAdminMapper;
     @Autowired
-    private ContractService contractService;
+    private ChainClient chainClient;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -79,7 +79,7 @@ public class DomainServiceImpl implements DomainService {
                     }
                 }).
                 setContractAddress(domain.getDomainAddress());
-        CommonResult<Object> send = contractService.send(chainServiceDTO);
+        CommonResult<Object> send = chainClient.send(chainServiceDTO);
         Assert.isTrue(send.getCode() == 200, "合约调用失败");
         Map<String, Object> data = Convert.toMap(String.class, Object.class, send.getData());
         String companyAddr = Convert.toStr(data.get("companyAddr"));
@@ -130,7 +130,7 @@ public class DomainServiceImpl implements DomainService {
                     }
                 }).
                 setContractAddress(domain.getDomainAddress());
-        CommonResult<Object> send = contractService.send(chainServiceDTO);
+        CommonResult<Object> send = chainClient.send(chainServiceDTO);
         Assert.isTrue(send.getCode() == 200, "合约调用失败");
         int result = companyMapper.deleteById(companyId);
         Assert.isTrue(result == 1, "公司不存在或者删除失败");
@@ -149,7 +149,7 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public CptInfoVO registerCpt(RegisterCptModel model) throws WeIdentityException {
+    public CptInfoVO registerCpt(RegisterCptBO model) throws WeIdentityException {
         Integer id = JwtUtil.getUserId(request);
         User admin = userMapper.selectById(id);
         String privateKey = CryptoUtil.decrypt(admin.getPrivateKey(), PathConstant.PATH_PRIVATE_KEY);

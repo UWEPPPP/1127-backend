@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import www.topview.dto.AddCompanyDTO;
-import www.topview.entity.model.RegisterCptModel;
+import www.topview.entity.bo.RegisterCptBO;
 import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;
 import www.topview.exception.WeIdentityException;
@@ -45,7 +45,7 @@ public class DomainAdminController {
     }
 
     @PostMapping("/registerCpt")
-    public CommonResult<CptInfoVO> registerCpt(@RequestBody RegisterCptModel model) throws WeIdentityException {
+    public CommonResult<CptInfoVO> registerCpt(@Validated @RequestBody RegisterCptBO model) throws WeIdentityException {
         return CommonResult.operateSuccess("Register cpt Success", domainService.registerCpt(model));
     }
 
