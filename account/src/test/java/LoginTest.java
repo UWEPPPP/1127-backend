@@ -1,4 +1,5 @@
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class LoginTest {
 
     @Autowired
     AccountServiceImpl accountService;
+
     @Test
     public void test1() throws IOException {
         accountService.login(new LoginBO("1", "1", 1));
@@ -32,8 +34,14 @@ public class LoginTest {
         //mTAeZVPt5/sq4GSZigdZ1VXgfhHNMYl0/V3insPjeSRSOBHWI23AvvJJET1PVID9++HNhUtDnTV9LYM+/2o/03ejEBfcTuS+PYHsffGWjzztxfGxRkHM+4v/B8vA70UEU7/107Xa9AYE/vsrApv+jdk885w2mmd6ACVioi3NVZ0=
         //XkvNfyN/u1giUd+yLTS/wyok+upskD6kHxt4K0ZoX6ab4qimiO9jSbycn1WXGElk9n4ei8sbDC37twHIyE3KYnee8WR6fBt33jcfBzeyHOv2wD2eG77gq1QbU4xWrgyWry8IdXt+SJYoZ1BwcXwpk2M8LXj6M0Sh42+tyiVmPC0=
 
-//        System.out.println(CryptoUtil.encrypt("1", PathConstant.PATH_PUBLIC_KEY));
+        System.out.println(CryptoUtil.encrypt("21427065261027152001557882408788762477854319152213485647613649430491008647987", PathConstant.PATH_PUBLIC_KEY));
 //        System.out.println(CryptoUtil.decrypt("XkvNfyN/u1giUd+yLTS/wyok+upskD6kHxt4K0ZoX6ab4qimiO9jSbycn1WXGElk9n4ei8sbDC37twHIyE3KYnee8WR6fBt33jcfBzeyHOv2wD2eG77gq1QbU4xWrgyWry8IdXt+SJYoZ1BwcXwpk2M8LXj6M0Sh42+tyiVmPC0=",PathConstant.PATH_PRIVATE_KEY));
+    }
+
+
+    @Test
+    public void test3(){
+
     }
 
 }

@@ -1,4 +1,5 @@
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,13 +38,18 @@ public class WeIdentityTest {
         }
     }
 
-    @org.junit.Test
-    public void createWeId() {
-        try {
-            System.out.printf(weIdentityService.createWeId().toString());
-        } catch (WeIdentityException e) {
-            log.error("WeIdentity调用异常", e);
-        }
+    @Test
+    public void createWeId() throws WeIdentityException {
+//        try {
+//            System.out.printf(weIdentityService.createWeId().toString());
+//        } catch (WeIdentityException e) {
+//            log.error("WeIdentity调用异常", e);
+//        }
+        AccountModel weId = weIdentityService.createWeId();
+        System.out.println(weId.getPublicKey());
+        System.out.println(weId.getWeId());
+        System.out.println(weId.getAccountAddress());
+        System.out.println(weId.getPrivateKey());
 
     }
 

@@ -21,7 +21,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("")
+@RequestMapping("account")
 public class AccountController {
 
     @Resource
