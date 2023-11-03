@@ -1,7 +1,8 @@
 package www.topview.service;
 
 
-import www.topview.entity.dto.AddWorkerDTO;
+import www.topview.dto.AddWorkerDTO;
+import www.topview.entity.po.CompanyAdminInfo;
 import www.topview.entity.vo.WorkerVO;
 import www.topview.exception.WeIdentityException;
 
@@ -17,12 +18,14 @@ public interface CompanyService {
 
 
     /**
+     * 供账户使用
      * add worker
      *
      * @param addWorkerDTO add worker dto
-     * @throws WeIdentityException we identity exception
+     * @throws WeIdentityException weidentity exception
      */
     void addWorker(AddWorkerDTO addWorkerDTO) throws WeIdentityException;
+
 
     /**
      * delete worker
@@ -37,4 +40,12 @@ public interface CompanyService {
      * @return {@link List}<{@link WorkerVO}>
      */
     public List<WorkerVO> getWorkerList();
+
+    /**
+     * get company by admin id
+     *
+     * @param id id
+     * @return {@link CompanyAdminInfo}
+     */
+    CompanyAdminInfo getCompanyByAdminId(Integer id);
 }

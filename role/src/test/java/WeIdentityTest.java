@@ -26,13 +26,15 @@ public class WeIdentityTest {
 //        String encrypt = CryptoUtil.encrypt("123", PathConstant.PATH_PUBLIC_KEY);
 //        String decrypt = CryptoUtil.decrypt(encrypt, PathConstant.PATH_PRIVATE_KEY);
 //        assert decrypt.equals("123");
-//        System.out.printf(StrUtil.str(decrypt,CharsetUtil.CHARSET_UTF_8));
-        AccountModel weId = weIdentityService.createWeId();
-        System.out.println(weId.getWeId());
-        System.out.println(weId.getAccountAddress());
-        System.out.println(weId.getPrivateKey());
-        System.out.println(weId.getPublicKey());
-
+//        System.out.printf(StrUtil.str(decrypt, CharsetUtil.CHARSET_UTF_8));
+        for (int i = 0; i < 10; i++) {
+            System.out.println("账户" + i);
+            AccountModel weId = weIdentityService.createWeId();
+            System.out.println(weId.getWeId());
+            System.out.println(weId.getAccountAddress());
+            System.out.println(weId.getPrivateKey());
+            System.out.println(weId.getPublicKey());
+        }
     }
 
     @org.junit.Test

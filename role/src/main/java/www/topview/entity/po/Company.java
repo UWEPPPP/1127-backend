@@ -18,7 +18,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("company")
-
 @Accessors(chain = true)
 public class Company {
 

@@ -3,7 +3,7 @@ package www.topview.controller;
 import org.checkerframework.checker.index.qual.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import www.topview.entity.dto.AddCompanyDTO;
+import www.topview.dto.AddCompanyDTO;
 import www.topview.entity.model.RegisterCptModel;
 import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;

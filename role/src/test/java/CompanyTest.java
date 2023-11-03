@@ -3,7 +3,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import www.topview.entity.dto.AddWorkerDTO;
+import www.topview.dto.AddWorkerDTO;
 import www.topview.exception.WeIdentityException;
 import www.topview.service.CompanyService;
 

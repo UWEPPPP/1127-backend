@@ -18,13 +18,13 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private static final byte[] key = "这是一个key".getBytes();
+    private static final byte[] KEY = "这是一个key".getBytes();
     private static JWTSigner jwtSigner;
 
     @PostConstruct
     public void init() throws IOException {
         //TODO 设置指定加密算法
-        jwtSigner = JWTSignerUtil.createSigner("HMD5", key);
+        jwtSigner = JWTSignerUtil.createSigner("HMD5", KEY);
 
     }
 
@@ -33,7 +33,7 @@ public class JwtUtil {
         try {
             token = JWT.create()
                     .setIssuer(WebSecurityConstant.ISSUER)
-                    .setKey(key)
+                    .setKey(KEY)
                     .setSubject(subject)
                     .setPayload("payload", payload)
                     .setExpiresAt(new Date(System.currentTimeMillis() + WebSecurityConstant.EXPIRE_TIME))
@@ -56,7 +56,7 @@ public class JwtUtil {
         JWT jwt=JWT.of(token);
         try {
             //验证JWT的有效性跟签名
-            validSignature = jwt.setKey(key).verify(jwtSigner);
+            validSignature = jwt.setKey(KEY).verify(jwtSigner);
         } catch (JWTException e) {
             throw new JWTException("jwt验证签名发生异常");
         }
