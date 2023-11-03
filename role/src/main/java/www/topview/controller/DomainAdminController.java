@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2023/10/31
  */
 @RestController
-@RequestMapping("/role/domainAdmin")
+@RequestMapping("/domainAdmin")
 @ResponseBody
 public class DomainAdminController {
     @Autowired
