@@ -6,8 +6,10 @@ import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
 import org.springframework.stereotype.Component;
 import www.topview.constant.WebSecurityConstant;
+import www.topview.dto.PayLoad;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 
@@ -20,12 +22,20 @@ import java.util.Date;
 public class JwtUtil {
     private static final byte[] KEY = "这是一个key".getBytes();
     private static JWTSigner jwtSigner;
+    private static final String HEADER = "token";
+    private static final String PAYLOAD_NAME = "payload";
 
     @PostConstruct
     public void init() throws IOException {
         //TODO 设置指定加密算法
         jwtSigner = JWTSignerUtil.createSigner("HMD5", KEY);
 
+    }
+
+    public static Integer getUserId(HttpServletRequest request) {
+        JWT jwt = JWT.of(request.getHeader(HEADER));
+        PayLoad payload = (PayLoad) jwt.getPayload(PAYLOAD_NAME);
+        return payload.getUserId();
     }
 
     public String createJwtToken(String subject, Object payload) {
@@ -53,7 +63,7 @@ public class JwtUtil {
     public boolean validateSignature(String token) {
         //验证签名算法
         boolean validSignature;
-        JWT jwt=JWT.of(token);
+        JWT jwt = JWT.of(token);
         try {
             //验证JWT的有效性跟签名
             validSignature = jwt.setKey(KEY).verify(jwtSigner);

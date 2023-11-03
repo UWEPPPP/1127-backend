@@ -1,6 +1,7 @@
 package www.topview.result;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import www.topview.constant.ResultCode;
 
@@ -11,6 +12,7 @@ import www.topview.constant.ResultCode;
  * @date 2023/10/29
  */
 @Data
+@NoArgsConstructor
 @Accessors(chain = true)
 public class CommonResult<T> {
     private Integer code;
@@ -38,7 +40,7 @@ public class CommonResult<T> {
         return new CommonResult<>(ResultCode.FAIL_CODE, false, message);
     }
 
-    public static CommonResult<Void> operateFailDueToToken(Integer code, String message){
+    public static CommonResult<Void> operateFailDueToToken(Integer code, String message) {
         return new CommonResult<>(code, false, message);
     }
 

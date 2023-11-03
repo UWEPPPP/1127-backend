@@ -15,7 +15,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = {"www.topview.rpc"})
+@EnableFeignClients(basePackages = {"www.topview.feign"})
 @MapperScan({"www.topview.dao"})
 public class RoleApplication {
     public static void main(String[] args) {

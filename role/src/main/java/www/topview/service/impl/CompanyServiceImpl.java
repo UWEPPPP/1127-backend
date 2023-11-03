@@ -1,7 +1,6 @@
 package www.topview.service.impl;
 
 import cn.hutool.core.lang.Assert;
-import cn.hutool.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import www.topview.dao.UserMapper;
 import www.topview.dao.WorkerInfoMapper;
 import www.topview.dto.AddWorkerDTO;
 import www.topview.dto.ChainServiceDTO;
-import www.topview.dto.PayLoad;
 import www.topview.entity.model.AccountModel;
 import www.topview.entity.po.Company;
 import www.topview.entity.po.CompanyAdminInfo;
@@ -22,10 +20,11 @@ import www.topview.entity.po.User;
 import www.topview.entity.po.WorkerInfo;
 import www.topview.entity.vo.WorkerVO;
 import www.topview.exception.WeIdentityException;
+import www.topview.feign.ChainClient;
 import www.topview.result.CommonResult;
-import www.topview.rpc.ContractService;
 import www.topview.service.WeIdentityService;
 import www.topview.util.CryptoUtil;
+import www.topview.util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
     @Autowired
     private HttpServletRequest request;
     @Autowired
-    private ContractService contractService;
+    private ChainClient chainClient;
     @Autowired
     private WorkerInfoMapper workerInfoMapper;
     @Autowired
@@ -92,15 +91,13 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
                 setFunctionName("addWorker").
                 setFunctionParams(objects).
                 setContractAddress(company.getContractAddress());
-        contractService.send(chainServiceDTO);
+        chainClient.send(chainServiceDTO);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteWorker(int workerId) {
-        JWT jwt = JWT.of(request.getHeader("token"));
-        PayLoad payload = (PayLoad) jwt.getPayload("payload");
-        Integer id = payload.getUserId();
+        Integer id = JwtUtil.getUserId(request);
         User worker = userMapper.selectById(workerId);
         String weid = worker.getWeId();
         Assert.notNull(worker, "该员工不存在");
@@ -117,15 +114,13 @@ public class CompanyServiceImpl implements www.topview.service.CompanyService {
         objects.add(worker.getAddress());
         ChainServiceDTO chainServiceDTO = new ChainServiceDTO();
         chainServiceDTO.setUserId(id).setContractName("CompanyLogic").setFunctionName("removedWorker").setFunctionParams(objects);
-        CommonResult<Object> send = contractService.send(chainServiceDTO);
+        CommonResult<Object> send = chainClient.send(chainServiceDTO);
         Assert.isTrue(send.getCode() == 200, "调用合约删除员工失败");
     }
 
     @Override
     public List<WorkerVO> getWorkerList() {
-        JWT jwt = JWT.of(request.getHeader("token"));
-        PayLoad payload = (PayLoad) jwt.getPayload("payload");
-        Integer id = payload.getUserId();
+        Integer id = JwtUtil.getUserId(request);
         Company company = companyMapper.selectOne(new QueryWrapper<Company>().eq("register_id", id));
         Assert.notNull(company, "用户id异常 无法查询到公司");
         List<WorkerInfo> workers = workerInfoMapper.selectList(new QueryWrapper<WorkerInfo>().eq("company_id", company.getId()));

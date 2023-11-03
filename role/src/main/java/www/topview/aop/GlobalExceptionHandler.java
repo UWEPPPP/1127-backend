@@ -30,4 +30,18 @@ public class GlobalExceptionHandler {
         log.error("用户信息或数据库异常", ex);
         return CommonResult.operateFailWithMessage(ex.getMessage());
     }
+
+    @ResponseBody
+    @ExceptionHandler(RuntimeException.class)
+    public CommonResult<Void> handlerRuntimeException(RuntimeException ex) {
+        log.error("运行时异常", ex);
+        return CommonResult.operateFailWithMessage("运行异常 请通知管理员");
+    }
+
+    @ResponseBody
+    @ExceptionHandler(Exception.class)
+    public CommonResult<Void> handlerException(Exception ex) {
+        log.error("未知异常", ex);
+        return CommonResult.operateFailWithMessage("系统繁忙 请稍后再试");
+    }
 }

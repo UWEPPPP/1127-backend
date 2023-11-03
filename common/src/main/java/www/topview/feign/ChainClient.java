@@ -3,16 +3,18 @@ package www.topview.feign;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import www.topview.dto.ChainServiceDTO;
+import www.topview.dto.CreateProcessorDTO;
 import www.topview.result.CommonResult;
 
-@FeignClient
-@RequestMapping("chain")
+@FeignClient("1127-chain")
 public interface ChainClient {
-    @GetMapping
+    @GetMapping("/chain")
     CommonResult<Object> call(ChainServiceDTO chainServiceDTO);
 
-    @PostMapping
+    @PostMapping("/chain")
     CommonResult<Object> send(ChainServiceDTO chainServiceDTO);
+
+    @PostMapping("processor")
+    CommonResult<Void> create(CreateProcessorDTO createProcessorDTO);
 }

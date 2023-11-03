@@ -3,7 +3,6 @@ package www.topview.service.impl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.webank.weid.protocol.base.CptBaseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +14,18 @@ import www.topview.constant.RoleConstant;
 import www.topview.dao.*;
 import www.topview.dto.AddCompanyDTO;
 import www.topview.dto.ChainServiceDTO;
-import www.topview.dto.PayLoad;
+import www.topview.entity.bo.RegisterCptBO;
 import www.topview.entity.model.AccountModel;
-import www.topview.entity.model.RegisterCptModel;
 import www.topview.entity.po.*;
 import www.topview.entity.vo.CompanyVO;
 import www.topview.entity.vo.CptInfoVO;
 import www.topview.exception.WeIdentityException;
+import www.topview.feign.ChainClient;
 import www.topview.result.CommonResult;
-import www.topview.rpc.ContractService;
 import www.topview.service.DomainService;
 import www.topview.service.WeIdentityService;
 import www.topview.util.CryptoUtil;
+import www.topview.util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public class DomainServiceImpl implements DomainService {
     @Autowired
     private CompanyAdminMapper companyAdminMapper;
     @Autowired
-    private ContractService contractService;
+    private ChainClient chainClient;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -80,7 +79,7 @@ public class DomainServiceImpl implements DomainService {
                     }
                 }).
                 setContractAddress(domain.getDomainAddress());
-        CommonResult<Object> send = contractService.send(chainServiceDTO);
+        CommonResult<Object> send = chainClient.send(chainServiceDTO);
         Assert.isTrue(send.getCode() == 200, "合约调用失败");
         Map<String, Object> data = Convert.toMap(String.class, Object.class, send.getData());
         String companyAddr = Convert.toStr(data.get("companyAddr"));
@@ -117,9 +116,7 @@ public class DomainServiceImpl implements DomainService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteCompany(int companyId) {
-        JWT jwt = JWT.of(request.getHeader("token"));
-        PayLoad payload = (PayLoad) jwt.getPayload("payload");
-        Integer id = payload.getUserId();
+        Integer id = JwtUtil.getUserId(request);
         CompanyAdminInfo companyAdmin = companyAdminMapper.selectOne(new QueryWrapper<CompanyAdminInfo>().eq("company_id", companyId));
         //链端调用
         Domain domain = domainMapper.selectOne(new QueryWrapper<Domain>().eq("domain_admin_id", id));
@@ -133,7 +130,7 @@ public class DomainServiceImpl implements DomainService {
                     }
                 }).
                 setContractAddress(domain.getDomainAddress());
-        CommonResult<Object> send = contractService.send(chainServiceDTO);
+        CommonResult<Object> send = chainClient.send(chainServiceDTO);
         Assert.isTrue(send.getCode() == 200, "合约调用失败");
         int result = companyMapper.deleteById(companyId);
         Assert.isTrue(result == 1, "公司不存在或者删除失败");
@@ -152,10 +149,8 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public CptInfoVO registerCpt(RegisterCptModel model) throws WeIdentityException {
-        JWT jwt = JWT.of(request.getHeader("token"));
-        PayLoad payload = (PayLoad) jwt.getPayload("payload");
-        Integer id = payload.getUserId();
+    public CptInfoVO registerCpt(RegisterCptBO model) throws WeIdentityException {
+        Integer id = JwtUtil.getUserId(request);
         User admin = userMapper.selectById(id);
         String privateKey = CryptoUtil.decrypt(admin.getPrivateKey(), PathConstant.PATH_PRIVATE_KEY);
         CptBaseInfo cptBaseInfo = weIdentityService.registerCpt(admin.getWeId(), privateKey, model.getClaim());
@@ -167,9 +162,7 @@ public class DomainServiceImpl implements DomainService {
 
     @Override
     public List<CompanyVO> getCompanyList() {
-        JWT jwt = JWT.of(request.getHeader("token"));
-        PayLoad payload = (PayLoad) jwt.getPayload("payload");
-        Integer id = payload.getUserId();
+        Integer id = JwtUtil.getUserId(request);
         Domain domain = domainMapper.selectOne(new QueryWrapper<Domain>().eq("domain_admin_id", id));
         Assert.notNull(domain, "该域不存在");
         List<Company> companies = companyMapper.selectList(new QueryWrapper<Company>().eq("domain_id", domain.getId()));
