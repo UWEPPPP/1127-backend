@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import www.topview.entity.dto.AddWorkerDTO;
+import www.topview.dto.AddWorkerDTO;
 import www.topview.entity.vo.WorkerVO;
 import www.topview.exception.WeIdentityException;
 import www.topview.result.CommonResult;

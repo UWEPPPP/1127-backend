@@ -1,6 +1,6 @@
 package www.topview.service;
 
-import www.topview.entity.dto.AddCompanyDTO;
+import www.topview.dto.AddCompanyDTO;
 import www.topview.entity.model.RegisterCptModel;
 import www.topview.entity.po.Company;
 import www.topview.entity.vo.CompanyVO;

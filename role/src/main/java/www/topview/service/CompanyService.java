@@ -1,7 +1,7 @@
 package www.topview.service;
 
 
-import www.topview.entity.dto.AddWorkerDTO;
+import www.topview.dto.AddWorkerDTO;
 import www.topview.entity.vo.WorkerVO;
 import www.topview.exception.WeIdentityException;
 
@@ -20,7 +20,7 @@ public interface CompanyService {
      * add worker
      *
      * @param addWorkerDTO add worker dto
-     * @throws WeIdentityException we identity exception
+     * @throws WeIdentityException weidentity exception
      */
     void addWorker(AddWorkerDTO addWorkerDTO) throws WeIdentityException;
 
