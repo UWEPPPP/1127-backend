@@ -8,7 +8,7 @@ import lombok.Data;
  */
 
 @Data
-public class JudgeBO {
+public class JudgeWorkerBO {
 
     /**
      * 申请列表中的主键

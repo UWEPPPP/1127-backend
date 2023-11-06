@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
  */
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @TableName("application_user")
 public class ApplicationForUser {
 
@@ -56,4 +54,16 @@ public class ApplicationForUser {
      */
     private String payload;
 
+    public ApplicationForUser(Integer id, Integer companyId, Integer domainId, Integer status, String applicantUsername, String applicantPassword, String payload) {
+        this.id = id;
+        this.companyId = companyId;
+        this.domainId = domainId;
+        this.status = status;
+        this.applicantUsername = applicantUsername;
+        this.applicantPassword = applicantPassword;
+        this.payload = payload;
+    }
+
+    public ApplicationForUser() {
+    }
 }

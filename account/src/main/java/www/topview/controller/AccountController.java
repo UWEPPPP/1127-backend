@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import www.topview.entity.bo.*;
-import www.topview.entity.vo.ApplicationWorkerVO;
+import www.topview.entity.vo.ApplicationsVO;
 import www.topview.exception.WeIdentityException;
 import www.topview.result.CommonResult;
 import www.topview.service.AccountService;
@@ -27,7 +27,6 @@ public class AccountController {
     @Resource
     private AccountService accountService;
 
-
     /**
      * 注册功能
      */
@@ -43,6 +42,7 @@ public class AccountController {
      * @return
      * @throws WeIdentityException
      */
+
     @PostMapping("/companyRegisterApplicant")
     CommonResult<Boolean> companyRegister(CompanyRegisterBO companyRegisterBO) throws WeIdentityException {
         return CommonResult.operateSuccess("申请注册成功", accountService.companyRegister(companyRegisterBO));
@@ -59,14 +59,24 @@ public class AccountController {
         return CommonResult.operateSuccess("登录成功", accountService.login(loginBO));
     }
 
-    @GetMapping("/queryApplications")
-    CommonResult<List<ApplicationWorkerVO>> queryApplications(QueryApplicationsBO queryApplicationsBO) {
-        return CommonResult.operateSuccess("获取申请列表成功", accountService.queryApplications(queryApplicationsBO));
+    @GetMapping("/queryApplicationsForWorker")
+    CommonResult<List<ApplicationsVO>> queryApplicationsForWorker(QueryApplicationsBO queryApplicationsBO) {
+        return CommonResult.operateSuccess("获取申请列表成功", accountService.queryApplicationsForWorker(queryApplicationsBO));
     }
 
-    @PostMapping("/judge")
-    CommonResult<Boolean> judge(JudgeBO judgeBO) throws WeIdentityException {
-        return CommonResult.operateSuccess("操作成功", accountService.judgeWorker(judgeBO));
+    @GetMapping("/queryApplications")
+    CommonResult<List<ApplicationsVO>> queryApplicationsForCompany() {
+        return CommonResult.operateSuccess("获取申请列表成功", accountService.queryApplicationsForCompany());
+    }
+
+    @PostMapping("/judgeWorker")
+    CommonResult<Boolean> judgeWorker(JudgeWorkerBO judgeWorkerBO) throws WeIdentityException {
+        return CommonResult.operateSuccess("操作成功", accountService.judgeWorker(judgeWorkerBO));
+    }
+
+    @PostMapping("/judgeCompany")
+    CommonResult<Boolean> judgeCompany(JudgeCompanyBO judgeCompanyBO) throws WeIdentityException {
+        return CommonResult.operateSuccess("操作成功", accountService.judgeCompany(judgeCompanyBO));
     }
 
 }

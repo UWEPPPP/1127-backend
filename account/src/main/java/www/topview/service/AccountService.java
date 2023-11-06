@@ -1,7 +1,7 @@
 package www.topview.service;
 
 import www.topview.entity.bo.*;
-import www.topview.entity.vo.ApplicationWorkerVO;
+import www.topview.entity.vo.ApplicationsVO;
 import www.topview.exception.WeIdentityException;
 
 import java.io.IOException;
@@ -47,16 +47,30 @@ public interface AccountService {
      * @param queryApplicationsBO 对应的公司id
      * @return 申请列表
      */
-    List<ApplicationWorkerVO> queryApplications(QueryApplicationsBO queryApplicationsBO);
+    List<ApplicationsVO> queryApplicationsForWorker(QueryApplicationsBO queryApplicationsBO);
 
+    /**
+     * 域管理员查询公司申请列表
+     * @return 公司申请列表
+     */
+    List<ApplicationsVO> queryApplicationsForCompany();
 
     /**
      * 通过申请的操作
      *
-     * @param judgeBO 带有申请对象的主键id
+     * @param judgeWorkerBO 带有申请对象的主键id
      * @return 操作成功与否
      * @throws WeIdentityException exception
      */
-    boolean judgeWorker(JudgeBO judgeBO) throws WeIdentityException;
+    boolean judgeWorker(JudgeWorkerBO judgeWorkerBO) throws WeIdentityException;
+
+
+    /**
+     *通过公司申请
+     * @param judgeCompanyBO 带有申请对象的主键id
+     * @return 操作成功与否
+     * @throws WeIdentityException exception
+     */
+    boolean judgeCompany(JudgeCompanyBO judgeCompanyBO) throws WeIdentityException;
 
 }

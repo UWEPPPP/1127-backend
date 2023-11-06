@@ -2,13 +2,13 @@ package www.topview.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
-import www.topview.entity.po.ApplicationForUser;
+import www.topview.entity.po.ApplicationForCompany;
 
 /**
  * @author :Lictory
- * @date : 2023/10/30
+ * @date : 2023/11/06
  */
 
 @Component
-public interface ApplicationMapper extends BaseMapper<ApplicationForUser> {
+public interface ApplicationForCompanyMapper extends BaseMapper<ApplicationForCompany> {
 }
