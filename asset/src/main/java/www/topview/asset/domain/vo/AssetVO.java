@@ -13,7 +13,7 @@ public class AssetVO {
     /**
      * 主键
      */
-    private Long id;
+    private Integer id;
 
     /**
      * 资产名字
