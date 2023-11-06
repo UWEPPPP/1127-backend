@@ -13,7 +13,7 @@ public class CreateAssetDTO {
     /**
      * 用户id
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 创建资产请求类
