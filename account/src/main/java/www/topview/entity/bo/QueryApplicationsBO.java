@@ -10,10 +10,16 @@ import lombok.experimental.Accessors;
  * @date : 2023/10/30
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Accessors(chain = true)
 public class QueryApplicationsBO {
     private Integer companyId;
     private Integer domainId;
+
+    public QueryApplicationsBO(Integer companyId, Integer domainId) {
+        this.companyId = companyId;
+        this.domainId = domainId;
+    }
+
+    public QueryApplicationsBO() {
+    }
 }

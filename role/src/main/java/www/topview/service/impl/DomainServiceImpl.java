@@ -109,8 +109,6 @@ public class DomainServiceImpl implements DomainService {
                 addCompanyDTO.getDomainId()
         );
         Assert.isTrue(companyAdminMapper.insert(admin) == 1, "企业管理员注册失败");
-
-
     }
 
     @Override

@@ -8,7 +8,7 @@ import lombok.Data;
  */
 
 @Data
-public class ApplicationWorkerVO {
+public class ApplicationsVO {
 
     /**
      * 消息主键
@@ -25,10 +25,10 @@ public class ApplicationWorkerVO {
      */
     private String payload;
 
-    public ApplicationWorkerVO() {
+    public ApplicationsVO() {
     }
 
-    public ApplicationWorkerVO(Integer id, Integer status, String payload) {
+    public ApplicationsVO(Integer id, Integer status, String payload) {
         this.id = id;
         this.status = status;
         this.payload = payload;

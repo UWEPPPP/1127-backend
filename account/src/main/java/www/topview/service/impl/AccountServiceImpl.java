@@ -14,12 +14,15 @@ import www.topview.dto.AddWorkerDTO;
 import www.topview.dto.CreateProcessorDTO;
 import www.topview.dto.PayLoad;
 import www.topview.entity.bo.*;
+import www.topview.entity.po.ApplicationForCompany;
 import www.topview.entity.po.ApplicationForUser;
 import www.topview.entity.po.User;
-import www.topview.entity.vo.ApplicationWorkerVO;
+import www.topview.entity.vo.ApplicationsVO;
+import www.topview.exception.WeIdentityException;
 import www.topview.feign.ChainClient;
 import www.topview.feign.RoleClient;
-import www.topview.mapper.ApplicationMapper;
+import www.topview.mapper.ApplicationForCompanyMapper;
+import www.topview.mapper.ApplicationForUserMapper;
 import www.topview.mapper.UserMapper;
 import www.topview.result.CommonResult;
 import www.topview.service.AccountService;
@@ -40,7 +43,7 @@ import java.util.List;
 @Service
 public class AccountServiceImpl implements AccountService {
     @Autowired
-    private ApplicationMapper applicationMapper;
+    private ApplicationForUserMapper applicationForUserMapper;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -52,6 +55,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private ApplicationForCompanyMapper applicationForCompanyMapper;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean userRegister(WorkerRegisterBO workerRegisterBO) {
@@ -60,7 +66,7 @@ public class AccountServiceImpl implements AccountService {
         //判断账号是否已经存在
         QueryWrapper<ApplicationForUser> queryWrapper = Wrappers.query();
         queryWrapper.eq("applicant_username", workerRegisterBO.getUsername());
-        Assert.isTrue(applicationMapper.selectOne(queryWrapper) == null, "对应账户已经存在");
+        Assert.isTrue(applicationForUserMapper.selectOne(queryWrapper) == null, "对应账户已经存在");
 
         //封装PO对象
         ApplicationForUser applicationForUser = new ApplicationForUser(
@@ -73,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
                 workerRegisterBO.getPayload()
         );
         //添加到申请列表中
-        Assert.isTrue(applicationMapper.insert(applicationForUser) == 1, "注册申请失败,数据库插入异常");
+        Assert.isTrue(applicationForUserMapper.insert(applicationForUser) == 1, "注册申请失败,数据库插入异常");
         //调用合约
         return true;
     }
@@ -89,23 +95,16 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean companyRegister(CompanyRegisterBO companyRegisterBO) {
-
-        String token = request.getHeader("token");
-        JWT jwt = JWT.of(token);
-        //token异常包括了    1. 过期 2. 签名不对
-        Assert.isTrue(jwtUtil.validateToken(token), "token异常");
-
-        PayLoad payload = (PayLoad) jwt.getPayload("payload");
-        Integer adminId = payload.getUserId();
-
-        AddCompanyDTO addCompanyDTO = new AddCompanyDTO();
-        addCompanyDTO.setCompanyName(companyRegisterBO.getCompanyName())
-                .setFounderName(companyRegisterBO.getUsername())
-                .setPasser(adminId)
-                .setFounderPassword(companyRegisterBO.getPassword())
-                .setDomainId(companyRegisterBO.getDomainId());
-        CommonResult<Void> voidCommonResult = roleService.addCompany(addCompanyDTO);
-        Assert.isTrue(voidCommonResult.getCode() == 200, "调用角色服务添加公司失败");
+        ApplicationForCompany applicationForCompany = new ApplicationForCompany(
+                null,
+                companyRegisterBO.getDomainId(),
+                companyRegisterBO.getCompanyName(),
+                companyRegisterBO.getPayLoad(),
+                companyRegisterBO.getUsername(),
+                companyRegisterBO.getPassword(),
+                2
+        );
+        Assert.isTrue(applicationForCompanyMapper.insert(applicationForCompany) == 1, "数据库异常,插入公司申请列表失败");
         return true;
     }
 
@@ -133,14 +132,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<ApplicationWorkerVO> queryApplications(QueryApplicationsBO queryApplicationsBO) {
-        List<ApplicationForUser> applications = applicationMapper.selectList(new QueryWrapper<ApplicationForUser>()
+    public List<ApplicationsVO> queryApplicationsForWorker(QueryApplicationsBO queryApplicationsBO) {
+        List<ApplicationForUser> applications = applicationForUserMapper.selectList(new QueryWrapper<ApplicationForUser>()
                 .eq("company_id", queryApplicationsBO.getCompanyId())
                 .eq("domain_id", queryApplicationsBO.getDomainId()));
-        List<ApplicationWorkerVO> result = new ArrayList<>();
+        List<ApplicationsVO> result = new ArrayList<>();
         for (ApplicationForUser temp : applications) {
             //TODO ApplicationUserVO 是否需要公司id
-            result.add(new ApplicationWorkerVO(
+            result.add(new ApplicationsVO(
                     temp.getId(),
                     temp.getStatus(),
                     temp.getPayload()));
@@ -149,32 +148,74 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean judgeWorker(JudgeBO judgeBO) {
+    public List<ApplicationsVO> queryApplicationsForCompany() {
+        List<ApplicationsVO> result = new ArrayList<>();
+        List<ApplicationForCompany> applicationForCompanies = applicationForCompanyMapper.selectList(new QueryWrapper<ApplicationForCompany>());
+        for (ApplicationForCompany temp : applicationForCompanies) {
+            result.add(new ApplicationsVO(
+                    temp.getId(),
+                    temp.getStatus(),
+                    temp.getPayLoad()));
+        }
+        return result;
+    }
+
+    @Override
+    public boolean judgeWorker(JudgeWorkerBO judgeWorkerBO) {
 
         String jwt = request.getHeader("token");
         JWT of = JWT.of(jwt);
         PayLoad payload = (PayLoad) of.getPayload("payload");
         Integer adminId = payload.getUserId();
 
-        applicationMapper.update(null,
+        applicationForUserMapper.update(null,
                 new UpdateWrapper<ApplicationForUser>().
-                        set("status", judgeBO.getStatus()).
-                        eq("id", judgeBO.getId()));
+                        set("status", judgeWorkerBO.getStatus()).
+                        eq("id", judgeWorkerBO.getId()));
         //判断是否通过申请      如果不通过则直接返回,通过则进行新用户创建操作
-        if (judgeBO.getStatus() == 0) {
-            return true;
+        if (judgeWorkerBO.getStatus() == 0) {
+            return false;
         }
-        ApplicationForUser applicationForUser = applicationMapper.selectOne(new QueryWrapper<ApplicationForUser>().eq("id", judgeBO.getId()));
+        ApplicationForUser applicationForUser = applicationForUserMapper.selectOne(new QueryWrapper<ApplicationForUser>().eq("id", judgeWorkerBO.getId()));
         //从申请表中获取的密码已经是加密过的了.在这里无需再次加密
         AddWorkerDTO addWorkerDTO = new AddWorkerDTO();
         addWorkerDTO.setUsername(applicationForUser.getApplicantUsername())
                 .setPassword(applicationForUser.getApplicantPassword())
                 .setPasser(adminId)
-                .setGroupName(judgeBO.getGroupName())
+                .setGroupName(judgeWorkerBO.getGroupName())
                 .setDomainId(applicationForUser.getDomainId())
                 .setCompanyId(applicationForUser.getCompanyId());
         CommonResult<Void> voidCommonResult = roleService.addWorker(addWorkerDTO);
         Assert.isTrue(voidCommonResult.getCode() == 200, "调用角色服务添加员工失败");
+        return true;
+    }
+
+    @Override
+    public boolean judgeCompany(JudgeCompanyBO judgeCompanyBO) throws WeIdentityException {
+        String jwt = request.getHeader("token");
+        JWT of = JWT.of(jwt);
+        PayLoad payload = (PayLoad) of.getPayload("payload");
+        Integer adminId = payload.getUserId();
+
+        applicationForCompanyMapper.update(null,
+                new UpdateWrapper<ApplicationForCompany>().
+                        set("status", judgeCompanyBO.getStatus()).
+                        eq("id", judgeCompanyBO.getId()));
+        //判断是否通过申请      如果不通过则直接返回,通过则进行新用户创建操作
+        if (judgeCompanyBO.getStatus() == 0) {
+            return false;
+        }
+
+        ApplicationForCompany applicationForCompany = applicationForCompanyMapper.selectOne(new QueryWrapper<ApplicationForCompany>().eq("id", judgeCompanyBO.getId()));
+
+        AddCompanyDTO addCompanyDTO = new AddCompanyDTO();
+        addCompanyDTO.setCompanyName(applicationForCompany.getCompanyName())
+                .setFounderName(applicationForCompany.getUsername())
+                .setPasser(adminId)
+                .setFounderPassword(applicationForCompany.getPassword())
+                .setDomainId(applicationForCompany.getDomainId());
+        CommonResult<Void> voidCommonResult = roleService.addCompany(addCompanyDTO);
+        Assert.isTrue(voidCommonResult.getCode() == 200, "调用角色服务添加公司失败");
         return true;
     }
 
