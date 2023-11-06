@@ -12,3 +12,7 @@ spring:
       discovery:
         locator:
           enabled: true
+
+white-path:
+    - /1127-account/account/login
+    - /1127-account/account/userRegisterApplicant

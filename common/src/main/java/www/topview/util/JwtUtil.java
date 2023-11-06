@@ -38,6 +38,13 @@ public class JwtUtil {
         return payload.getUserId();
     }
 
+    // TODO 改用下面方法解耦
+    public static Integer getUserId(String token) {
+        JWT jwt = JWT.of(token);
+        PayLoad payload = (PayLoad) jwt.getPayload(PAYLOAD_NAME);
+        return payload.getUserId();
+    }
+
     public String createJwtToken(String subject, Object payload) {
         String token;
         try {

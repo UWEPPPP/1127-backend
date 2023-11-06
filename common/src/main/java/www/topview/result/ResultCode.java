@@ -1,4 +1,4 @@
-package www.topview.constant;
+package www.topview.result;
 
 /**
  * @author 刘家辉
