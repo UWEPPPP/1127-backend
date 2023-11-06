@@ -13,7 +13,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @ServletComponentScan("www.topview.controller")
-@EnableFeignClients(basePackages = {"www.topview.rpc"})
+@EnableFeignClients(basePackages = {"www.topview.feign"})
 @MapperScan("www.topview.mapper")
 public class AccountApplication {
     public static void main(String[] args) {
