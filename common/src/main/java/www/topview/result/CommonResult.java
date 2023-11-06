@@ -3,7 +3,6 @@ package www.topview.result;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import www.topview.constant.ResultCode;
 
 /**
  * 前后端通讯标准
