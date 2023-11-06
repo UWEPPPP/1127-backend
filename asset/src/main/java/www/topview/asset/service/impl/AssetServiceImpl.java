@@ -1,23 +1,32 @@
 package www.topview.asset.service.impl;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.Digester;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 import www.topview.asset.client.IpfsClient;
+import www.topview.asset.domain.bo.CreateAssetBO;
 import www.topview.asset.domain.dto.CreateAssetDTO;
 import www.topview.asset.domain.po.Asset;
-import www.topview.asset.domain.bo.CreateAssetBO;
 import www.topview.asset.domain.vo.AssetDetailsVO;
 import www.topview.asset.domain.vo.AssetVO;
 import www.topview.asset.mapper.AssetMapper;
 import www.topview.asset.service.AssetService;
+import www.topview.constant.ContractName;
+import www.topview.dto.ChainServiceDTO;
+import www.topview.dto.CompanyDTO;
+import www.topview.dto.UserDTO;
+import www.topview.feign.ChainClient;
+import www.topview.feign.CompanyClient;
+import www.topview.feign.UserClient;
+import www.topview.result.CommonResult;
 import www.topview.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +44,15 @@ public class AssetServiceImpl implements AssetService {
     @Resource
     private IpfsClient ipfsClient;
 
+    @Resource
+    private UserClient userClient;
+
+    @Resource
+    private ChainClient chainClient;
+
+    @Resource
+    private CompanyClient companyClient;
+
     public Boolean createAsset(CreateAssetDTO createAssetDTO){
         CreateAssetBO createAssetBO = createAssetDTO.getCreateAssetBO();
         // 判断组名
@@ -44,35 +62,57 @@ public class AssetServiceImpl implements AssetService {
         // 上传文件
         String cid = ipfsClient.upload(createAssetBO.getFile());
 
-        // TODO 远程调用接口 => 查询用户信息以及对应公司信息
+        CommonResult<UserDTO> userMessage = userClient.getUserMessage(createAssetDTO.getUserId());
+        if(!userMessage.isSuccess()){
+            throw new RuntimeException("获取用户信息失败");
+        }
+        UserDTO userDTO = userMessage.getData();
+        // 获取公司信息
+        CommonResult<CompanyDTO> companyMessage = companyClient.getCompanyMessage(userDTO.getWeId());
+        if(!companyMessage.isSuccess()){
+            throw new RuntimeException("获取公司信息失败");
+        }
+        CompanyDTO companyDTO = companyMessage.getData();
 
-        // TODO 使用公司私钥加密cid
         Digester sha256 = new Digester(DigestAlgorithm.SHA256);
-        byte[] key = sha256.digest("公司名字");
+        byte[] key = sha256.digest(companyDTO.getCompanyName());
         SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, key);
         String encodeCid = aes.encryptHex(cid);
 
-        // TODO 调用合约获取assetCount
-        Long count = 1L;
+        CommonResult<Object> callResult = chainClient.call(new ChainServiceDTO()
+                .setUserId(userDTO.getId())
+                .setContractAddress(companyDTO.getContractAddress())
+                .setContractName(ContractName.COMPANY)
+                .setFunctionName("getAssetCount()")
+                .setFunctionParams(Collections.emptyList()));
+        if(!callResult.isSuccess()){
+            throw new RuntimeException("合约调用失败");
+        }
+        Integer id = Convert.convert(Integer.class, callResult.getData());
 
-        // TODO 设置asset信息 => 插入数据库
         Asset asset = new Asset()
-                .setId(count + 1L)
+                .setId(id)
                 .setName(createAssetBO.getName())
-                .setCreatorName("")
+                .setCreatorName(userDTO.getUsername())
                 .setGroupName(createAssetBO.getGroupName())
-                .setDomainName("")
-                .setCompanyName("")
+                .setDomainName("1")
+                .setCompanyName(companyDTO.getCompanyName())
                 .setDescription(createAssetBO.getDescription());
         if (assetMapper.insert(asset) != 1){
             throw new RuntimeException("插入数据库失败");
         }
 
-        // TODO 调用合约
         List<Object> args = new ArrayList<Object>();
-        // TODO 调用链端接口
+        args.add(encodeCid);
+        args.add(createAssetBO.getName());
+        args.add(companyDTO.getCompanyName());
 
-        return true;
+        return chainClient.send(new ChainServiceDTO()
+                .setUserId(userDTO.getId())
+                .setContractAddress(companyDTO.getContractAddress())
+                .setContractName(companyDTO.getCompanyName())
+                .setFunctionName("addAsset()")
+                .setFunctionParams(args)).isSuccess();
     }
 
     public AssetDetailsVO getAssetMessage(Integer id) {
