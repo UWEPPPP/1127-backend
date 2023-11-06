@@ -17,11 +17,11 @@ import www.topview.entity.bo.*;
 import www.topview.entity.po.ApplicationForUser;
 import www.topview.entity.po.User;
 import www.topview.entity.vo.ApplicationWorkerVO;
+import www.topview.feign.ChainClient;
+import www.topview.feign.RoleClient;
 import www.topview.mapper.ApplicationMapper;
 import www.topview.mapper.UserMapper;
 import www.topview.result.CommonResult;
-import www.topview.rpc.ChainService;
-import www.topview.rpc.RoleService;
 import www.topview.service.AccountService;
 import www.topview.util.CryptoUtil;
 import www.topview.util.JwtUtil;
@@ -44,11 +44,11 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private RoleService roleService;
+    private RoleClient roleService;
     @Autowired
     private HttpServletRequest request;
     @Autowired
-    private ChainService chainService;
+    private ChainClient chainService;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -90,7 +90,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(rollbackFor = Exception.class)
     public boolean companyRegister(CompanyRegisterBO companyRegisterBO) {
 
-        String token=request.getHeader("token");
+        String token = request.getHeader("token");
         JWT jwt = JWT.of(token);
         //token异常包括了    1. 过期 2. 签名不对
         Assert.isTrue(jwtUtil.validateToken(token), "token异常");

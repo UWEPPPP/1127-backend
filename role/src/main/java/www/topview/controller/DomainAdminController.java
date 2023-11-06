@@ -27,7 +27,7 @@ public class DomainAdminController {
     @Autowired
     DomainService domainService;
 
-    @PostMapping("/addCompany")
+    @PostMapping("/registerCompany")
     public CommonResult<Void> addCompany(@Validated @RequestBody AddCompanyDTO addCompanyDTO) throws WeIdentityException {
         domainService.addCompany(addCompanyDTO);
         return CommonResult.operateSuccess("公司创建成功");
