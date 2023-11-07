@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import www.topview.entity.po.WorkerInfo;
 
 /**
- * user mapper
+ * worker info mapper
  *
  * @author 刘家辉
  * @date 2023/10/31
