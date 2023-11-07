@@ -96,8 +96,8 @@ public class CompanyAdminController {
      * @eo.method post
      * @eo.request-type formdata
      */
-    @PostMapping("/deleteWorker")
-    public CommonResult<Void> deleteWorker(@Positive int workerId) {
+    @PostMapping("/deleteWorker/{workerId}")
+    public CommonResult<Void> deleteWorker(@Positive @PathVariable int workerId) {
         service.deleteWorker(workerId);
         return CommonResult.operateSuccess("删除成功");
     }

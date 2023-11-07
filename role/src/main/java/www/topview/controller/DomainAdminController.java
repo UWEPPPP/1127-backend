@@ -38,8 +38,8 @@ public class DomainAdminController {
         return CommonResult.operateSuccess("成功获取公司信息列表", domainService.getCompanyList());
     }
 
-    @PostMapping("/deleteCompany")
-    public CommonResult<Void> deleteCompany(@Positive int domainId) {
+    @PostMapping("/deleteCompany/{domainId}")
+    public CommonResult<Void> deleteCompany(@Positive @PathVariable int domainId) {
         domainService.deleteCompany(domainId);
         return CommonResult.operateSuccess("公司删除成功");
     }
